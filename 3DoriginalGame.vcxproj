@@ -76,7 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dxlib(C++)\3DoriginalGame\object;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -93,7 +93,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dxlib(C++)\3DoriginalGame\object;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -110,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dxlib(C++)\3DoriginalGame\object;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dxlib(C++)\3DoriginalGame\object;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -140,19 +140,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="object\Map.cpp" />
+    <ClCompile Include="object\Player.cpp" />
+    <ClCompile Include="SceneGameClear.cpp" />
     <ClCompile Include="scene\SceneBase.cpp" />
     <ClCompile Include="scene\SceneDebug.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
-    <ClCompile Include="scene\SceneTest.cpp" />
+    <ClCompile Include="scene\SceneMain.cpp" />
     <ClCompile Include="util\Pad.cpp" />
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
+    <ClInclude Include="object\Map.h" />
+    <ClInclude Include="object\Player.h" />
+    <ClInclude Include="SceneGameClear.h" />
     <ClInclude Include="scene\SceneBase.h" />
     <ClInclude Include="scene\SceneDebug.h" />
     <ClInclude Include="scene\SceneManager.h" />
-    <ClInclude Include="scene\SceneTest.h" />
+    <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="util\Pad.h" />
     <ClInclude Include="util\Vec2.h" />
   </ItemGroup>

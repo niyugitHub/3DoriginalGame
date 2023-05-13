@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "game.h"
 #include "SceneDebug.h"
-#include "SceneTest.h"
+#include "SceneMain.h"
 
 #include "Pad.h"
 
@@ -30,7 +30,7 @@ SceneBase* SceneDebug::update()
 {
 	if (Pad::isTrigger(PAD_INPUT_1))
 	{
-		return new SceneTest;
+		return new SceneMain;
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_UP))
