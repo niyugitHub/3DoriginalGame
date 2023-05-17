@@ -17,9 +17,16 @@ public:
 	VECTOR GetPos() { return m_Pos; }
 
 private:
+	void updateIdle();
+	void updateMove();
+	void updateJump();
+
+private:
 	int m_modelHandle;
 
-	VECTOR m_Pos;
+	VECTOR m_Pos; // プレイヤーのサイズ
+
+	VECTOR m_Vec; // プレイヤーの移動速度
 
 	float m_cameraPos;
 
