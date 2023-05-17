@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="object\Map.cpp" />
     <ClCompile Include="object\Player.cpp" />
     <ClCompile Include="SceneGameClear.cpp" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="object\Map.h" />
     <ClInclude Include="object\Player.h" />
     <ClInclude Include="SceneGameClear.h" />
