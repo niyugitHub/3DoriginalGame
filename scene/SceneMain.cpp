@@ -2,9 +2,10 @@
 #include "game.h"
 #include "SceneMain.h"
 #include "SceneDebug.h"
-#include "Map.h"
+#include "Field.h"
 #include "Player.h"
 #include "SceneGameClear.h"
+#include"Model.h"
 
 #include "Pad.h"
 
@@ -16,10 +17,11 @@ namespace
 }
 
 SceneMain::SceneMain() : 
-	m_GameClear(false)
+	m_GameClear(false),
+	m_HitCount(0)
 {
 	m_Player = std::make_shared<Player>();
-	m_Map = std::make_shared<Map>();
+	m_Field = std::make_shared<Field>();
 	m_SceneGameClear = std::make_shared<SceneGameClear>();
 }
 
@@ -45,7 +47,7 @@ void SceneMain::init()
 	SetCameraPositionAndTarget_UpVecY(VGet(0, 300, -800), VGet(0.0f, 0.0f, 0.0f));
 
 	m_Player->Init();
-	m_Map->Init();
+	m_Field->Init();
 }
 
 void SceneMain::end()
@@ -59,19 +61,57 @@ SceneBase* SceneMain::update()
 	{
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_UP))
+	/*if (Pad::isTrigger(PAD_INPUT_UP))
 	{
 		m_GameClear = true;
-	}
+	}*/
 	if (Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 	}
 
 	m_Player->Update();
+	m_Field->Update();
 	
 	if (m_GameClear)
 	{
 		m_SceneGameClear->Update();
+	}
+
+//	int a = m_Field->GetModel().size();
+
+	for (auto& pModel : m_Field->GetModel())
+	{
+		// DxLibの関数を利用して当たり判定をとる
+		MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+
+		VECTOR pos = m_Player->GetNextPos();
+		pos.y = m_Player->GetNextPos().y + 60;
+
+		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
+		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
+			pos, pos, m_Player->GetColRadius());
+
+		//ポリゴンが一つでもあたっていた場合
+		if (result.HitNum > 0)
+		{
+			m_HitCount++;
+			printfDx("Hit %d\n", m_HitCount);
+			//pModel->OnDamage(10);
+
+			m_Player->SetcolFieldY(true);
+
+			if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
+			{
+				m_Player->SetcolFieldXZ(true);
+				m_Player->SetcolFieldY(false);
+			}
+			// 当たり判定情報の後始末
+			MV1CollResultPolyDimTerminate(result);
+			break;
+		}
+
+		// 当たり判定情報の後始末
+		MV1CollResultPolyDimTerminate(result);
 	}
 
 	updateFade();
@@ -88,7 +128,7 @@ void SceneMain::draw()
 	DrawString(64, 64,"上入力でクリア",0xffffff);
 
 	m_Player->Draw();
-	m_Map->Draw();
+	m_Field->Draw();
 
 	if (m_GameClear)
 	{
@@ -96,7 +136,7 @@ void SceneMain::draw()
 	}
 
 	//-500~500の範囲にグリッドを表示
-	for (float x = -500.0f; x <= 500.0f; x += 100)
+	/*for (float x = -500.0f; x <= 500.0f; x += 100)
 	{
 		VECTOR start = VGet(x, 0.0f, -500.0f);
 		VECTOR end = VGet(x, 0.0f, 500.0f);
@@ -107,7 +147,7 @@ void SceneMain::draw()
 		VECTOR start = VGet(-500.0f, 0.0f, z);
 		VECTOR end = VGet(500.0f, 0.0f, z);
 		DrawLine3D(start, end, 0xffff00);
-	}
+	}*/
 
 	SceneBase::drawFade();
 }

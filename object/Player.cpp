@@ -20,6 +20,12 @@ namespace
 	// アニメーション番号
 	constexpr int kIdleAnimNo = 3;	// 待機モーション
 	constexpr int kModeAnimNo = 11;// 移動モーション
+
+	// 当たり判定のサイズ
+	constexpr float kColRadius = 90.0f;
+
+	// 重力
+	constexpr float kGravity = 1.0f;
 }
 
 Player::Player() :
@@ -27,9 +33,12 @@ Player::Player() :
 	m_modelHandle(-1),
 	m_cameraPos(0.0f),
 	m_animNo(3),
-	m_angle(0)
+	m_angle(0),
+	m_colFieldY(false),
+	m_colFieldXZ(false)
 {
 	m_Pos = VGet(0, 0, 0);
+	m_NextPos = m_Pos;
 	m_Vec = VGet(0, 0, 0);
 	//3Dモデルの生成
 	m_pModel = std::make_shared<Model>(kEnemyModelFileName);
@@ -47,12 +56,28 @@ void Player::Init()
 
 void Player::Update()
 {
+	if (!m_colFieldXZ)
+	{
+		m_Pos.x = m_NextPos.x;
+		m_Pos.z = m_NextPos.z;
+	}
+	if (!m_colFieldY)
+	{
+		m_Pos.y = m_NextPos.y;
+	}
+	m_NextPos = m_Pos;
+
+	m_colFieldY = false;
+	m_colFieldXZ = false;
+
 	(this->*m_updateFunc)();
 
 	//現在の座標に移動ベクトルを足す
-	m_Pos.x += m_Vec.x;
-	m_Pos.y += m_Vec.y;
-	m_Pos.z += m_Vec.z;
+	m_NextPos.x += m_Vec.x;
+		m_NextPos.y -= kGravity;
+
+
+	m_NextPos.z += m_Vec.z;
 	//アニメーションを進める
 	m_pModel->update();
 
@@ -69,7 +94,12 @@ void Player::Draw()
 	m_pModel->draw();
 
 //	printfDx("%f\n", static_cast<float>(m_Vec.z));
-	printfDx("%f\n", static_cast<float>(m_Vec.x));
+//	printfDx("%f\n", static_cast<float>(m_Vec.x));
+}
+
+float Player::GetColRadius()
+{
+	return kColRadius;
 }
 
 void Player::updateIdle()

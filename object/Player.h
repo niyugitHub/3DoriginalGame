@@ -15,6 +15,13 @@ public:
 	void Draw();
 
 	VECTOR GetPos() { return m_Pos; }
+	VECTOR GetNextPos() { return m_NextPos; }
+
+	float GetColRadius();
+
+	void SetcolFieldY(bool colFieldY) { m_colFieldY = colFieldY; }
+
+	void SetcolFieldXZ(bool colFieldXZ) { m_colFieldXZ = colFieldXZ; }
 
 private:
 	void updateIdle();
@@ -25,9 +32,11 @@ private:
 	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
 
 private:
-	int m_modelHandle;
+	int m_modelHandle; // モデルハンドル
 
-	VECTOR m_Pos; // プレイヤーのサイズ
+	VECTOR m_Pos; // プレイヤーの座標
+
+	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
 
 	VECTOR m_Vec; // プレイヤーの移動速度
 
@@ -47,5 +56,11 @@ private:
 
 	//プレイヤーの向いている方向
 	float m_angle;
+
+	//フィールドとの当たりy判定
+	bool m_colFieldY;
+
+	//フィールドとの当たり判定XZ
+	bool m_colFieldXZ;
 };
 

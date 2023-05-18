@@ -26,6 +26,8 @@ public:
 	//表示位置の設定
 	void setPos(VECTOR pos);
 
+	VECTOR GetPos() { return m_Pos; }
+
 	// 回転状態の設定
 	void setRot(VECTOR rot);
 
@@ -45,6 +47,7 @@ public:
 	// 現在のアニメーションが終了しているかどうかを取得する(Loopアニメの場合は取得できない = falseを返す)
 	bool isAnimEnd();
 
+	
 
 private:
 	//アニメーション情報
@@ -57,6 +60,8 @@ private:
 		bool isLoop;		// アニメーションがループするか
 	};
 private:
+	//モデルの位置
+	VECTOR m_Pos;
 	// アニメーションデータのクリア
 	void clearAnimData(AnimData& anim);
 

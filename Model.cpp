@@ -4,7 +4,7 @@
 namespace
 {
 	// 当たり判定として使用するフレームの名前
-	const char* const kCollisionFrameName = "Collision";
+	const char* const kCollisionFrameName = "Cube_Grass_Single";
 }
 
 Model::Model(const char* fileName) :
@@ -15,6 +15,7 @@ Model::Model(const char* fileName) :
 	m_animChangeFrameTotal(0),
 	m_animSpeed(0)
 {
+	m_Pos = { 0,0,0 };
 	m_modelHandle = MV1LoadModel(fileName);
 	//コピーに失敗した場合
 	assert(m_modelHandle != -1);
@@ -110,7 +111,8 @@ void Model::draw()
 
 void Model::setPos(VECTOR pos)
 {
-	MV1SetPosition(m_modelHandle, pos);
+	m_Pos = pos;
+	MV1SetPosition(m_modelHandle, m_Pos);
 }
 
 void Model::setRot(VECTOR rot)
