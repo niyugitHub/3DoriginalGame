@@ -21,6 +21,9 @@ private:
 	void updateMove();
 	void updateJump();
 
+	void IsMove(bool Left,bool Up,bool Right,bool Bottom);
+	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
+
 private:
 	int m_modelHandle;
 

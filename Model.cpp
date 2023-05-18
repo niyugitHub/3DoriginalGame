@@ -12,7 +12,8 @@ Model::Model(const char* fileName) :
 	m_isUpdateCollision(false),
 	m_modelHandle(-1),
 	m_animChangeFrame(0),
-	m_animChangeFrameTotal(0)
+	m_animChangeFrameTotal(0),
+	m_animSpeed(0)
 {
 	m_modelHandle = MV1LoadModel(fileName);
 	//コピーに失敗した場合
@@ -78,8 +79,13 @@ void Model::setUseCollision(bool isUse, bool isNeedUpdate)
 
 void Model::update()
 {
-	updateAnim(m_animPrev);
-	updateAnim(m_animNext);
+	m_animSpeed++;
+	if (m_animSpeed >= m_animChangeFrameTotal)
+	{
+		updateAnim(m_animPrev);
+		updateAnim(m_animNext);
+		m_animSpeed = 0;
+	}
 
 	//指定フレームにかけてアニメーションを変更する
 	m_animChangeFrame++;

@@ -16,6 +16,10 @@ namespace
 
 	// 一フレームごとの移動速度上昇
 	constexpr float kMoveSpeedUp = 0.5f;
+
+	// アニメーション番号
+	constexpr int kIdleAnimNo = 3;	// 待機モーション
+	constexpr int kModeAnimNo = 11;// 移動モーション
 }
 
 Player::Player() :
@@ -29,7 +33,7 @@ Player::Player() :
 	m_Vec = VGet(0, 0, 0);
 	//3Dモデルの生成
 	m_pModel = std::make_shared<Model>(kEnemyModelFileName);
-	m_pModel->setAnimation(m_animNo, true, true);
+	m_pModel->setAnimation(kIdleAnimNo, true, true);
 }
 
 Player::~Player()
@@ -63,6 +67,9 @@ void Player::Update()
 void Player::Draw()
 {
 	m_pModel->draw();
+
+//	printfDx("%f\n", static_cast<float>(m_Vec.z));
+	printfDx("%f\n", static_cast<float>(m_Vec.x));
 }
 
 void Player::updateIdle()
@@ -71,6 +78,8 @@ void Player::updateIdle()
 		Pad::isPress(PAD_INPUT_LEFT) || Pad::isPress(PAD_INPUT_RIGHT))
 	{
 		m_updateFunc = &Player::updateMove;
+		m_pModel->changeAnimation(kModeAnimNo, true, true, 2);
+		return;
 	}
 
 	m_Vec.x = min(max(m_Vec.x - kMoveSpeedUp, 0), m_Vec.x + kMoveSpeedUp);
@@ -84,7 +93,10 @@ void Player::updateMove()
 	bool PressRight = Pad::isPress(PAD_INPUT_RIGHT);
 	bool PressBottom = Pad::isPress(PAD_INPUT_DOWN);
 
-	if (PressUp)
+	IsMove(PressLeft, PressUp, PressRight, PressBottom);
+	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
+
+	/*if (PressUp)
 	{
 		m_Vec.z = min(m_Vec.z + kMoveSpeedUp,kMaxMoveSpeed);
 		if (m_angle <= DX_PI_F)
@@ -152,32 +164,221 @@ void Player::updateMove()
 	if (m_angle < 0)
 	{
 		m_angle = DX_PI_F * 2;
-	}
+	}*/
 
-	if (!PressLeft && !PressRight)
+	if (fabs(m_Vec.x) >= 5.0f && fabs(m_Vec.z) >= 5.0f)
 	{
-		m_Vec.x = min(max(m_Vec.x - kMoveSpeedUp, 0), m_Vec.x + kMoveSpeedUp);
+		Vec2 vec = { m_Vec.x,m_Vec.z };
+
+		vec = vec.normalize() * kMaxMoveSpeed;
+
+		m_Vec.x = vec.x;
+		m_Vec.z = vec.y;
 	}
-
-	if (!PressUp && !PressBottom)
-	{
-		m_Vec.z = min(max(m_Vec.z - kMoveSpeedUp, 0), m_Vec.z + kMoveSpeedUp);
-	}
-
-	Vec2 vec = { m_Vec.x,m_Vec.z };
-
-	vec = vec.normalize() * kMaxMoveSpeed;
-
-	m_Vec.x = vec.x;
-	m_Vec.z = vec.y;
 
 	if (!PressLeft && !PressRight &&
 		!PressUp && !PressBottom)
 	{
 		m_updateFunc = &Player::updateIdle;
+		m_pModel->changeAnimation(kIdleAnimNo, true, true,1);
 	}
 }
 
 void Player::updateJump()
 {
+}
+
+void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom)
+{
+	if (Up)
+	{
+		m_Vec.z = min(m_Vec.z + kMoveSpeedUp, kMaxMoveSpeed);
+	}
+
+	if (Bottom)
+	{
+		m_Vec.z = max(m_Vec.z - kMoveSpeedUp, -kMaxMoveSpeed);
+	}
+
+	if (Right)
+	{
+		m_Vec.x = min(m_Vec.x + kMoveSpeedUp, kMaxMoveSpeed);
+	}
+
+	if (Left)
+	{
+		m_Vec.x = max(m_Vec.x - kMoveSpeedUp, -kMaxMoveSpeed);
+	}
+
+	Vec2 vec = { m_Vec.x,m_Vec.z };
+	vec = vec.normalize() * kMaxMoveSpeed;
+
+	if (Up && Right)
+	{
+		if (m_Vec.x > 0 && m_Vec.z > 0)
+		{
+			m_Vec.x = vec.x;
+			m_Vec.z = vec.y;
+		}
+	}
+
+	if (Right && Bottom)
+	{
+		if (m_Vec.x > 0 && m_Vec.z < 0)
+		{
+			m_Vec.x = vec.x;
+			m_Vec.z = vec.y;
+		}
+	}
+
+	if (Bottom && Left)
+	{
+		if (m_Vec.x < 0 && m_Vec.z < 0)
+		{
+			m_Vec.x = vec.x;
+			m_Vec.z = vec.y;
+		}
+	}
+
+	if (Left && Up)
+	{
+		if (m_Vec.x < 0 && m_Vec.z > 0)
+		{
+			m_Vec.x = vec.x;
+			m_Vec.z = vec.y;
+		}
+	}
+
+	if (!Left && !Right)
+	{
+		m_Vec.x = min(max(m_Vec.x - kMoveSpeedUp, 0), m_Vec.x + kMoveSpeedUp);
+	}
+
+	if (!Up && !Bottom)
+	{
+		m_Vec.z = min(max(m_Vec.z - kMoveSpeedUp, 0), m_Vec.z + kMoveSpeedUp);
+	}
+
+}
+
+void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
+{
+	if (m_angle > DX_PI_F * 2)
+	{
+		m_angle = 0;
+	}
+
+	if (m_angle < 0)
+	{
+		m_angle = DX_PI_F * 2;
+	}
+
+	if (Right && Bottom)
+	{
+		if (m_angle <= (DX_PI_F / 4) * 7 && m_angle >= (DX_PI_F / 4) * 3)
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+		if (m_angle >= (DX_PI_F / 4 * 7) || m_angle <= (DX_PI_F / 4) * 3)
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		return;
+	}
+
+	if (Bottom && Left)
+	{
+		if (m_angle <= (DX_PI_F / 4) || m_angle >= (DX_PI_F / 4) * 5)
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+		if (m_angle >= (DX_PI_F / 4) && m_angle <= (DX_PI_F / 4) * 5)
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		return;
+	}
+
+	if (Left && Up)
+	{
+		if (m_angle <= (DX_PI_F / 4) * 3 || m_angle >= (DX_PI_F / 4) * 7)
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+		if (m_angle >= (DX_PI_F / 4) * 3 && m_angle <= (DX_PI_F / 4) * 7)
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		return;
+	}
+
+	if (Up && Right)
+	{
+		if (m_angle <= (DX_PI_F / 4) * 5 && m_angle >= (DX_PI_F / 4))
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+		if (m_angle >= (DX_PI_F / 4 * 5) || m_angle <= (DX_PI_F / 4))
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		return;
+	}
+
+	if (Up)
+	{
+		if (m_angle <= DX_PI_F)
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+		if (m_angle > DX_PI_F)
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		return;
+	}
+
+	if (Bottom)
+	{
+		if (m_angle <= DX_PI_F)
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		if (m_angle > DX_PI_F)
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+
+		if (m_angle < 0)
+		{
+			m_angle = 0;
+		}
+		return;
+	}
+
+	if (Right)
+	{
+		if (m_angle >= DX_PI_F / 2 && m_angle < (DX_PI_F / 2 * 3))
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+		if (m_angle >= (DX_PI_F / 2 * 3) || m_angle < DX_PI_F / 2)
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		return;
+	}
+
+	if (Left)
+	{
+		if (m_angle >= DX_PI_F / 2 && m_angle < (DX_PI_F / 2 * 3))
+		{
+			m_angle = m_angle - kRotSpeed;
+		}
+		if (m_angle >= (DX_PI_F / 2 * 3) || m_angle <= DX_PI_F / 2)
+		{
+			m_angle = m_angle + kRotSpeed;
+		}
+		return;
+	}
 }

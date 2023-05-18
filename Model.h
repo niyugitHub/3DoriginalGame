@@ -77,6 +77,9 @@ private:
 	// 当たり判定として使用するフレームのインデックス
 	int m_colFrameIndex;
 
+	// アニメーション変更速度
+	int m_animSpeed;
+
 	// アニメーションのアタッチ番号
 	AnimData m_animPrev;	// 変更前アニメーション情報
 	AnimData m_animNext;	// 変更後アニメーションデータ
