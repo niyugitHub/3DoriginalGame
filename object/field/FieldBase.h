@@ -4,6 +4,7 @@
 #include<DxLib.h>
 
 class Model;
+class Switch;
 class FieldBase
 {
 public:
@@ -34,6 +35,8 @@ public:
 
 	std::vector<std::shared_ptr<Model>> GetModelBlue() { return m_pModelBlue; }
 
+	std::vector<std::shared_ptr<Switch>> GetSwitch() { return m_pSwitch; }
+
 	int GetLookBlock() { return m_lookBlock; }
 
 protected:
@@ -45,6 +48,9 @@ protected:
 
 	//モデルのポインター(青)
 	std::vector<std::shared_ptr<Model>> m_pModelBlue;
+
+	//スイッチのポインター
+	std::vector<std::shared_ptr<Switch>> m_pSwitch;
 
 	//ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum; 

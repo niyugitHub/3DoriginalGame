@@ -1,6 +1,8 @@
 #include "FieldBase.h"
 #include "Model.h"
 #include"Pad.h"
+#include"../Switch.h"
+
 
 namespace
 {
@@ -71,6 +73,7 @@ void FieldBase::Update()
 		model->update();
 	}
 
+
 	if (Pad::isTrigger(PAD_INPUT_3))
 	{
 		m_lookBlock++;
@@ -78,6 +81,11 @@ void FieldBase::Update()
 		{
 			m_lookBlock = 2;
 		}
+	}
+	for (auto& Switch : m_pSwitch)
+	{
+		Switch->SetColorNum(m_lookBlock);
+		Switch->Update();
 	}
 }
 
@@ -105,6 +113,11 @@ void FieldBase::Draw()
 			model->draw();
 			DrawString(500, 0, "Â", 0xffffff);
 		}
+	}
+
+	for (auto& Switch : m_pSwitch)
+	{
+		Switch->Draw();
 	}
 }
 

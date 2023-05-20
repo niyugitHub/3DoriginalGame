@@ -130,6 +130,12 @@ SceneBase* SceneMain::update()
 	{
 		return new SceneDebug();
 	}
+
+	if (m_Player->GetPos().y < -500)
+	{
+		return new SceneMain();
+	}
+
 	return this;
 }
 
@@ -171,6 +177,7 @@ void SceneMain::draw()
 		VECTOR end = VGet(500.0f, 0.0f, z);
 		DrawLine3D(start, end, 0xffff00);
 	}*/
+
 
 	SceneBase::drawFade();
 }

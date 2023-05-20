@@ -78,6 +78,9 @@
     <ClCompile Include="object\field\Field1.cpp">
       <Filter>ソース ファイル\object\field</Filter>
     </ClCompile>
+    <ClCompile Include="object\Switch.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -118,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="object\field\Field1.h">
       <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Switch.h">
+      <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
