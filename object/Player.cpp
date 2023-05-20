@@ -126,6 +126,7 @@ void Player::updateIdle()
 		m_Vec.y = kJumpPower;
 		m_updateFunc = &Player::updateJump;
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
+		return;
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_2))
@@ -134,6 +135,7 @@ void Player::updateIdle()
 		m_Vec.z = 0.0f;
 		m_updateFunc = &Player::updatePunch;
 		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
+		return;
 	}
 
 	m_Vec.x = min(max(m_Vec.x - kMoveSpeed, 0), m_Vec.x + kMoveSpeed);
@@ -156,6 +158,7 @@ void Player::updateMove()
 		m_Vec.y = kJumpPower;
 		m_updateFunc = &Player::updateJump;
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
+		return;
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_2))
@@ -164,6 +167,7 @@ void Player::updateMove()
 		m_Vec.z = 0.0f;
 		m_updateFunc = &Player::updatePunch;
 		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
+		return;
 	}
 
 	/*if (PressUp)
@@ -251,6 +255,7 @@ void Player::updateMove()
 	{
 		m_updateFunc = &Player::updateIdle;
 		m_pModel->changeAnimation(kIdleAnimNo, true, true, 1);
+		return;
 	}
 }
 
