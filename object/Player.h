@@ -27,8 +27,9 @@ private:
 	void updateIdle();
 	void updateMove();
 	void updateJump();
+	void updatePunch();
 
-	void IsMove(bool Left,bool Up,bool Right,bool Bottom);
+	void IsMove(bool Left,bool Up,bool Right,bool Bottom, float MoveSpeed);
 	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
 
 private:

@@ -49,6 +49,13 @@ void SceneMain::init()
 
 	m_Player->Init();
 	m_Field->Init();
+
+	//SetLightPosition(VGet(-1500, -1500 , 1000));
+	SetLightDirection(VGet(300, -1000 , 300));
+	SetLightDirection(GetLightDirection());
+	// シャドウマップの生成
+	m_shadowMap = MakeShadowMap(4096, 4096);
+	SetShadowMapLightDirection(m_shadowMap, GetLightDirection());
 }
 
 void SceneMain::end()
@@ -130,8 +137,21 @@ void SceneMain::draw()
 {
 	DrawString(64, 64,"上入力でクリア",0xffffff);
 
+	// シャドウマップへの書き込み
+	ShadowMap_DrawSetup(m_shadowMap);
+
 	m_Player->Draw();
 	m_Field->Draw();
+
+	ShadowMap_DrawEnd();
+
+	// シャドウマップを使用してモデルの描画を行う
+	SetUseShadowMap(0, m_shadowMap);
+
+	m_Player->Draw();
+	m_Field->Draw();
+
+	SetUseShadowMap(0, -1);
 
 	if (m_GameClear)
 	{

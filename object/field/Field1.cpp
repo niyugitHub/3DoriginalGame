@@ -44,6 +44,9 @@ Field1::Field1()
 	//’n–Ê‚É•À‚×‚é
 	for (int i = 0; i < m_blockNum.size(); i++)
 	{
+		if (m_blockNum[i] == 3)continue;
+
+
 		if (m_blockNum[i] == 0)
 		{
 			m_pModel.push_back(std::make_shared<Model>(orgModel));

@@ -27,4 +27,7 @@ private:
 	bool m_GameClear;	//クリアしたかどうか
 
 	int m_HitCount;
+
+	// シャドウマップ
+	int m_shadowMap;
 };

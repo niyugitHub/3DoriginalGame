@@ -15,12 +15,14 @@ namespace
 	constexpr float kMaxMoveSpeed = 7.0f;
 
 	// 一フレームごとの移動速度上昇
-	constexpr float kMoveSpeedUp = 1.0f;
+	constexpr float kMoveSpeed = 1.0f; //地面にいるとき
+	constexpr float kMoveJumpSpeed = 0.4f;//ジャンプ中
 
 	// アニメーション番号
 	constexpr int kIdleAnimNo = 3;	// 待機モーション
 	constexpr int kModeAnimNo = 11;// 移動モーション
 	constexpr int kJumpAnimNo = 6;// ジャンプモーション
+	constexpr int kPunchAnimNo = 10;// パンチモーション
 
 	// 当たり判定のサイズ
 	constexpr float kColRadius = 90.0f;
@@ -90,6 +92,10 @@ void Player::Update()
 	//カメラの位置、どこからどこを見ているかを設定
 	m_cameraPos = (m_cameraPos * 0.8f) + (m_Pos.x * 0.2f);
 	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos, 1500, -800 + m_Pos.z), VGet(m_cameraPos, 0, m_Pos.z));
+
+
+	//SetLightPosition(VGet(m_Pos.x, 500 , m_Pos.z));
+	//SetLightDirection(VGet(m_Pos.x, 0 , m_Pos.z));
 }
 
 void Player::Draw()
@@ -122,8 +128,16 @@ void Player::updateIdle()
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
 	}
 
-	m_Vec.x = min(max(m_Vec.x - kMoveSpeedUp, 0), m_Vec.x + kMoveSpeedUp);
-	m_Vec.z = min(max(m_Vec.z - kMoveSpeedUp, 0), m_Vec.z + kMoveSpeedUp);
+	if (Pad::isTrigger(PAD_INPUT_2))
+	{
+		m_Vec.x = 0.0f;
+		m_Vec.z = 0.0f;
+		m_updateFunc = &Player::updatePunch;
+		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
+	}
+
+	m_Vec.x = min(max(m_Vec.x - kMoveSpeed, 0), m_Vec.x + kMoveSpeed);
+	m_Vec.z = min(max(m_Vec.z - kMoveSpeed, 0), m_Vec.z + kMoveSpeed);
 
 }
 
@@ -134,7 +148,7 @@ void Player::updateMove()
 	bool PressRight = Pad::isPress(PAD_INPUT_RIGHT);
 	bool PressBottom = Pad::isPress(PAD_INPUT_DOWN);
 
-	IsMove(PressLeft, PressUp, PressRight, PressBottom);
+	IsMove(PressLeft, PressUp, PressRight, PressBottom, kMoveSpeed);
 	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
 
 	if (Pad::isTrigger(PAD_INPUT_1))
@@ -142,6 +156,14 @@ void Player::updateMove()
 		m_Vec.y = kJumpPower;
 		m_updateFunc = &Player::updateJump;
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_2))
+	{
+		m_Vec.x = 0.0f;
+		m_Vec.z = 0.0f;
+		m_updateFunc = &Player::updatePunch;
+		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
 	}
 
 	/*if (PressUp)
@@ -234,8 +256,16 @@ void Player::updateMove()
 
 void Player::updateJump()
 {
+	bool PressLeft = Pad::isPress(PAD_INPUT_LEFT);
+	bool PressUp = Pad::isPress(PAD_INPUT_UP);
+	bool PressRight = Pad::isPress(PAD_INPUT_RIGHT);
+	bool PressBottom = Pad::isPress(PAD_INPUT_DOWN);
+
 	m_Vec.y -= kGravity;
 	m_Pos.y += m_Vec.y;
+
+	IsMove(PressLeft, PressUp, PressRight, PressBottom, kMoveJumpSpeed);
+	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
 
 	if (m_Vec.y < -19)
 	{
@@ -244,26 +274,39 @@ void Player::updateJump()
 	}
 }
 
-void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom)
+void Player::updatePunch()
+{
+	if (m_pModel->isAnimEnd())
+	{
+		// 待機アニメに変更する
+		m_animNo = kIdleAnimNo;
+		m_pModel->changeAnimation(kIdleAnimNo, true, true, 4);
+
+		// updateを待機に
+		m_updateFunc = &Player::updateIdle;
+	}
+}
+
+void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed)
 {
 	if (Up)
 	{
-		m_Vec.z = min(m_Vec.z + kMoveSpeedUp, kMaxMoveSpeed);
+		m_Vec.z = min(m_Vec.z + MoveSpeed, kMaxMoveSpeed);
 	}
 
 	if (Bottom)
 	{
-		m_Vec.z = max(m_Vec.z - kMoveSpeedUp, -kMaxMoveSpeed);
+		m_Vec.z = max(m_Vec.z - MoveSpeed, -kMaxMoveSpeed);
 	}
 
 	if (Right)
 	{
-		m_Vec.x = min(m_Vec.x + kMoveSpeedUp, kMaxMoveSpeed);
+		m_Vec.x = min(m_Vec.x + MoveSpeed, kMaxMoveSpeed);
 	}
 
 	if (Left)
 	{
-		m_Vec.x = max(m_Vec.x - kMoveSpeedUp, -kMaxMoveSpeed);
+		m_Vec.x = max(m_Vec.x - MoveSpeed, -kMaxMoveSpeed);
 	}
 
 	Vec2 vec = { m_Vec.x,m_Vec.z };
@@ -307,12 +350,12 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom)
 
 	if (!Left && !Right)
 	{
-		m_Vec.x = min(max(m_Vec.x - kMoveSpeedUp, 0), m_Vec.x + kMoveSpeedUp);
+		m_Vec.x = min(max(m_Vec.x - MoveSpeed, 0), m_Vec.x + MoveSpeed);
 	}
 
 	if (!Up && !Bottom)
 	{
-		m_Vec.z = min(max(m_Vec.z - kMoveSpeedUp, 0), m_Vec.z + kMoveSpeedUp);
+		m_Vec.z = min(max(m_Vec.z - MoveSpeed, 0), m_Vec.z + MoveSpeed);
 	}
 
 }
