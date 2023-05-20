@@ -30,7 +30,7 @@ Field1::Field1()
 
 	for (int i = 0; i < kBlockNum; i++)
 	{
-		m_blockNum.push_back(GetRand(2));
+		m_blockNum.push_back(GetRand(2) + 1);
 	}
 
 	//最初にロードしたモデルと合わせてモデルを100個生成
@@ -44,10 +44,7 @@ Field1::Field1()
 	//地面に並べる
 	for (int i = 0; i < m_blockNum.size(); i++)
 	{
-		if (m_blockNum[i] == 3)continue;
-
-
-		if (m_blockNum[i] == 0)
+		if (m_blockNum[i] == kField)
 		{
 			m_pModel.push_back(std::make_shared<Model>(orgModel));
 			m_pModel.back()->setUseCollision(true, true);
@@ -57,7 +54,7 @@ Field1::Field1()
 			continue;
 		}
 
-		if (m_blockNum[i] == 1)
+		if (m_blockNum[i] == kRed)
 		{
 			m_pModelRed.push_back(std::make_shared<Model>(orgModel));
 			m_pModelRed.back()->setUseCollision(true, true);
@@ -67,7 +64,7 @@ Field1::Field1()
 			continue;
 		}
 
-		if (m_blockNum[i] == 2)
+		if (m_blockNum[i] == kBlue)
 		{
 			m_pModelBlue.push_back(std::make_shared<Model>(orgModel));
 			m_pModelBlue.back()->setUseCollision(true, true);

@@ -74,25 +74,22 @@ void FieldBase::Update()
 	if (Pad::isTrigger(PAD_INPUT_3))
 	{
 		m_lookBlock++;
-		if (m_lookBlock >= 3)
+		if (m_lookBlock >= 4)
 		{
-			m_lookBlock = 0;
+			m_lookBlock = 2;
 		}
 	}
 }
 
 void FieldBase::Draw()
 {
-	if (m_lookBlock == 0)
+	for (auto& model : m_pModel)
 	{
-		for (auto& model : m_pModel)
-		{
-			model->draw();
-			DrawString(500, 0, "Ç≥Ç”Ç•ÇÑÅGÇäÉï", 0xffffff);
-		}
+		model->draw();
+		DrawString(500, 0, "Ç≥Ç”Ç•ÇÑÅGÇäÉï", 0xffffff);
 	}
 
-	if (m_lookBlock == 1)
+	if (m_lookBlock == kRed)
 	{
 		for (auto& model : m_pModelRed)
 		{
@@ -101,7 +98,7 @@ void FieldBase::Draw()
 		}
 	}
 
-	if (m_lookBlock == 2)
+	if (m_lookBlock == kBlue)
 	{
 		for (auto& model : m_pModelBlue)
 		{

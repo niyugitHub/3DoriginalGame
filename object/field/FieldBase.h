@@ -17,6 +17,14 @@ public:
 	float GetFieldSizeX();	//X軸のフィールドの長さ
 	float GetFieldSizeZ();	//Z軸のフィールドの長さ
 
+	enum
+	{
+		kField = 1,
+		kRed = 2,
+		kBlue = 3,
+		kGreen = 4,
+	};
+
 	/*int GetBlockNumX() { return m_blockNum.x; }
 	int GetBlockNumZ() { return m_blockNum.z; }*/
 
@@ -25,6 +33,8 @@ public:
 	std::vector<std::shared_ptr<Model>> GetModelRed() { return m_pModelRed; }
 
 	std::vector<std::shared_ptr<Model>> GetModelBlue() { return m_pModelBlue; }
+
+	int GetLookBlock() { return m_lookBlock; }
 
 protected:
 	//モデルのポインター
