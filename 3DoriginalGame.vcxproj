@@ -139,9 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="object\field\Field1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="object\Field.cpp" />
+    <ClCompile Include="object\field\FieldBase.cpp" />
     <ClCompile Include="object\Map.cpp" />
     <ClCompile Include="object\Player.cpp" />
     <ClCompile Include="SceneGameClear.cpp" />
@@ -153,9 +154,10 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="object\field\Field1.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="object\Field.h" />
+    <ClInclude Include="object\field\FieldBase.h" />
     <ClInclude Include="object\Map.h" />
     <ClInclude Include="object\Player.h" />
     <ClInclude Include="SceneGameClear.h" />

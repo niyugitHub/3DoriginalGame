@@ -31,6 +31,12 @@
     <Filter Include="ソース ファイル\object">
       <UniqueIdentifier>{182b3740-b0bd-4156-9954-84abf94ea410}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\object\field">
+      <UniqueIdentifier>{3a5fc8fe-b46c-4819-a809-c631ea65e3d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\object\field">
+      <UniqueIdentifier>{a2f8b0bf-e773-4a81-95a5-71f1ec2af42f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -66,8 +72,11 @@
     <ClCompile Include="Model.cpp">
       <Filter>ソース ファイル\object</Filter>
     </ClCompile>
-    <ClCompile Include="object\Field.cpp">
-      <Filter>ソース ファイル\object</Filter>
+    <ClCompile Include="object\field\FieldBase.cpp">
+      <Filter>ソース ファイル\object\field</Filter>
+    </ClCompile>
+    <ClCompile Include="object\field\Field1.cpp">
+      <Filter>ソース ファイル\object\field</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,8 +113,11 @@
     <ClInclude Include="Model.h">
       <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
-    <ClInclude Include="object\Field.h">
-      <Filter>ヘッダー ファイル\object</Filter>
+    <ClInclude Include="object\field\FieldBase.h">
+      <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\field\Field1.h">
+      <Filter>ヘッダー ファイル\object\field</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

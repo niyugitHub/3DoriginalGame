@@ -2,7 +2,8 @@
 #include "game.h"
 #include "SceneMain.h"
 #include "SceneDebug.h"
-#include "Field.h"
+#include "../object/field/FieldBase.h"
+#include "../object/field/Field1.h"
 #include "Player.h"
 #include "SceneGameClear.h"
 #include"Model.h"
@@ -21,7 +22,7 @@ SceneMain::SceneMain() :
 	m_HitCount(0)
 {
 	m_Player = std::make_shared<Player>();
-	m_Field = std::make_shared<Field>();
+	m_Field = std::make_shared<Field1>();
 	m_SceneGameClear = std::make_shared<SceneGameClear>();
 }
 
@@ -44,7 +45,7 @@ void SceneMain::init()
 	// カメラの視野角(ラジアン)
 	SetupCamera_Perspective(60.0f * DX_PI_F / 180.0f);
 	// カメラの位置、どこからどこを見ているかを設定
-	SetCameraPositionAndTarget_UpVecY(VGet(0, 300, -800), VGet(0.0f, 0.0f, 0.0f));
+	SetCameraPositionAndTarget_UpVecY(VGet(0, 1500, -800), VGet(0.0f, 0.0f, 0.0f));
 
 	m_Player->Init();
 	m_Field->Init();
@@ -79,40 +80,42 @@ SceneBase* SceneMain::update()
 
 //	int a = m_Field->GetModel().size();
 
-	for (auto& pModel : m_Field->GetModel())
-	{
-		// DxLibの関数を利用して当たり判定をとる
-		MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+	IsColl();
 
-		VECTOR pos = m_Player->GetNextPos();
-		pos.y = m_Player->GetNextPos().y + 60;
+	//for (auto& pModel : m_Field->GetModel())
+	//{
+	//	// DxLibの関数を利用して当たり判定をとる
+	//	MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
 
-		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
-		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
-			pos, pos, m_Player->GetColRadius());
+	//	VECTOR pos = m_Player->GetNextPos();
+	//	pos.y = m_Player->GetNextPos().y + 60;
 
-		//ポリゴンが一つでもあたっていた場合
-		if (result.HitNum > 0)
-		{
-			m_HitCount++;
-			printfDx("Hit %d\n", m_HitCount);
-			//pModel->OnDamage(10);
+	//	//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
+	//	result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
+	//		pos, pos, m_Player->GetColRadius());
 
-			m_Player->SetcolFieldY(true);
+	//	//ポリゴンが一つでもあたっていた場合
+	//	if (result.HitNum > 0)
+	//	{
+	//		m_HitCount++;
+	//		printfDx("Hit %d\n", m_HitCount);
+	//		//pModel->OnDamage(10);
 
-			if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
-			{
-				m_Player->SetcolFieldXZ(true);
-				m_Player->SetcolFieldY(false);
-			}
-			// 当たり判定情報の後始末
-			MV1CollResultPolyDimTerminate(result);
-			break;
-		}
+	//		m_Player->SetcolFieldY(true);
 
-		// 当たり判定情報の後始末
-		MV1CollResultPolyDimTerminate(result);
-	}
+	//		if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
+	//		{
+	//			m_Player->SetcolFieldXZ(true);
+	//			m_Player->SetcolFieldY(false);
+	//		}
+	//		// 当たり判定情報の後始末
+	//		MV1CollResultPolyDimTerminate(result);
+	//		break;
+	//	}
+
+	//	// 当たり判定情報の後始末
+	//	MV1CollResultPolyDimTerminate(result);
+	//}
 
 	updateFade();
 
@@ -150,5 +153,115 @@ void SceneMain::draw()
 	}*/
 
 	SceneBase::drawFade();
+}
+
+void SceneMain::IsColl()
+{
+	for (auto& pModel : m_Field->GetModelRed())
+	{
+		// DxLibの関数を利用して当たり判定をとる
+		MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+
+		VECTOR pos = m_Player->GetNextPos();
+		pos.y = m_Player->GetNextPos().y + 60;
+
+		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
+		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
+			pos, pos, m_Player->GetColRadius());
+
+		//ポリゴンが一つでもあたっていた場合
+		if (result.HitNum > 0)
+		{
+			m_HitCount++;
+			printfDx("Hit %d\n", m_HitCount);
+			//pModel->OnDamage(10);
+
+			m_Player->SetcolFieldY(true);
+
+			if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
+			{
+				m_Player->SetcolFieldXZ(true);
+				m_Player->SetcolFieldY(false);
+			}
+			// 当たり判定情報の後始末
+			MV1CollResultPolyDimTerminate(result);
+			return;
+		}
+
+	//	// 当たり判定情報の後始末
+		MV1CollResultPolyDimTerminate(result);
+	}
+
+	for (auto& pModel : m_Field->GetModel())
+	{
+		// DxLibの関数を利用して当たり判定をとる
+		MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+
+		VECTOR pos = m_Player->GetNextPos();
+		pos.y = m_Player->GetNextPos().y + 60;
+
+		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
+		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
+			pos, pos, m_Player->GetColRadius());
+
+		//ポリゴンが一つでもあたっていた場合
+		if (result.HitNum > 0)
+		{
+			m_HitCount++;
+			printfDx("Hit %d\n", m_HitCount);
+			//pModel->OnDamage(10);
+
+			m_Player->SetcolFieldY(true);
+
+			if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
+			{
+				m_Player->SetcolFieldXZ(true);
+				m_Player->SetcolFieldY(false);
+			}
+			// 当たり判定情報の後始末
+			MV1CollResultPolyDimTerminate(result);
+			return;
+		}
+
+		// 当たり判定情報の後始末
+		MV1CollResultPolyDimTerminate(result);
+	}
+
+	
+
+	for (auto& pModel : m_Field->GetModelBlue())
+	{
+		// DxLibの関数を利用して当たり判定をとる
+		MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+
+		VECTOR pos = m_Player->GetNextPos();
+		pos.y = m_Player->GetNextPos().y + 60;
+
+		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
+		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
+			pos, pos, m_Player->GetColRadius());
+
+		//ポリゴンが一つでもあたっていた場合
+		if (result.HitNum > 0)
+		{
+			m_HitCount++;
+			printfDx("Hit %d\n", m_HitCount);
+			//pModel->OnDamage(10);
+
+			m_Player->SetcolFieldY(true);
+
+			if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
+			{
+				m_Player->SetcolFieldXZ(true);
+				m_Player->SetcolFieldY(false);
+			}
+			// 当たり判定情報の後始末
+			MV1CollResultPolyDimTerminate(result);
+			return;
+		}
+
+		// 当たり判定情報の後始末
+		MV1CollResultPolyDimTerminate(result);
+	}
 }
 

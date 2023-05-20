@@ -12,20 +12,24 @@ namespace
 	constexpr float kRotSpeed = 0.15f;
 
 	// 最大移動速度
-	constexpr float kMaxMoveSpeed = 5.0f;
+	constexpr float kMaxMoveSpeed = 7.0f;
 
 	// 一フレームごとの移動速度上昇
-	constexpr float kMoveSpeedUp = 0.5f;
+	constexpr float kMoveSpeedUp = 1.0f;
 
 	// アニメーション番号
 	constexpr int kIdleAnimNo = 3;	// 待機モーション
 	constexpr int kModeAnimNo = 11;// 移動モーション
+	constexpr int kJumpAnimNo = 6;// ジャンプモーション
 
 	// 当たり判定のサイズ
 	constexpr float kColRadius = 90.0f;
 
 	// 重力
-	constexpr float kGravity = 1.0f;
+	constexpr float kGravity = 0.5f;
+
+	// ジャンプ力
+	constexpr float kJumpPower = 20.0f;
 }
 
 Player::Player() :
@@ -65,6 +69,7 @@ void Player::Update()
 	{
 		m_Pos.y = m_NextPos.y;
 	}
+
 	m_NextPos = m_Pos;
 
 	m_colFieldY = false;
@@ -74,9 +79,7 @@ void Player::Update()
 
 	//現在の座標に移動ベクトルを足す
 	m_NextPos.x += m_Vec.x;
-		m_NextPos.y -= kGravity;
-
-
+	m_NextPos.y += m_Vec.y;
 	m_NextPos.z += m_Vec.z;
 	//アニメーションを進める
 	m_pModel->update();
@@ -86,15 +89,15 @@ void Player::Update()
 
 	//カメラの位置、どこからどこを見ているかを設定
 	m_cameraPos = (m_cameraPos * 0.8f) + (m_Pos.x * 0.2f);
-	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos, 300, -800 + m_Pos.z), VGet(m_cameraPos, 0, m_Pos.z));
+	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos, 1500, -800 + m_Pos.z), VGet(m_cameraPos, 0, m_Pos.z));
 }
 
 void Player::Draw()
 {
 	m_pModel->draw();
 
-//	printfDx("%f\n", static_cast<float>(m_Vec.z));
-//	printfDx("%f\n", static_cast<float>(m_Vec.x));
+	//	printfDx("%f\n", static_cast<float>(m_Vec.z));
+	//	printfDx("%f\n", static_cast<float>(m_Vec.x));
 }
 
 float Player::GetColRadius()
@@ -112,8 +115,16 @@ void Player::updateIdle()
 		return;
 	}
 
+	if (Pad::isTrigger(PAD_INPUT_1))
+	{
+		m_Vec.y = kJumpPower;
+		m_updateFunc = &Player::updateJump;
+		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
+	}
+
 	m_Vec.x = min(max(m_Vec.x - kMoveSpeedUp, 0), m_Vec.x + kMoveSpeedUp);
 	m_Vec.z = min(max(m_Vec.z - kMoveSpeedUp, 0), m_Vec.z + kMoveSpeedUp);
+
 }
 
 void Player::updateMove()
@@ -125,6 +136,13 @@ void Player::updateMove()
 
 	IsMove(PressLeft, PressUp, PressRight, PressBottom);
 	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
+
+	if (Pad::isTrigger(PAD_INPUT_1))
+	{
+		m_Vec.y = kJumpPower;
+		m_updateFunc = &Player::updateJump;
+		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
+	}
 
 	/*if (PressUp)
 	{
@@ -210,12 +228,20 @@ void Player::updateMove()
 		!PressUp && !PressBottom)
 	{
 		m_updateFunc = &Player::updateIdle;
-		m_pModel->changeAnimation(kIdleAnimNo, true, true,1);
+		m_pModel->changeAnimation(kIdleAnimNo, true, true, 1);
 	}
 }
 
 void Player::updateJump()
 {
+	m_Vec.y -= kGravity;
+	m_Pos.y += m_Vec.y;
+
+	if (m_Vec.y < -19)
+	{
+		m_pModel->changeAnimation(kIdleAnimNo, true, true, 2);
+		m_updateFunc = &Player::updateIdle;
+	}
 }
 
 void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom)
@@ -412,3 +438,4 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		return;
 	}
 }
+
