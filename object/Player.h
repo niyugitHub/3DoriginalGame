@@ -37,16 +37,15 @@ private:
 private:
 	int m_modelHandle; // モデルハンドル
 
+	float m_cameraPos;
+
 	VECTOR m_Pos; // プレイヤーの座標
 
 	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
 
 	VECTOR m_Vec; // プレイヤーの移動速度
 
-	float m_cameraPos;
 
-	//メンバ関数ポインタ
-	void (Player::* m_updateFunc)();
 
 	//プレイヤーのモデル
 	std::shared_ptr<Model> m_pModel;
@@ -69,5 +68,8 @@ private:
 
 	//ショットのポインター
 //	std::vector<std::shared_ptr<Shot>> m_pShot;
+
+	//メンバ関数ポインタ
+	void (Player::* m_updateFunc)();
 };
 
