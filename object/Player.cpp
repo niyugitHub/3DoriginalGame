@@ -2,6 +2,7 @@
 #include"Pad.h"
 #include"Model.h"
 #include"Vec2.h"
+#include"Shot.h"
 
 namespace
 {
@@ -49,6 +50,8 @@ Player::Player() :
 	//3DÉÇÉfÉãÇÃê∂ê¨
 	m_pModel = std::make_shared<Model>(kEnemyModelFileName);
 	m_pModel->setAnimation(kIdleAnimNo, true, true);
+
+//	m_pShot.push_back(std::make_shared<Shot>(VGet(0, 0, 0), VGet(0, 0, 0)));
 }
 
 Player::~Player()
@@ -62,6 +65,10 @@ void Player::Init()
 
 void Player::Update()
 {
+	/*for (auto& shot : m_pShot)
+	{
+		shot->Update();
+	}*/
 	if (!m_colFieldXZ)
 	{
 		m_Pos.x = m_NextPos.x;
@@ -101,6 +108,11 @@ void Player::Update()
 void Player::Draw()
 {
 	m_pModel->draw();
+
+	/*for (auto& shot : m_pShot)
+	{
+		shot->Draw();
+	}*/
 
 	//	printfDx("%f\n", static_cast<float>(m_Vec.z));
 	//	printfDx("%f\n", static_cast<float>(m_Vec.x));

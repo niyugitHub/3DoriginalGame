@@ -11,7 +11,7 @@ class SceneMain : public SceneBase
 {
 public:
 	SceneMain();
-	virtual ~SceneMain() {}
+	virtual ~SceneMain();
 
 	virtual void init() override;
 	virtual void end() override;

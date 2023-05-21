@@ -26,6 +26,11 @@ SceneMain::SceneMain() :
 	m_SceneGameClear = std::make_shared<SceneGameClear>();
 }
 
+SceneMain::~SceneMain()
+{
+
+}
+
 void SceneMain::init()
 {
 	//3DŠÖ˜A‚Ìİ’è

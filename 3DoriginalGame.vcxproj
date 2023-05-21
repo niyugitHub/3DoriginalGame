@@ -145,6 +145,7 @@
     <ClCompile Include="object\field\FieldBase.cpp" />
     <ClCompile Include="object\Map.cpp" />
     <ClCompile Include="object\Player.cpp" />
+    <ClCompile Include="object\Shot.cpp" />
     <ClCompile Include="SceneGameClear.cpp" />
     <ClCompile Include="scene\SceneBase.cpp" />
     <ClCompile Include="scene\SceneDebug.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="object\field\FieldBase.h" />
     <ClInclude Include="object\Map.h" />
     <ClInclude Include="object\Player.h" />
+    <ClInclude Include="object\Shot.h" />
     <ClInclude Include="SceneGameClear.h" />
     <ClInclude Include="scene\SceneBase.h" />
     <ClInclude Include="scene\SceneDebug.h" />

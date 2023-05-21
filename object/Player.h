@@ -1,8 +1,10 @@
 #pragma once
 #include<DxLib.h>
 #include<memory>
+#include<vector>
 
 class Model;
+class Shot;
 
 class Player
 {
@@ -28,9 +30,9 @@ private:
 	void updateMove();
 	void updateJump();
 	void updatePunch();
-
 	void IsMove(bool Left,bool Up,bool Right,bool Bottom, float MoveSpeed);
 	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
+
 
 private:
 	int m_modelHandle; // モデルハンドル
@@ -49,6 +51,7 @@ private:
 	//プレイヤーのモデル
 	std::shared_ptr<Model> m_pModel;
 
+
 	// 再生しているアニメーション番号
 	int m_animNo;
 
@@ -63,5 +66,8 @@ private:
 
 	//フィールドとの当たり判定XZ
 	bool m_colFieldXZ;
+
+	//ショットのポインター
+//	std::vector<std::shared_ptr<Shot>> m_pShot;
 };
 

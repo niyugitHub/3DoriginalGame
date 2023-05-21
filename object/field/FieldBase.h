@@ -14,6 +14,12 @@ public:
 	void Init();
 	void Update();
 	void Draw();
+	
+	void FirstModelLoad(); // モデルロード(最初の一個だけ)
+
+	void LoadFile(const char* fileName);
+
+	void ModelLoad(int Model1, int Model2, int Model3);//モデルロード(全部のモデル)
 
 	float GetFieldSizeX();	//X軸のフィールドの長さ
 	float GetFieldSizeZ();	//Z軸のフィールドの長さ
