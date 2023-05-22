@@ -27,7 +27,8 @@ namespace
 	constexpr float kFieldSideLengthZ = kBlockSideLength * kBlockNumZ;
 }
 
-FieldBase::FieldBase()
+FieldBase::FieldBase() : 
+	m_lookBlock(1)
 {
 	
 	////3Dモデルをロード
@@ -235,8 +236,8 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
-			float x = 200.0f * (i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
-			float z = 200.0f * (i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float x = 200.0f * static_cast<float>(i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float z = 200.0f * static_cast<float>(i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
 			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
 
 			m_pSwitch.push_back(std::make_shared<Switch>(VGet(x, 100, z)));
@@ -247,8 +248,8 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
-			float x = 200.0f * (i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
-			float z = 200.0f * (i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float x = 200.0f * static_cast<float>(i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float z = 200.0f * static_cast<float>(i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
 			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
 			continue;
 		}
@@ -257,8 +258,8 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 		{
 			m_pModelRed.push_back(std::make_shared<Model>(Model2));
 			m_pModelRed.back()->setUseCollision(true, true);
-			float x = 200.0f * (i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
-			float z = 200.0f * (i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float x = 200.0f * static_cast<float>(i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float z = 200.0f * static_cast<float>(i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
 			m_pModelRed.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
 			continue;
 		}
@@ -267,8 +268,8 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 		{
 			m_pModelBlue.push_back(std::make_shared<Model>(Model3));
 			m_pModelBlue.back()->setUseCollision(true, true);
-			float x = 200.0f * (i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
-			float z = 200.0f * (i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float x = 200.0f * static_cast<float>(i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float z = 200.0f * static_cast<float>(i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
 			m_pModelBlue.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
 			continue;
 		}

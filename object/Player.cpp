@@ -1,7 +1,6 @@
 #include "Player.h"
 #include"Pad.h"
 #include"Model.h"
-#include"Vec2.h"
 #include"Shot.h"
 
 namespace
@@ -33,6 +32,9 @@ namespace
 
 	// ジャンプ力
 	constexpr float kJumpPower = 20.0f;
+
+	//ショットスピード
+	constexpr float kShotSpeed = 20.0f;
 }
 
 Player::Player() :
@@ -65,10 +67,10 @@ void Player::Init()
 
 void Player::Update()
 {
-	/*for (auto& shot : m_pShot)
+	for (auto& shot : m_pShot)
 	{
 		shot->Update();
-	}*/
+	}
 	if (!m_colFieldXZ)
 	{
 		m_Pos.x = m_NextPos.x;
@@ -109,10 +111,10 @@ void Player::Draw()
 {
 	m_pModel->draw();
 
-	/*for (auto& shot : m_pShot)
+	for (auto& shot : m_pShot)
 	{
 		shot->Draw();
-	}*/
+	}
 
 	//	printfDx("%f\n", static_cast<float>(m_Vec.z));
 	//	printfDx("%f\n", static_cast<float>(m_Vec.x));
@@ -145,7 +147,12 @@ void Player::updateIdle()
 	{
 		m_Vec.x = 0.0f;
 		m_Vec.z = 0.0f;
-		m_updateFunc = &Player::updatePunch;
+
+		Vec2 shotSpeed = { 1,1 };
+		shotSpeed = IsShot(shotSpeed);
+		m_pShot.push_back(std::make_shared<Shot>(m_Pos, VGet(shotSpeed.x, 0.0f, shotSpeed.y)));
+
+		m_updateFunc = &Player::updateShot;
 		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
 		return;
 	}
@@ -177,80 +184,15 @@ void Player::updateMove()
 	{
 		m_Vec.x = 0.0f;
 		m_Vec.z = 0.0f;
-		m_updateFunc = &Player::updatePunch;
+
+		Vec2 shotSpeed = { 1,1 };
+		shotSpeed = IsShot(shotSpeed);
+
+		m_pShot.push_back(std::make_shared<Shot>(m_Pos, VGet(shotSpeed.x, 0.0f, shotSpeed.y)));
+		m_updateFunc = &Player::updateShot;
 		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
 		return;
 	}
-
-	/*if (PressUp)
-	{
-		m_Vec.z = min(m_Vec.z + kMoveSpeedUp,kMaxMoveSpeed);
-		if (m_angle <= DX_PI_F)
-		{
-			m_angle = m_angle + kRotSpeed;
-		}
-		if (m_angle > DX_PI_F)
-		{
-			m_angle = m_angle - kRotSpeed;
-		}
-	}
-
-	if (PressBottom)
-	{
-		m_Vec.z = max(m_Vec.z - kMoveSpeedUp, -kMaxMoveSpeed);
-		if (m_angle <= DX_PI_F)
-		{
-			m_angle = m_angle - kRotSpeed;
-		}
-		if (m_angle > DX_PI_F)
-		{
-			m_angle = m_angle + kRotSpeed;
-		}
-
-		if (m_angle < 0)
-		{
-			m_angle = 0;
-		}
-	}
-
-	if (PressRight)
-	{
-		m_Vec.x = min(m_Vec.x + kMoveSpeedUp, kMaxMoveSpeed);
-
-		if (m_angle >= DX_PI_F / 2 && m_angle < (DX_PI_F / 2 * 3))
-		{
-			m_angle = m_angle + kRotSpeed;
-		}
-		if (m_angle >= (DX_PI_F / 2 * 3) || m_angle < DX_PI_F / 2)
-		{
-			m_angle = m_angle - kRotSpeed;
-		}
-
-	}
-
-	if (PressLeft)
-	{
-		m_Vec.x = max(m_Vec.x - kMoveSpeedUp, -kMaxMoveSpeed);
-
-		if (m_angle >= DX_PI_F / 2 && m_angle < (DX_PI_F / 2 * 3))
-		{
-			m_angle = m_angle - kRotSpeed;
-		}
-		if (m_angle >= (DX_PI_F / 2 * 3) || m_angle <= DX_PI_F / 2)
-		{
-			m_angle = m_angle + kRotSpeed;
-		}
-	}
-
-	if (m_angle > DX_PI_F * 2)
-	{
-		m_angle = 0;
-	}
-
-	if (m_angle < 0)
-	{
-		m_angle = DX_PI_F * 2;
-	}*/
 
 	if (fabs(m_Vec.x) >= 5.0f && fabs(m_Vec.z) >= 5.0f)
 	{
@@ -291,7 +233,7 @@ void Player::updateJump()
 	}
 }
 
-void Player::updatePunch()
+void Player::updateShot()
 {
 	if (m_pModel->isAnimEnd())
 	{
@@ -384,7 +326,7 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		m_angle = 0;
 	}
 
-	if (m_angle < 0)
+	if (m_angle < 0.0f)
 	{
 		m_angle = DX_PI_F * 2;
 	}
@@ -443,11 +385,11 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 
 	if (Up)
 	{
-		if (m_angle <= DX_PI_F)
+		if (m_angle <= DX_PI_F + kRotSpeed)
 		{
 			m_angle = m_angle + kRotSpeed;
 		}
-		if (m_angle > DX_PI_F)
+		if (m_angle > DX_PI_F + kRotSpeed)
 		{
 			m_angle = m_angle - kRotSpeed;
 		}
@@ -497,5 +439,17 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		}
 		return;
 	}
+}
+
+Vec2 Player::IsShot(Vec2 ShotSpeed)
+{
+	ShotSpeed.x = sin(m_angle);
+	ShotSpeed.y = cos(m_angle);
+
+	ShotSpeed = ShotSpeed.normalize();
+
+	ShotSpeed *= -kShotSpeed;
+
+	return ShotSpeed;
 }
 

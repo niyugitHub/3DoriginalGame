@@ -2,6 +2,7 @@
 #include<DxLib.h>
 #include<memory>
 #include<vector>
+#include"Vec2.h"
 
 class Model;
 class Shot;
@@ -29,9 +30,10 @@ private:
 	void updateIdle();
 	void updateMove();
 	void updateJump();
-	void updatePunch();
+	void updateShot();
 	void IsMove(bool Left,bool Up,bool Right,bool Bottom, float MoveSpeed);
 	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
+	Vec2 IsShot(Vec2 ShotSpeed);
 
 
 private:
@@ -45,11 +47,8 @@ private:
 
 	VECTOR m_Vec; // プレイヤーの移動速度
 
-
-
 	//プレイヤーのモデル
 	std::shared_ptr<Model> m_pModel;
-
 
 	// 再生しているアニメーション番号
 	int m_animNo;
@@ -67,7 +66,7 @@ private:
 	bool m_colFieldXZ;
 
 	//ショットのポインター
-//	std::vector<std::shared_ptr<Shot>> m_pShot;
+	std::vector<std::shared_ptr<Shot>> m_pShot;
 
 	//メンバ関数ポインタ
 	void (Player::* m_updateFunc)();
