@@ -49,7 +49,6 @@ private:
 	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
 
 	VECTOR m_Vec; // プレイヤーの移動速度
-	
 
 	// 再生しているアニメーション番号
 	int m_animNo;
