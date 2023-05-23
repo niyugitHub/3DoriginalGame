@@ -26,14 +26,16 @@ public:
 
 	void SetcolFieldXZ(bool colFieldXZ) { m_colFieldXZ = colFieldXZ; }
 
+	std::vector<Shot*> GetShot() { return m_pShot; }
+
 private:
 	void updateIdle();
 	void updateMove();
 	void updateJump();
 	void updateShot();
 	void IsMove(bool Left,bool Up,bool Right,bool Bottom, float MoveSpeed);
-//	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
-//	Vec2 IsShot(Vec2 ShotSpeed);
+	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
+	Vec2 IsShot(Vec2 ShotSpeed);
 
 
 private:
@@ -67,5 +69,7 @@ private:
 
 	//メンバ関数ポインタ
 	void (Player::* m_updateFunc)();
+
+	std::vector<Shot*> m_pShot;
 };
 

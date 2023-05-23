@@ -3,7 +3,7 @@
 namespace
 {
 	// ƒVƒ‡ƒbƒg‚Ì”¼Œa
-	constexpr float kRadius = 30.0f;
+	constexpr float kRadius = 40.0f;
 }
 
 Shot::Shot(VECTOR pos, VECTOR vec) :
@@ -18,11 +18,20 @@ Shot::~Shot()
 {
 }
 
-void Shot::Update()
+void Shot::Update(VECTOR PlayerPos)
 {
 	m_lastPos = m_Pos;
 
 	m_Pos = VAdd(m_Pos, m_Vec);
+
+	VECTOR toPos = VSub(m_Pos, PlayerPos);
+
+	float dist = VSize(toPos);
+
+	if (dist > 1500)
+	{
+		m_Exist = false;
+	}
 }
 
 void Shot::Draw()

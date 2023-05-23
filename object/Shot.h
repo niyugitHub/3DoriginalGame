@@ -8,7 +8,7 @@ public:
 
 	virtual ~Shot();
 
-	void Update();
+	void Update(VECTOR PlayerPos);
 
 	void Draw();
 
@@ -17,6 +17,9 @@ public:
 
 	// ”¼Œa‚Ìæ“¾
 	float GetRadius() const;
+
+	void SetExist(bool exist) { m_Exist = exist; }
+	bool GetExist() { return m_Exist; }
 
 private:
 	VECTOR m_Pos; // Œ»İˆÊ’u

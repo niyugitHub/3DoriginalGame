@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "SceneGameClear.h"
 #include"Model.h"
+#include"Shot.h"
+#include"Switch.h"
 
 #include "Pad.h"
 
@@ -189,6 +191,25 @@ void SceneMain::draw()
 
 void SceneMain::IsColl()
 {
+	for (auto& pShot : m_Player->GetShot())
+	{
+		VECTOR shotPos = pShot->GetPos();
+		for (auto& pSwitch : m_Field->GetSwitch())
+		{
+			VECTOR switchPos = pSwitch->GetPos();
+			VECTOR toSwitch = VSub(shotPos, switchPos);
+
+			float dist = VSize(toSwitch);
+			if (dist < (pShot->GetRadius() + pSwitch->GetRadius()))
+			{
+				// “–‚½‚Á‚½
+			//	m_pPlayer->OnDamage(10);
+				m_Field->ChangeBlock();
+				pShot->SetExist(false);
+			}
+		}
+	}
+
 	for (auto& pModel : m_Field->GetModel())
 	{
 		// DxLib‚ÌŠÖ”‚ğ—˜—p‚µ‚Ä“–‚½‚è”»’è‚ğ‚Æ‚é

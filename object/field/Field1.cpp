@@ -23,13 +23,13 @@ namespace
 
 Field1::Field1()
 {
-	m_lookBlock = 0;
+	m_lookBlock = 2;
 	
 	FirstModelLoad();
 
 	LoadFile(kFileStage);
 
-	m_blockNum.push_back(-1);
+	m_blockNum.push_back(8);
 
 	//最初にロードしたモデルと合わせてモデルを100個生成
 	int orgModel1 = m_pModel[0]->getModelHandle();
