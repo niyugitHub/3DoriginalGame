@@ -15,6 +15,6 @@ public:
 	void update();
 	void draw();
 private:
-//	SceneBase* m_pScene;
+	//	SceneBase* m_pScene;
 	std::unique_ptr<SceneBase>	m_pScene;
 };

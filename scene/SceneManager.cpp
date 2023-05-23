@@ -4,7 +4,7 @@
 #include "SceneDebug.h"
 #include "Pad.h"
 
-SceneManager::SceneManager():
+SceneManager::SceneManager() :
 	m_pScene()
 {
 }

@@ -54,7 +54,7 @@ FieldBase::FieldBase() :
 
 FieldBase::~FieldBase()
 {
-
+	
 }
 
 void FieldBase::Init()
