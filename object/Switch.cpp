@@ -56,7 +56,7 @@ void Switch::Draw()
 		true);
 }
 
-float Switch::GetColRadius()
+float Switch::GetRadius()
 {
-	return kColRadius;
+	return kColRadius * 1.5f; //ƒVƒ‡ƒbƒg‚ð“–‚Ä‚â‚·‚­‚·‚é‚½‚ß
 }

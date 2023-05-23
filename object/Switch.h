@@ -13,7 +13,7 @@ public:
 
 	VECTOR GetPos() { return m_Pos; }
 
-	float GetColRadius();
+	float GetRadius();
 
 	void SetColorNum(int colorNum) { m_colorNum = colorNum; }
 

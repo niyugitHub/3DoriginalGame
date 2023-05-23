@@ -78,15 +78,6 @@ void FieldBase::Update()
 		model->update();
 	}
 
-
-	if (Pad::isTrigger(PAD_INPUT_3))
-	{
-		m_lookBlock++;
-		if (m_lookBlock >= 4)
-		{
-			m_lookBlock = 2;
-		}
-	}
 	for (auto& Switch : m_pSwitch)
 	{
 		Switch->SetColorNum(m_lookBlock);
@@ -232,7 +223,7 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 	//’n–Ê‚É•À‚×‚é
 	for (int i = 0; i < m_blockNum.size(); i++)
 	{
-		if (m_blockNum[i] == -1)
+		if (m_blockNum[i] == 8)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
@@ -276,11 +267,19 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 	}
 }
 
+void FieldBase::ChangeBlock()
+{
+	m_lookBlock++;
+	if (m_lookBlock >= 4)
+	{
+		m_lookBlock = 2;
+	}
+}
+
 float FieldBase::GetFieldSizeX()
 {
 	return kFieldSideLengthX;
 }
-
 
 float FieldBase::GetFieldSizeZ()
 {

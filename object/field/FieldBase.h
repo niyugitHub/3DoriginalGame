@@ -21,6 +21,8 @@ public:
 
 	void ModelLoad(int Model1, int Model2, int Model3);//モデルロード(全部のモデル)
 
+	void ChangeBlock();
+
 	float GetFieldSizeX();	//X軸のフィールドの長さ
 	float GetFieldSizeZ();	//Z軸のフィールドの長さ
 
