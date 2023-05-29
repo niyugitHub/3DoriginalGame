@@ -148,6 +148,8 @@
     <ClCompile Include="object\Player.cpp" />
     <ClCompile Include="object\Shot.cpp" />
     <ClCompile Include="SceneGameClear.cpp" />
+    <ClCompile Include="scene\SceneStageSelect.cpp" />
+    <ClCompile Include="scene\SceneTitle.cpp" />
     <ClCompile Include="scene\SceneBase.cpp" />
     <ClCompile Include="scene\SceneDebug.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
@@ -166,6 +168,8 @@
     <ClInclude Include="object\Player.h" />
     <ClInclude Include="object\Shot.h" />
     <ClInclude Include="SceneGameClear.h" />
+    <ClInclude Include="scene\SceneStageSelect.h" />
+    <ClInclude Include="scene\SceneTitle.h" />
     <ClInclude Include="scene\SceneBase.h" />
     <ClInclude Include="scene\SceneDebug.h" />
     <ClInclude Include="scene\SceneManager.h" />
