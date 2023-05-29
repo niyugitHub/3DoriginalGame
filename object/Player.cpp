@@ -152,7 +152,7 @@ void Player::Draw()
 	//	printfDx("%f\n", static_cast<float>(m_Vec.x));
 }
 
-float Player::GetColRadius()
+float Player::GetRadius()
 {
 	return kColRadius;
 }

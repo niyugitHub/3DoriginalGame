@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="object\Goal.cpp" />
     <ClCompile Include="object\field\Field1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="object\Goal.h" />
     <ClInclude Include="object\field\Field1.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Model.h" />

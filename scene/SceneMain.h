@@ -20,6 +20,8 @@ public:
 	virtual void draw() override;
 
 	void IsColl();
+
+	bool StageClear();
 private:
 	std::shared_ptr<Player> m_Player;
 	std::shared_ptr<FieldBase> m_Field;

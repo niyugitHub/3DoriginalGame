@@ -5,6 +5,8 @@
 
 class Model;
 class Switch;
+class Goal;
+
 class FieldBase
 {
 public:
@@ -45,6 +47,8 @@ public:
 
 	std::vector<std::shared_ptr<Switch>> GetSwitch() { return m_pSwitch; }
 
+	std::shared_ptr<Goal> GetGoal() { return m_pGoal; }
+
 	int GetLookBlock() { return m_lookBlock; }
 
 protected:
@@ -59,6 +63,9 @@ protected:
 
 	//スイッチのポインター
 	std::vector<std::shared_ptr<Switch>> m_pSwitch;
+
+	//ゴールのポインター
+	std::shared_ptr<Goal> m_pGoal;
 
 	//ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum; 

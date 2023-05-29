@@ -20,7 +20,7 @@ public:
 	VECTOR GetPos() { return m_Pos; }
 	VECTOR GetNextPos() { return m_NextPos; }
 
-	float GetColRadius();
+	float GetRadius();
 
 	void SetcolFieldY(bool colFieldY) { m_colFieldY = colFieldY; }
 

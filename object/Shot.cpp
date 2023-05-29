@@ -28,7 +28,7 @@ void Shot::Update(VECTOR PlayerPos)
 
 	float dist = VSize(toPos);
 
-	if (dist > 1500)
+	if (dist > 5000)
 	{
 		m_Exist = false;
 	}

@@ -9,6 +9,7 @@
 #include"Model.h"
 #include"Shot.h"
 #include"Switch.h"
+#include"Goal.h"
 
 #include "Pad.h"
 
@@ -76,10 +77,10 @@ SceneBase* SceneMain::update()
 	{
 	}
 
-	/*if (Pad::isTrigger(PAD_INPUT_UP))
+	if (StageClear())
 	{
 		m_GameClear = true;
-	}*/
+	}
 	if (Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 	}
@@ -95,41 +96,6 @@ SceneBase* SceneMain::update()
 //	int a = m_Field->GetModel().size();
 
 	IsColl();
-
-	//for (auto& pModel : m_Field->GetModel())
-	//{
-	//	// DxLibの関数を利用して当たり判定をとる
-	//	MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
-
-	//	VECTOR pos = m_Player->GetNextPos();
-	//	pos.y = m_Player->GetNextPos().y + 60;
-
-	//	//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
-	//	result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
-	//		pos, pos, m_Player->GetColRadius());
-
-	//	//ポリゴンが一つでもあたっていた場合
-	//	if (result.HitNum > 0)
-	//	{
-	//		m_HitCount++;
-	//		printfDx("Hit %d\n", m_HitCount);
-	//		//pModel->OnDamage(10);
-
-	//		m_Player->SetcolFieldY(true);
-
-	//		if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
-	//		{
-	//			m_Player->SetcolFieldXZ(true);
-	//			m_Player->SetcolFieldY(false);
-	//		}
-	//		// 当たり判定情報の後始末
-	//		MV1CollResultPolyDimTerminate(result);
-	//		break;
-	//	}
-
-	//	// 当たり判定情報の後始末
-	//	MV1CollResultPolyDimTerminate(result);
-	//}
 
 	updateFade();
 
@@ -220,7 +186,7 @@ void SceneMain::IsColl()
 
 		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
 		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
-			pos, pos, m_Player->GetColRadius());
+			pos, pos, m_Player->GetRadius());
 
 		//ポリゴンが一つでもあたっていた場合
 		if (result.HitNum > 0)
@@ -257,7 +223,7 @@ void SceneMain::IsColl()
 
 			//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
 			result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
-				pos, pos, m_Player->GetColRadius());
+				pos, pos, m_Player->GetRadius());
 
 			//ポリゴンが一つでもあたっていた場合
 			if (result.HitNum > 0)
@@ -296,7 +262,7 @@ void SceneMain::IsColl()
 
 			//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
 			result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
-				pos, pos, m_Player->GetColRadius());
+				pos, pos, m_Player->GetRadius());
 
 			//ポリゴンが一つでもあたっていた場合
 			if (result.HitNum > 0)
@@ -321,5 +287,19 @@ void SceneMain::IsColl()
 			MV1CollResultPolyDimTerminate(result);
 		}
 	}
+}
+
+bool SceneMain::StageClear()
+{
+	VECTOR GoalPos = m_Field->GetGoal()->GetPos();
+	VECTOR PlayerPos = m_Player->GetPos();
+	VECTOR toGoal = VSub(GoalPos, PlayerPos);
+
+	float dist = VSize(toGoal);
+	if (dist < (m_Field->GetGoal()->GetRadius() + m_Player->GetRadius()))
+	{
+		return true;
+	}
+	return false;
 }
 

@@ -2,6 +2,7 @@
 #include "Model.h"
 #include"Pad.h"
 #include"../Switch.h"
+#include"../Goal.h"
 #include<cassert>
 #include <iostream>
 
@@ -115,6 +116,8 @@ void FieldBase::Draw()
 	{
 		Switch->Draw();
 	}
+
+	m_pGoal->Draw();
 }
 
 void FieldBase::FirstModelLoad()
@@ -223,6 +226,18 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 	//ínñ Ç…ï¿Ç◊ÇÈ
 	for (int i = 0; i < m_blockNum.size(); i++)
 	{
+		if (m_blockNum[i] == 10)
+		{
+			m_pModel.push_back(std::make_shared<Model>(Model1));
+			m_pModel.back()->setUseCollision(true, true);
+			float x = 200.0f * static_cast<float>(i % kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			float z = 200.0f * static_cast<float>(i / kBlockNumX) - kFieldSideLengthX / 2 + kBlockSideLength / 2;
+			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//è„ñ Ç™y=0.0fÇ…Ç»ÇÈÇÊÇ§Ç…îzíu
+
+			m_pGoal = std::make_shared<Goal>(VGet(x, 100, z));
+			continue;
+		}
+
 		if (m_blockNum[i] == 8)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
