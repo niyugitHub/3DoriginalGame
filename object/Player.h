@@ -26,15 +26,22 @@ public:
 
 	void SetcolFieldXZ(bool colFieldXZ) { m_colFieldXZ = colFieldXZ; }
 
-	std::vector<Shot*> GetShot() { return m_pShot; }
+	std::vector<Shot*> GetShot() { return m_pShot; } //ショットの情報取得
+
+	void ClearUpdate(); //クリアしたときのアップデート
+
+	void ClearCharaMotion(); //クリアしたときのキャラクターの動き変更
 
 private:
-	void updateIdle();
-	void updateMove();
-	void updateJump();
-	void updateShot();
+	void updateIdle();	//アイドル状態時のアップデート
+	void updateMove();	//移動状態時のアップデート
+	void updateJump();	//ジャンプ状態時のアップデート
+	void updateShot();	//ショット状態時のアップデート
+	//移動時の処理
 	void IsMove(bool Left,bool Up,bool Right,bool Bottom, float MoveSpeed);
+	//プレイヤーの向きの処理
 	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
+	//プレイヤーの向きによってのショットの方向処理
 	Vec2 IsShot(Vec2 ShotSpeed);
 
 
@@ -44,7 +51,7 @@ private:
 	
 	int m_modelHandle; // モデルハンドル
 
-	float m_cameraPos;
+	VECTOR m_cameraPos; //カメラポジション
 
 	VECTOR m_Pos; // プレイヤーの座標
 
@@ -61,6 +68,9 @@ private:
 	//プレイヤーの向いている方向
 	float m_angle;
 
+	//カメラの向いている方向
+	float m_cameraAngle;
+
 	//フィールドとの当たりy判定
 	bool m_colFieldY;
 
@@ -70,6 +80,7 @@ private:
 	//メンバ関数ポインタ
 	void (Player::* m_updateFunc)();
 
+	// ショットのポインタ
 	std::vector<Shot*> m_pShot;
 };
 

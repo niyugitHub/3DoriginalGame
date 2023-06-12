@@ -6,6 +6,7 @@
 #include "../object/field/Field1.h"
 #include "Player.h"
 #include "SceneGameClear.h"
+#include "SceneOption.h"
 #include"Model.h"
 #include"Shot.h"
 #include"Switch.h"
@@ -20,22 +21,13 @@ namespace
 	
 }
 
-SceneMain::SceneMain() : 
+SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
 	m_GameClear(false),
 	m_HitCount(0)
 {
 	m_Player = std::make_shared<Player>();
-	m_Field = std::make_shared<Field1>();
-	m_SceneGameClear = std::make_shared<SceneGameClear>();
-}
+	m_Field = Field;
 
-SceneMain::~SceneMain()
-{
-
-}
-
-void SceneMain::init()
-{
 	//3D関連の設定
 
 	//Zバッファを使用する
@@ -56,14 +48,51 @@ void SceneMain::init()
 	SetCameraPositionAndTarget_UpVecY(VGet(0, 1500, -800), VGet(0.0f, 0.0f, 0.0f));
 
 	m_Player->Init();
-	m_Field->Init();
+	//m_Field->Init();
 
 	//SetLightPosition(VGet(-1500, -1500 , 1000));
-	SetLightDirection(VGet(300, -1000 , 300));
+	SetLightDirection(VGet(300, -1000, 300));
 	SetLightDirection(GetLightDirection());
 	// シャドウマップの生成
 	m_shadowMap = MakeShadowMap(4096, 4096);
 	SetShadowMapLightDirection(m_shadowMap, GetLightDirection());
+}
+
+SceneMain::~SceneMain()
+{
+
+}
+
+void SceneMain::init()
+{
+	////3D関連の設定
+
+	////Zバッファを使用する
+	//SetUseZBuffer3D(true);
+	////Zバッファへの書き込みを行う
+	//SetWriteZBuffer3D(true);
+
+	////ポリゴンの裏面を描画しない
+	//SetUseBackCulling(true);
+
+
+	//// カメラの設定
+	//// どこまで表示するか
+	//SetCameraNearFar(5.0f, 2800.0f);
+	//// カメラの視野角(ラジアン)
+	//SetupCamera_Perspective(60.0f * DX_PI_F / 180.0f);
+	//// カメラの位置、どこからどこを見ているかを設定
+	//SetCameraPositionAndTarget_UpVecY(VGet(0, 1500, -800), VGet(0.0f, 0.0f, 0.0f));
+
+	//m_Player->Init();
+	////m_Field->Init();
+
+	////SetLightPosition(VGet(-1500, -1500 , 1000));
+	//SetLightDirection(VGet(300, -1000 , 300));
+	//SetLightDirection(GetLightDirection());
+	//// シャドウマップの生成
+	//m_shadowMap = MakeShadowMap(4096, 4096);
+	//SetShadowMapLightDirection(m_shadowMap, GetLightDirection());
 }
 
 void SceneMain::end()
@@ -90,7 +119,8 @@ SceneBase* SceneMain::update()
 	
 	if (m_GameClear)
 	{
-		m_SceneGameClear->Update();
+		m_Player->ClearCharaMotion();
+		return new SceneGameClear(m_Player, m_Field);
 	}
 
 //	int a = m_Field->GetModel().size();
@@ -99,14 +129,14 @@ SceneBase* SceneMain::update()
 
 	updateFade();
 
-	if (m_SceneGameClear->GetGameClear())
-	{
-		return new SceneDebug();
-	}
-
 	if (m_Player->GetPos().y < -500)
 	{
-		return new SceneMain();
+		return new SceneMain(m_Field);
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_8))
+	{
+		return new SceneOption(this);
 	}
 
 	return this;
@@ -132,10 +162,10 @@ void SceneMain::draw()
 
 	SetUseShadowMap(0, -1);
 
-	if (m_GameClear)
+	/*if (m_GameClear)
 	{
 		m_SceneGameClear->Draw();
-	}
+	}*/
 
 	//-500~500の範囲にグリッドを表示
 	/*for (float x = -500.0f; x <= 500.0f; x += 100)

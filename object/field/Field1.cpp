@@ -23,25 +23,7 @@ namespace
 
 Field1::Field1()
 {
-	m_lookBlock = 2;
-	
-	FirstModelLoad();
-
-	LoadFile(kFileStage);
-
-	m_blockNum.push_back(8);
-
-	//最初にロードしたモデルと合わせてモデルを100個生成
-	int orgModel1 = m_pModel[0]->getModelHandle();
-	int orgModel2 = m_pModel[1]->getModelHandle();
-	int orgModel3 = m_pModel[2]->getModelHandle();
-	/*for (auto& block : m_blockNum)
-	{		
-		m_pModel.push_back(std::make_shared<Model>(orgModel));
-		m_pModel.back()->setUseCollision(true, true);
-	}*/
-
-	ModelLoad(orgModel1, orgModel2, orgModel3);
+	Init(kFileStage,kRed,kBlue);
 }
 
 Field1::~Field1()

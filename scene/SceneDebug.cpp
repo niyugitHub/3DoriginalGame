@@ -28,10 +28,10 @@ void SceneDebug::end()
 
 SceneBase* SceneDebug::update()
 {
-	if (Pad::isTrigger(PAD_INPUT_1))
+	/*if (Pad::isTrigger(PAD_INPUT_1))
 	{
 		return new SceneMain;
-	}
+	}*/
 
 	if (Pad::isTrigger(PAD_INPUT_UP))
 	{

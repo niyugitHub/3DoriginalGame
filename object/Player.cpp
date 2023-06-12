@@ -23,6 +23,7 @@ namespace
 	constexpr int kModeAnimNo = 11;// 移動モーション
 	constexpr int kJumpAnimNo = 6;// ジャンプモーション
 	constexpr int kShotAnimNo = 5;// ショットモーション
+	constexpr int kClearAnimNo = 16;// クリアモーション
 
 	// 当たり判定のサイズ
 	constexpr float kColRadius = 90.0f;
@@ -35,14 +36,19 @@ namespace
 
 	//ショットスピード
 	constexpr float kShotSpeed = 20.0f;
+
+	// カメラの位置
+	constexpr float kCameraPosY = 1500.0f;
+	constexpr float kCameraPosZ = -800.0f;
 }
 
 Player::Player() :
 	m_updateFunc(&Player::updateIdle),
 	m_modelHandle(-1),
-	m_cameraPos(0.0f),
+	m_cameraPos(VGet(0.0f, kCameraPosY, kCameraPosZ)),
 	m_animNo(3),
-	m_angle(0),
+	m_angle(0.0f),
+	m_cameraAngle(0.0f),
 	m_colFieldY(false),
 	m_colFieldXZ(false)
 {
@@ -92,20 +98,24 @@ void Player::Update()
 	{
 		pShot->Update(m_Pos);
 	}
-
+	//XZ軸から見てフィールドと当たってない場合
 	if (!m_colFieldXZ)
 	{
 		m_Pos.x = m_NextPos.x;
 		m_Pos.z = m_NextPos.z;
 	}
+	//Y軸から見てフィールドと当たってない場合
 	if (!m_colFieldY)
 	{
 		m_Pos.y = m_NextPos.y;
-		if (m_updateFunc != &Player::updateJump)
+		//ジャンプ中じゃないとき
+		if (m_updateFunc != &Player::updateJump) 
 		{
 			m_Vec.y -= kGravity;
 		}
 	}
+
+	//ジャンプ中ではなく、地面と当たっているとき
 	else if(m_updateFunc != &Player::updateJump)
 	{
 		m_Vec.y = 0.0f;
@@ -130,8 +140,9 @@ void Player::Update()
 	m_pModel->setRot(VGet(0.0f, m_angle, 0.0f));
 
 	//カメラの位置、どこからどこを見ているかを設定
-	m_cameraPos = (m_cameraPos * 0.8f) + (m_Pos.x * 0.2f);
-	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos, 1500, -800 + m_Pos.z), VGet(m_cameraPos, 0, m_Pos.z));
+	m_cameraPos.x = (m_cameraPos.x * 0.8f) + (m_Pos.x * 0.2f);
+	m_cameraPos.z = kCameraPosZ + m_Pos.z;
+	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z), VGet(m_cameraPos.x, 0, m_Pos.z));
 
 
 	//SetLightPosition(VGet(m_Pos.x, 500 , m_Pos.z));
@@ -157,6 +168,46 @@ float Player::GetRadius()
 	return kColRadius;
 }
 
+void Player::ClearUpdate()
+{
+	//プレイヤーの目の前にカメラを置く
+	m_angle = max(0, m_angle - kRotSpeed);
+
+	VECTOR flontCamera = VAdd(m_Pos, VGet(0.0f, 300.0f, -600.0f));
+
+//	VECTOR moveCameraSpeed = VSub(flontCamera, m_cameraPos);
+
+//	moveCameraSpeed = VScale(VNorm(moveCameraSpeed), 10.0f);
+
+	/*if (m_cameraPos.z < flontCamera.z)
+	{
+		m_cameraPos = VAdd(m_cameraPos, moveCameraSpeed);
+	}*/
+
+	m_cameraPos.x = (m_cameraPos.x * 0.95f) + (flontCamera.x * 0.05f);
+	m_cameraPos.y = (m_cameraPos.y * 0.95f) + (flontCamera.y * 0.05f);
+	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (flontCamera.z * 0.05f); 
+
+	/*flontCamera = VScale(flontCamera, 1000.0f);
+
+	flontCamera.z *= -1;
+	flontCamera.x *= -1;
+
+	m_cameraPos.x = (m_cameraPos.x * 0.95f) + (flontCamera.x * 0.05f);
+	m_cameraPos.y = (m_cameraPos.y * 0.95f) + (flontCamera.y * 0.05f);
+	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (flontCamera.z * 0.05f);*/
+
+	//アニメーションを進める
+	m_pModel->update();
+	m_pModel->setRot(VGet(0.0f, m_angle, 0.0f));
+	SetCameraPositionAndTarget_UpVecY(m_cameraPos, m_Pos);
+}
+
+void Player::ClearCharaMotion()
+{
+	m_pModel->changeAnimation(kClearAnimNo, true, true, 2);
+}
+
 void Player::updateIdle()
 {
 	if (Pad::isPress(PAD_INPUT_UP) || Pad::isPress(PAD_INPUT_DOWN) ||
@@ -167,7 +218,8 @@ void Player::updateIdle()
 		return;
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_1))
+	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているとき
+	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY) 
 	{
 		m_Vec.y = kJumpPower;
 		m_updateFunc = &Player::updateJump;
@@ -204,7 +256,7 @@ void Player::updateMove()
 	IsMove(PressLeft, PressUp, PressRight, PressBottom, kMoveSpeed);
 	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
 
-	if (Pad::isTrigger(PAD_INPUT_1))
+	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY)
 	{
 		m_Vec.y = kJumpPower;
 		m_updateFunc = &Player::updateJump;

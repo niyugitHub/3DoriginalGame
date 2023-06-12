@@ -13,7 +13,7 @@ public:
 	FieldBase();
 	virtual ~FieldBase();
 
-	void Init();
+	void Init(const char* FileName,int lookBlock,int blockKind);
 	void Update();
 	void Draw();
 	
@@ -72,5 +72,8 @@ protected:
 
 	//今見えるブロックの番号
 	int m_lookBlock;
+
+	//ステージで使われるブロックの種類
+	int m_blockKinds;
 };
 

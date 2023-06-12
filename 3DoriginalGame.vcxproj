@@ -147,7 +147,9 @@
     <ClCompile Include="object\Map.cpp" />
     <ClCompile Include="object\Player.cpp" />
     <ClCompile Include="object\Shot.cpp" />
-    <ClCompile Include="SceneGameClear.cpp" />
+    <ClCompile Include="scene\SceneGameClear.cpp" />
+    <ClCompile Include="scene\SceneOption.cpp" />
+    <ClCompile Include="scene\SceneSelectScreen.cpp" />
     <ClCompile Include="scene\SceneStageSelect.cpp" />
     <ClCompile Include="scene\SceneTitle.cpp" />
     <ClCompile Include="scene\SceneBase.cpp" />
@@ -167,7 +169,9 @@
     <ClInclude Include="object\Map.h" />
     <ClInclude Include="object\Player.h" />
     <ClInclude Include="object\Shot.h" />
-    <ClInclude Include="SceneGameClear.h" />
+    <ClInclude Include="scene\SceneGameClear.h" />
+    <ClInclude Include="scene\SceneOption.h" />
+    <ClInclude Include="scene\SceneSelectScreen.h" />
     <ClInclude Include="scene\SceneStageSelect.h" />
     <ClInclude Include="scene\SceneTitle.h" />
     <ClInclude Include="scene\SceneBase.h" />
@@ -177,6 +181,7 @@
     <ClInclude Include="object\Switch.h" />
     <ClInclude Include="util\Pad.h" />
     <ClInclude Include="util\Vec2.h" />
+    <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

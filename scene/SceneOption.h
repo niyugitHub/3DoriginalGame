@@ -1,10 +1,11 @@
 #pragma once
 #include "SceneBase.h"
-class SceneTitle : public SceneBase
+#include <memory>
+class SceneOption : public SceneBase
 {
 public:
-	SceneTitle();
-	virtual ~SceneTitle();
+	SceneOption(SceneBase* pScene);
+	virtual ~SceneOption();
 
 	virtual void init();
 	virtual void end();
@@ -13,5 +14,6 @@ public:
 	virtual void draw() override;
 
 private:
+	SceneBase* m_pScene;
 };
 

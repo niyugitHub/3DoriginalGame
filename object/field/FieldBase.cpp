@@ -58,8 +58,29 @@ FieldBase::~FieldBase()
 	
 }
 
-void FieldBase::Init()
+void FieldBase::Init(const char* FileName, int lookBlock, int blockKind)
 {
+	m_lookBlock = lookBlock; //最初赤のブロックが見える
+
+	m_blockKinds = blockKind; // 青のブロックまで使う
+
+	FirstModelLoad(); // 最初に複製するためにモデルを用意する
+
+	LoadFile(FileName);
+
+	m_blockNum.push_back(8); //とりあえずスイッチ用意(8がスイッチ)
+
+	//最初にロードしたモデルと合わせてモデルを100個生成
+	int orgModel1 = m_pModel[0]->getModelHandle();
+	int orgModel2 = m_pModel[1]->getModelHandle();
+	int orgModel3 = m_pModel[2]->getModelHandle();
+	/*for (auto& block : m_blockNum)
+	{
+		m_pModel.push_back(std::make_shared<Model>(orgModel));
+		m_pModel.back()->setUseCollision(true, true);
+	}*/
+
+	ModelLoad(orgModel1, orgModel2, orgModel3);
 }
 
 void FieldBase::Update()
@@ -285,9 +306,9 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 void FieldBase::ChangeBlock()
 {
 	m_lookBlock++;
-	if (m_lookBlock >= 4)
+	if (m_lookBlock > m_blockKinds)
 	{
-		m_lookBlock = 2;
+		m_lookBlock = kRed;
 	}
 }
 
