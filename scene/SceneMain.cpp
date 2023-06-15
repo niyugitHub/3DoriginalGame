@@ -25,8 +25,9 @@ SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
 	m_GameClear(false),
 	m_HitCount(0)
 {
-	m_Player = std::make_shared<Player>();
 	m_Field = Field;
+	m_Player = std::make_shared<Player>(m_Field->GetPlayerPos());
+//	m_Player->SetPos(m_Field->GetPlayerPos());
 
 	//3D関連の設定
 
@@ -52,7 +53,7 @@ SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
 
 	//SetLightPosition(VGet(-1500, -1500 , 1000));
 	SetLightDirection(VGet(300, -1000, 300));
-	SetLightDirection(GetLightDirection());
+	//SetLightDirection(GetLightDirection());
 	// シャドウマップの生成
 	m_shadowMap = MakeShadowMap(4096, 4096);
 	SetShadowMapLightDirection(m_shadowMap, GetLightDirection());
@@ -104,6 +105,9 @@ SceneBase* SceneMain::update()
 {
 	if (Pad::isTrigger(PAD_INPUT_1))
 	{
+		m_Player->ClearCharaMotion();
+		m_Field->StageClear();
+		return new SceneGameClear(m_Player, m_Field);
 	}
 
 	if (StageClear())
@@ -120,6 +124,7 @@ SceneBase* SceneMain::update()
 	if (m_GameClear)
 	{
 		m_Player->ClearCharaMotion();
+		m_Field->StageClear();
 		return new SceneGameClear(m_Player, m_Field);
 	}
 
@@ -187,23 +192,37 @@ void SceneMain::draw()
 
 void SceneMain::IsColl()
 {
-	for (auto& pShot : m_Player->GetShot())
+	VECTOR PlayerPos = m_Player->GetPos();
+	for (auto& pSwitch : m_Field->GetSwitch())
 	{
-		VECTOR shotPos = pShot->GetPos();
-		for (auto& pSwitch : m_Field->GetSwitch())
-		{
-			VECTOR switchPos = pSwitch->GetPos();
-			VECTOR toSwitch = VSub(shotPos, switchPos);
+		VECTOR switchPos = pSwitch->GetPos();
+		VECTOR toSwitch = VSub(PlayerPos, switchPos);
 
-			float dist = VSize(toSwitch);
-			if (dist < (pShot->GetRadius() + pSwitch->GetRadius()))
-			{
-				// 当たった
-			//	m_pPlayer->OnDamage(10);
-				m_Field->ChangeBlock();
-				pShot->SetExist(false);
-			}
+		float dist = VSize(toSwitch);
+		if (dist < (m_Player->GetRadius() + pSwitch->GetRadius()))
+		{
+			// 当たった
+			m_SwitchColl = true;
+			break;
+			
 		}
+		else
+		{
+			m_SwitchColl = false;
+		}
+	}
+	
+	if (m_SwitchColl)
+	{
+		if (!m_SwitchColled)
+		{
+			m_Field->ChangeBlock();
+			m_SwitchColled = true;
+		}
+	}
+	else
+	{
+		m_SwitchColled = false;
 	}
 
 	for (auto& pModel : m_Field->GetModel())
@@ -222,7 +241,7 @@ void SceneMain::IsColl()
 		if (result.HitNum > 0)
 		{
 			m_HitCount++;
-			printfDx("Hit %d\n", m_HitCount);
+		//	printfDx("Hit %d\n", m_HitCount);
 			//pModel->OnDamage(10);
 
 			m_Player->SetcolFieldY(true);
@@ -240,83 +259,77 @@ void SceneMain::IsColl()
 		// 当たり判定情報の後始末
 		MV1CollResultPolyDimTerminate(result);
 	}
-
-	if (m_Field->GetLookBlock() == FieldBase::kRed)
+	
+	for (auto& pModel : m_Field->GetModelRed())
 	{
-		for (auto& pModel : m_Field->GetModelRed())
+		// DxLibの関数を利用して当たり判定をとる
+		MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+
+		VECTOR pos = m_Player->GetNextPos();
+		pos.y = m_Player->GetNextPos().y + 60;
+
+		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
+		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
+			pos, pos, m_Player->GetRadius());
+
+		//ポリゴンが一つでもあたっていた場合
+		if (result.HitNum > 0)
 		{
-			// DxLibの関数を利用して当たり判定をとる
-			MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+			m_HitCount++;
+		//	printfDx("Hit %d\n", m_HitCount);
+			//pModel->OnDamage(10);
 
-			VECTOR pos = m_Player->GetNextPos();
-			pos.y = m_Player->GetNextPos().y + 60;
+			m_Player->SetcolFieldY(true);
 
-			//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
-			result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
-				pos, pos, m_Player->GetRadius());
-
-			//ポリゴンが一つでもあたっていた場合
-			if (result.HitNum > 0)
+			if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
 			{
-				m_HitCount++;
-				printfDx("Hit %d\n", m_HitCount);
-				//pModel->OnDamage(10);
-
-				m_Player->SetcolFieldY(true);
-
-				if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
-				{
-					m_Player->SetcolFieldXZ(true);
-					m_Player->SetcolFieldY(false);
-				}
-				// 当たり判定情報の後始末
-				MV1CollResultPolyDimTerminate(result);
-				return;
+				m_Player->SetcolFieldXZ(true);
+				m_Player->SetcolFieldY(false);
 			}
-
-			//	// 当たり判定情報の後始末
-			MV1CollResultPolyDimTerminate(result);
-		}
-	}
-
-
-	if (m_Field->GetLookBlock() == FieldBase::kBlue)
-	{
-		for (auto& pModel : m_Field->GetModelBlue())
-		{
-			// DxLibの関数を利用して当たり判定をとる
-			MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
-
-			VECTOR pos = m_Player->GetNextPos();
-			pos.y = m_Player->GetNextPos().y + 60;
-
-			//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
-			result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
-				pos, pos, m_Player->GetRadius());
-
-			//ポリゴンが一つでもあたっていた場合
-			if (result.HitNum > 0)
-			{
-				m_HitCount++;
-				printfDx("Hit %d\n", m_HitCount);
-				//pModel->OnDamage(10);
-
-				m_Player->SetcolFieldY(true);
-
-				if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
-				{
-					m_Player->SetcolFieldXZ(true);
-					m_Player->SetcolFieldY(false);
-				}
-				// 当たり判定情報の後始末
-				MV1CollResultPolyDimTerminate(result);
-				return;
-			}
-
 			// 当たり判定情報の後始末
 			MV1CollResultPolyDimTerminate(result);
+			return;
 		}
+
+		//	// 当たり判定情報の後始末
+		MV1CollResultPolyDimTerminate(result);
 	}
+	
+	for (auto& pModel : m_Field->GetModelBlue())
+	{
+		// DxLibの関数を利用して当たり判定をとる
+		MV1_COLL_RESULT_POLY_DIM result;	// 当たりデータ
+
+		VECTOR pos = m_Player->GetNextPos();
+		pos.y = m_Player->GetNextPos().y + 60;
+
+		//result = MV1CollCheck_Sphere(Enemy->getModelHandle(), -1, Shot->getPos(), Shot->getRadius());
+		result = MV1CollCheck_Capsule(pModel->getModelHandle(), pModel->getColFrameIndex(),
+			pos, pos, m_Player->GetRadius());
+
+		//ポリゴンが一つでもあたっていた場合
+		if (result.HitNum > 0)
+		{
+			m_HitCount++;
+		//	printfDx("Hit %d\n", m_HitCount);
+			//pModel->OnDamage(10);
+
+			m_Player->SetcolFieldY(true);
+
+			if (m_Player->GetPos().y - 80 < pModel->GetPos().y) // あたったフィールドよりプレイヤーの位置が低いとき
+			{
+				m_Player->SetcolFieldXZ(true);
+				m_Player->SetcolFieldY(false);
+			}
+			// 当たり判定情報の後始末
+			MV1CollResultPolyDimTerminate(result);
+			return;
+		}
+
+		// 当たり判定情報の後始末
+		MV1CollResultPolyDimTerminate(result);
+	}
+	
 }
 
 bool SceneMain::StageClear()

@@ -30,4 +30,8 @@ private:
 
 	// シャドウマップ
 	int m_shadowMap;
+
+	//スイッチとプレイヤーの当たり判定
+	bool m_SwitchColl = false;
+	bool m_SwitchColled = false;
 };

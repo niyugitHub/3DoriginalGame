@@ -2,6 +2,7 @@
 #include"Pad.h"
 #include"Model.h"
 #include"Shot.h"
+#include <cassert>
 
 namespace
 {
@@ -22,7 +23,7 @@ namespace
 	constexpr int kIdleAnimNo = 3;	// 待機モーション
 	constexpr int kModeAnimNo = 11;// 移動モーション
 	constexpr int kJumpAnimNo = 6;// ジャンプモーション
-	constexpr int kShotAnimNo = 5;// ショットモーション
+	constexpr int kPunchAnimNo = 10;// ショットモーション
 	constexpr int kClearAnimNo = 16;// クリアモーション
 
 	// 当たり判定のサイズ
@@ -42,17 +43,17 @@ namespace
 	constexpr float kCameraPosZ = -800.0f;
 }
 
-Player::Player() :
+Player::Player(VECTOR pos) :
 	m_updateFunc(&Player::updateIdle),
 	m_modelHandle(-1),
 	m_cameraPos(VGet(0.0f, kCameraPosY, kCameraPosZ)),
 	m_animNo(3),
-	m_angle(0.0f),
+	m_angle(DX_PI_F),
 	m_cameraAngle(0.0f),
 	m_colFieldY(false),
 	m_colFieldXZ(false)
 {
-	m_Pos = VGet(0, 0, 0);
+	m_Pos = pos;
 	m_NextPos = m_Pos;
 	m_Vec = VGet(0, 0, 0);
 	//3Dモデルの生成
@@ -158,7 +159,7 @@ void Player::Draw()
 
 	m_pModel->draw();
 	
-
+	//printfDx("%f\n", m_Vec.x);
 	//	printfDx("%f\n", static_cast<float>(m_Vec.z));
 	//	printfDx("%f\n", static_cast<float>(m_Vec.x));
 }
@@ -175,27 +176,9 @@ void Player::ClearUpdate()
 
 	VECTOR flontCamera = VAdd(m_Pos, VGet(0.0f, 300.0f, -600.0f));
 
-//	VECTOR moveCameraSpeed = VSub(flontCamera, m_cameraPos);
-
-//	moveCameraSpeed = VScale(VNorm(moveCameraSpeed), 10.0f);
-
-	/*if (m_cameraPos.z < flontCamera.z)
-	{
-		m_cameraPos = VAdd(m_cameraPos, moveCameraSpeed);
-	}*/
-
 	m_cameraPos.x = (m_cameraPos.x * 0.95f) + (flontCamera.x * 0.05f);
 	m_cameraPos.y = (m_cameraPos.y * 0.95f) + (flontCamera.y * 0.05f);
 	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (flontCamera.z * 0.05f); 
-
-	/*flontCamera = VScale(flontCamera, 1000.0f);
-
-	flontCamera.z *= -1;
-	flontCamera.x *= -1;
-
-	m_cameraPos.x = (m_cameraPos.x * 0.95f) + (flontCamera.x * 0.05f);
-	m_cameraPos.y = (m_cameraPos.y * 0.95f) + (flontCamera.y * 0.05f);
-	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (flontCamera.z * 0.05f);*/
 
 	//アニメーションを進める
 	m_pModel->update();
@@ -227,20 +210,6 @@ void Player::updateIdle()
 		return;
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_2))
-	{
-		m_Vec.x = 0.0f;
-		m_Vec.z = 0.0f;
-
-		Vec2 vec = { 1.0f,1.0f };
-		vec = IsShot(vec);
-		m_pShot.push_back(new Shot(m_Pos, VGet(vec.x, 0.0f, vec.y)));
-
-		m_updateFunc = &Player::updateShot;
-		m_pModel->changeAnimation(kShotAnimNo, false, true, 1);
-		return;
-	}
-
 	m_Vec.x = min(max(m_Vec.x - kMoveSpeed, 0), m_Vec.x + kMoveSpeed);
 	m_Vec.z = min(max(m_Vec.z - kMoveSpeed, 0), m_Vec.z + kMoveSpeed);
 
@@ -248,6 +217,7 @@ void Player::updateIdle()
 
 void Player::updateMove()
 {
+	//入力状態取得
 	bool PressLeft = Pad::isPress(PAD_INPUT_LEFT);
 	bool PressUp = Pad::isPress(PAD_INPUT_UP);
 	bool PressRight = Pad::isPress(PAD_INPUT_RIGHT);
@@ -261,20 +231,6 @@ void Player::updateMove()
 		m_Vec.y = kJumpPower;
 		m_updateFunc = &Player::updateJump;
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
-		return;
-	}
-
-	if (Pad::isTrigger(PAD_INPUT_2))
-	{
-		m_Vec.x = 0.0f;
-		m_Vec.z = 0.0f;
-
-		Vec2 vec = { 1.0f,1.0f };
-		vec = IsShot(vec);
-		m_pShot.push_back(new Shot(m_Pos, VGet(vec.x, 0.0f, vec.y)));
-
-		m_updateFunc = &Player::updateShot;
-		m_pModel->changeAnimation(kShotAnimNo, false, true, 1);
 		return;
 	}
 
@@ -317,19 +273,6 @@ void Player::updateJump()
 	}
 }
 
-void Player::updateShot()
-{
-	if (m_pModel->isAnimEnd())
-	{
-		// 待機アニメに変更する
-		m_animNo = kIdleAnimNo;
-		m_pModel->changeAnimation(kIdleAnimNo, true, true, 4);
-
-		// updateを待機に
-		m_updateFunc = &Player::updateIdle;
-	}
-}
-
 void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed)
 {
 	if (Up)
@@ -355,7 +298,7 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed
 	Vec2 vec = { m_Vec.x,m_Vec.z };
 	vec = vec.normalize() * kMaxMoveSpeed;
 
-	if (Up && Right)
+	if (Up && Right)//上、右入力されたとき
 	{
 		if (m_Vec.x > 0 && m_Vec.z > 0)
 		{
@@ -364,7 +307,7 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed
 		}
 	}
 
-	if (Right && Bottom)
+	if (Right && Bottom)//下、右入力されたとき
 	{
 		if (m_Vec.x > 0 && m_Vec.z < 0)
 		{
@@ -373,7 +316,7 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed
 		}
 	}
 
-	if (Bottom && Left)
+	if (Bottom && Left)//下、左入力されたとき
 	{
 		if (m_Vec.x < 0 && m_Vec.z < 0)
 		{
@@ -382,7 +325,7 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed
 		}
 	}
 
-	if (Left && Up)
+	if (Left && Up)//上、左入力されたとき
 	{
 		if (m_Vec.x < 0 && m_Vec.z > 0)
 		{
@@ -391,12 +334,12 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed
 		}
 	}
 
-	if (!Left && !Right)
+	if (!Left && !Right)//左、右入力がないときm_Vec.xの値をゼロにする
 	{
 		m_Vec.x = min(max(m_Vec.x - MoveSpeed, 0), m_Vec.x + MoveSpeed);
 	}
 
-	if (!Up && !Bottom)
+	if (!Up && !Bottom)//上、下入力がないときm_Vec.	yの値をゼロにする
 	{
 		m_Vec.z = min(max(m_Vec.z - MoveSpeed, 0), m_Vec.z + MoveSpeed);
 	}
@@ -405,16 +348,21 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed
 
 void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 {
+	//m_angleがDX_PI_F * 2より大きいとき
 	if (m_angle > DX_PI_F * 2)
 	{
 		m_angle = 0;
 	}
-
+	//m_angleが0より小さいとき
 	if (m_angle < 0.0f)
 	{
 		m_angle = DX_PI_F * 2;
 	}
 
+	
+	///////////////////////////////
+	//各入力ごとのm_angleの調整///
+	//////////////////////////////
 	if (Right && Bottom)
 	{
 		if (m_angle <= (DX_PI_F / 4) * 7 && m_angle >= (DX_PI_F / 4) * 3)
@@ -427,7 +375,6 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		}
 		return;
 	}
-
 	if (Bottom && Left)
 	{
 		if (m_angle <= (DX_PI_F / 4) || m_angle >= (DX_PI_F / 4) * 5)
@@ -440,7 +387,6 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		}
 		return;
 	}
-
 	if (Left && Up)
 	{
 		if (m_angle <= (DX_PI_F / 4) * 3 || m_angle >= (DX_PI_F / 4) * 7)
@@ -453,7 +399,6 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		}
 		return;
 	}
-
 	if (Up && Right)
 	{
 		if (m_angle <= (DX_PI_F / 4) * 5 && m_angle >= (DX_PI_F / 4))
@@ -466,20 +411,18 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		}
 		return;
 	}
-
 	if (Up)
 	{
 		if (m_angle <= DX_PI_F + kRotSpeed)
 		{
-			m_angle = m_angle + kRotSpeed;
+			m_angle = min(m_angle + kRotSpeed, DX_PI_F);
 		}
 		if (m_angle > DX_PI_F + kRotSpeed)
 		{
-			m_angle = m_angle - kRotSpeed;
+			m_angle = max(m_angle - kRotSpeed, DX_PI_F);
 		}
 		return;
 	}
-
 	if (Bottom)
 	{
 		if (m_angle <= DX_PI_F)
@@ -497,7 +440,6 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		}
 		return;
 	}
-
 	if (Right)
 	{
 		if (m_angle >= DX_PI_F / 2 && m_angle < (DX_PI_F / 2 * 3))
@@ -510,7 +452,6 @@ void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 		}
 		return;
 	}
-
 	if (Left)
 	{
 		if (m_angle >= DX_PI_F / 2 && m_angle < (DX_PI_F / 2 * 3))

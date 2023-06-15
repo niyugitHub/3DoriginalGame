@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="object\field\Field2.cpp" />
     <ClCompile Include="object\Goal.cpp" />
     <ClCompile Include="object\field\Field1.cpp" />
     <ClCompile Include="main.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="object\Map.cpp" />
     <ClCompile Include="object\Player.cpp" />
     <ClCompile Include="object\Shot.cpp" />
+    <ClCompile Include="SaveData.cpp" />
     <ClCompile Include="scene\SceneGameClear.cpp" />
     <ClCompile Include="scene\SceneOption.cpp" />
     <ClCompile Include="scene\SceneSelectScreen.cpp" />
@@ -161,6 +163,7 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="object\field\Field2.h" />
     <ClInclude Include="object\Goal.h" />
     <ClInclude Include="object\field\Field1.h" />
     <ClInclude Include="game.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="object\Map.h" />
     <ClInclude Include="object\Player.h" />
     <ClInclude Include="object\Shot.h" />
+    <ClInclude Include="SaveData.h" />
     <ClInclude Include="scene\SceneGameClear.h" />
     <ClInclude Include="scene\SceneOption.h" />
     <ClInclude Include="scene\SceneSelectScreen.h" />
