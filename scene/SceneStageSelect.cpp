@@ -4,6 +4,7 @@
 #include"SceneOption.h"
 #include <DxLib.h>
 #include "field/Field1.h"
+#include "field/Field2.h"
 
 SceneStageSelect::SceneStageSelect() : 
 	m_stageNum(0)

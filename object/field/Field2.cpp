@@ -1,11 +1,9 @@
-#include "Field1.h"
-#include "Model.h"
-#include"../Switch.h"
+#include "Field2.h"
 
 namespace
 {
-	const char* const kFileStage = "data/stage/stage1.csv";
-//	const char* const kFileName2 = "data/fieldGreen.mv1";
+	const char* const kFileStage = "data/stage/stage2.csv";
+	//	const char* const kFileName2 = "data/fieldGreen.mv1";
 
 	//地面に敷き詰めるブロックの数
 	constexpr int kBlockNumX = 15;
@@ -21,11 +19,9 @@ namespace
 	constexpr float kFieldSideLengthZ = kBlockSideLength * kBlockNumZ;
 }
 
-Field1::Field1()
+Field2::Field2()
 {
-	//ステージ番号
-	m_stageNum = 1;
-
+	m_stageNum = 2;
 	m_data.fileName = kFileStage;
 	m_lookBlock = kRed;
 	m_blockKinds = kBlue;
@@ -35,7 +31,7 @@ Field1::Field1()
 	Init(m_data);
 }
 
-Field1::~Field1()
+Field2::~Field2()
 {
 	m_pModel.erase(m_pModel.begin(), m_pModel.end());
 	m_pModelRed.erase(m_pModelRed.begin(), m_pModelRed.end());

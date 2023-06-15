@@ -2,6 +2,7 @@
 
 #include "game.h"
 #include "SceneManager.h"
+#include "SaveData.h"
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -24,6 +25,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SceneManager scene;
 	scene.init();
 
+	SaveData::Init();
+	SaveData::Read();
+
 	while (ProcessMessage() == 0)
 	{
 		LONGLONG  time = GetNowHiPerformanceCount();
@@ -33,6 +37,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		scene.update();
 
 		scene.draw();
+
+		SaveData::Draw();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();

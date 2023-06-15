@@ -9,11 +9,19 @@ class Goal;
 
 class FieldBase
 {
+protected:
+	//ロードする際のデータ構造体
+	struct loadData
+	{
+		const char* fileName;//ファイル名
+		int blockNumX;//X軸のブロックの数
+		int blockNumZ;//Y軸のブロックの数
+	};
 public:
 	FieldBase();
 	virtual ~FieldBase();
 
-	void Init(const char* FileName,int lookBlock,int blockKind);
+	void Init(loadData data);
 	void Update();
 	void Draw();
 	
@@ -27,6 +35,10 @@ public:
 
 	float GetFieldSizeX();	//X軸のフィールドの長さ
 	float GetFieldSizeZ();	//Z軸のフィールドの長さ
+
+	VECTOR GetPlayerPos() { return m_playerPos; }
+
+	void StageClear();
 
 	enum
 	{
@@ -70,10 +82,18 @@ protected:
 	//ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum; 
 
-	//今見えるブロックの番号
-	int m_lookBlock;
+	int m_lookBlock;//今見えるブロックの番号
+	int m_blockKinds;//ステージで使われるブロックの種類
 
-	//ステージで使われるブロックの種類
-	int m_blockKinds;
+	loadData m_data; // ロードデータ
+
+	//プレイヤー初期位置
+	VECTOR m_playerPos;
+
+	//ステージ番号
+	int m_stageNum;
+
+	//スター取得状態(スターの数は3つ)
+	bool m_getStar[3];
 };
 

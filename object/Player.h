@@ -10,7 +10,7 @@ class Shot;
 class Player
 {
 public:
-	Player();
+	Player(VECTOR pos);
 	virtual ~Player();
 
 	void Init();
@@ -18,6 +18,7 @@ public:
 	void Draw();
 
 	VECTOR GetPos() { return m_Pos; }
+//	void SetPos(VECTOR pos) { m_Pos = m_NextPos = pos; }
 	VECTOR GetNextPos() { return m_NextPos; }
 
 	float GetRadius();
@@ -36,14 +37,13 @@ private:
 	void updateIdle();	//アイドル状態時のアップデート
 	void updateMove();	//移動状態時のアップデート
 	void updateJump();	//ジャンプ状態時のアップデート
-	void updateShot();	//ショット状態時のアップデート
+	
 	//移動時の処理
 	void IsMove(bool Left,bool Up,bool Right,bool Bottom, float MoveSpeed);
 	//プレイヤーの向きの処理
 	void IsAngle(bool Left, bool Up, bool Right, bool Bottom);
 	//プレイヤーの向きによってのショットの方向処理
 	Vec2 IsShot(Vec2 ShotSpeed);
-
 
 private:
 	//プレイヤーのモデル
