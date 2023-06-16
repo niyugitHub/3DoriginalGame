@@ -20,7 +20,8 @@ public:
 	void SelectStage(int stageNum);
 
 private:
-	int m_stageNum;
+	int m_stageNum; // ステージ番号
+	void ChangeStage();
 
 	std::shared_ptr<FieldBase> m_Field;
 };
