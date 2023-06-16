@@ -16,6 +16,9 @@ public:
 	virtual SceneBase* update() override;
 	virtual void draw() override;
 
+	//ステージ番号によってステージを変える関数
+	void SelectStage(int stageNum);
+
 private:
 	int m_stageNum;
 

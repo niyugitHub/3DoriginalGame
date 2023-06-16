@@ -31,7 +31,10 @@ void SaveData::Update(int stageNum,  bool getStar[])
 	//kGetStarにスターを取得したかどうかの情報を与える
 	for (int i = 0; i < kStarNum; i++)
 	{
-		kGetStar[stageNum][i] = getStar[i];
+		if (!kGetStar[stageNum][i] && getStar[i])
+		{
+			kGetStar[stageNum][i] = getStar[i];
+		}
 	}
 
 	Write();//スター情報書き込み

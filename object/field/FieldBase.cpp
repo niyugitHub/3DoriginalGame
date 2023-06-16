@@ -36,7 +36,7 @@ FieldBase::FieldBase()
 {
 	for (int i = 0; i < kStarNum; i++)
 	{
-		m_getStar[i] = true;
+		m_getStar[i] = false;
 	}
 	
 	////3Dƒ‚ƒfƒ‹‚ðƒ[ƒh
