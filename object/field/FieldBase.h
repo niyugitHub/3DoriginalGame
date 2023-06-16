@@ -29,7 +29,7 @@ public:
 
 	void LoadFile(const char* fileName);
 
-	void ModelLoad(int Model1, int Model2, int Model3);//モデルロード(全部のモデル)
+	void ModelLoad(int Model1, int Model2, int Model3, int Model4);//モデルロード(全部のモデル)
 
 	void ChangeBlock();
 
@@ -57,6 +57,8 @@ public:
 
 	std::vector<std::shared_ptr<Model>> GetModelBlue() { return m_pModelBlue; }
 
+	std::vector<std::shared_ptr<Model>> GetModelGreen() { return m_pModelGreen; }
+
 	std::vector<std::shared_ptr<Switch>> GetSwitch() { return m_pSwitch; }
 
 	std::shared_ptr<Goal> GetGoal() { return m_pGoal; }
@@ -72,6 +74,9 @@ protected:
 
 	//モデルのポインター(青)
 	std::vector<std::shared_ptr<Model>> m_pModelBlue;
+
+	//モデルのポインター(緑)
+	std::vector<std::shared_ptr<Model>> m_pModelGreen;
 
 	//スイッチのポインター
 	std::vector<std::shared_ptr<Switch>> m_pSwitch;

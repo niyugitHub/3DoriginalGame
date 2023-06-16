@@ -14,6 +14,7 @@ namespace
 	const char* const kFileName1 = "data/field.mv1";
 	const char* const kFileName2 = "data/fieldRed.mv1";
 	const char* const kFileName3 = "data/fieldBlue.mv1";
+	const char* const kFileName4 = "data/fieldGreen.mv1";
 
 	//地面に敷き詰めるブロックの数
 	constexpr int kBlockNumX = 15;
@@ -36,7 +37,7 @@ FieldBase::FieldBase()
 {
 	for (int i = 0; i < kStarNum; i++)
 	{
-		m_getStar[i] = false;
+		m_getStar[i] = true;
 	}
 	
 	////3Dモデルをロード
@@ -77,13 +78,14 @@ void FieldBase::Init(loadData data)
 	int orgModel1 = m_pModel[0]->getModelHandle();
 	int orgModel2 = m_pModel[1]->getModelHandle();
 	int orgModel3 = m_pModel[2]->getModelHandle();
+	int orgModel4 = m_pModel[3]->getModelHandle();
 	/*for (auto& block : m_blockNum)
 	{
 		m_pModel.push_back(std::make_shared<Model>(orgModel));
 		m_pModel.back()->setUseCollision(true, true);
 	}*/
 
-	ModelLoad(orgModel1, orgModel2, orgModel3);
+	ModelLoad(orgModel1, orgModel2, orgModel3, orgModel4);
 }
 
 void FieldBase::Update()
@@ -103,6 +105,16 @@ void FieldBase::Update()
 		model->update();
 	}
 
+	for (auto& model : m_pModelBlue)
+	{
+		model->update();
+	}
+
+	for (auto& model : m_pModelGreen)
+	{
+		model->update();
+	}
+
 	for (auto& Switch : m_pSwitch)
 	{
 		Switch->SetColorNum(m_lookBlock);
@@ -115,7 +127,7 @@ void FieldBase::Draw()
 	for (auto& model : m_pModel)
 	{
 		model->draw();
-		DrawString(500, 0, "さふぇｄ；ｊヵ", 0xffffff);
+		//DrawString(500, 0, "さふぇｄ；ｊヵ", 0xffffff);
 	}
 
 	if (m_lookBlock == kRed)
@@ -133,6 +145,15 @@ void FieldBase::Draw()
 		{
 			model->draw();
 			DrawString(500, 0, "青", 0xffffff);
+		}
+	}
+
+	if (m_lookBlock == kGreen)
+	{
+		for (auto& model : m_pModelGreen)
+		{
+			model->draw();
+			DrawString(500, 0, "緑", 0xffffff);
 		}
 	}
 
@@ -158,6 +179,11 @@ void FieldBase::FirstModelLoad()
 
 	//3Dモデルをロード
 	m_pModel.push_back(std::make_shared<Model>(kFileName3));
+	m_pModel.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
+	m_pModel.back()->setUseCollision(true, true);
+
+	//3Dモデルをロード
+	m_pModel.push_back(std::make_shared<Model>(kFileName4));
 	m_pModel.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
 	m_pModel.back()->setUseCollision(true, true);
 }
@@ -245,7 +271,7 @@ void FieldBase::LoadFile(const char* fileName)
 	fclose(fp);
 }
 
-void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
+void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 {
 	//地面に並べる
 	for (int i = 0; i < m_blockNum.size(); i++)
@@ -292,6 +318,14 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3)
 			m_pModelBlue.push_back(std::make_shared<Model>(Model3));
 			m_pModelBlue.back()->setUseCollision(true, true);
 			m_pModelBlue.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			continue;
+		}
+
+		if (m_blockNum[i] == kGreen)
+		{
+			m_pModelGreen.push_back(std::make_shared<Model>(Model4));
+			m_pModelGreen.back()->setUseCollision(true, true);
+			m_pModelGreen.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
 			continue;
 		}
 
