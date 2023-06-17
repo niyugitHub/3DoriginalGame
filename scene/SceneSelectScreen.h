@@ -1,5 +1,7 @@
 #pragma once
 #include "SceneBase.h"
+#include <array>
+#include <Vec2.h>
 
 class SceneSelectScreen : public SceneBase
 {
@@ -25,6 +27,7 @@ private:
 	void DecisionNum(int& selectNum);	//Œˆ’è•\
 
 	int m_selectScreen;	//‰½‚ğ‘I‘ğ‚·‚é‚©
+	std::array<UI, 3> m_UI;//UIî•ñ
 };
 
 

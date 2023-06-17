@@ -17,7 +17,7 @@ SceneManager::~SceneManager()
 
 void SceneManager::init()
 {
-	m_pScene = new SceneStageSelect;
+	m_pScene = new SceneTitle;
 	m_pScene->init();
 }
 

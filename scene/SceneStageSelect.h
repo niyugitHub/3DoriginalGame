@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 #include<memory>
+#include<array>
 
 class FieldBase;
 
@@ -24,5 +25,7 @@ private:
 	void ChangeStage();
 
 	std::shared_ptr<FieldBase> m_Field;
+
+	std::array<UI, 11> m_UI;//UIî•ñ
 };
 

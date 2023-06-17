@@ -1,4 +1,5 @@
 #pragma once
+#include"Vec2.h"
 
 // ゲームシーン基底クラス
 class SceneBase
@@ -30,6 +31,12 @@ public:
 	/// <returns>0(フェードしていない)～255(真っ黒)</returns>
 	int getFadeBright() const { return m_fadeBright; }
 
+protected:
+	struct UI
+	{
+		Vec2 pos;
+		Vec2 size;
+	};
 private:
 	// フェード関連処理
 	int m_fadeColor;

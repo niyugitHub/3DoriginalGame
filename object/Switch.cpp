@@ -43,8 +43,8 @@ void Switch::Update()
 	if (m_colorNum == kGreenNumber)
 	{
 		m_Color.x = 0;
-		m_Color.y = 0;
-		m_Color.z = 255;
+		m_Color.y = 255;
+		m_Color.z = 0;
 	}
 }
 
