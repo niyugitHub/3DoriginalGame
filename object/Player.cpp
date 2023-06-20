@@ -46,18 +46,22 @@ namespace
 Player::Player(VECTOR pos) :
 	m_updateFunc(&Player::updateIdle),
 	m_modelHandle(-1),
-	m_cameraPos(VGet(0.0f, kCameraPosY, kCameraPosZ)),
 	m_animNo(3),
 	m_angle(DX_PI_F),
 	m_cameraAngle(0.0f),
 	m_colFieldY(false),
-	m_colFieldXZ(false)
+	m_colFieldXZ(false),
+	m_inputX(0),
+	m_inputZ(0)
 	/*m_inputX(0),
 	m_inputY(0)*/
 {
 	m_Pos = pos;
 	m_NextPos = m_Pos;
 	m_Vec = VGet(0, 0, 0);
+
+	m_cameraPos = VGet(m_Pos.x, kCameraPosY, kCameraPosZ);
+	m_cameraTargetPos = VGet(m_Pos.x, 0, 0);
 	//3Dモデルの生成
 	m_pModel = std::make_shared<Model>(kEnemyModelFileName);
 	m_pModel->setAnimation(kIdleAnimNo, true, true);
@@ -74,37 +78,6 @@ void Player::Init()
 
 void Player::Update()
 {
-	// なくなったショットは消す
-	// 消す命令だが、実際には消してなくて、うしろによけているだけ
-	auto rmIt = std::remove_if        // 条件に合致したものを消す
-	(m_pShot.begin(),			// 対象はenemies_の最初から
-		m_pShot.end(),			// 最後まで
-	   // 消えてもらう条件を表すラムダ式
-	   // trueだと消える。falseだと消えない
-		[](Shot* shot)
-		{
-			return !shot->GetExist();
-		});
-
-	// 入力状態を取得
-	GetJoypadDirectInputState(DX_INPUT_PAD1, &m_input);
-
-
-	// remove系の関数はちょっと罠があり、これを呼び出すだけでは、
-	// 実際には消えていない。
-	// 不要なものを後ろに避けてるだけ。
-	// なので、必ずerase関数で実際に消す必要がある。
-	// remove系関数は不要なものを後ろに避けて、避けた場所を
-	// イテレータとして返す。
-
-	// 実際に範囲を指定して消す
-	m_pShot.erase(rmIt, m_pShot.end());
-	// ここまでやらないと実際には消えないので注意
-
-	for (auto& pShot : m_pShot)
-	{
-		pShot->Update(m_Pos);
-	}
 	//XZ軸から見てフィールドと当たってない場合
 	if (!m_colFieldXZ)
 	{
@@ -132,35 +105,67 @@ void Player::Update()
 
 	(this->*m_updateFunc)();
 
+	//マイフレーム当たり判定をfalseに変更
 	m_colFieldY = false;
 	m_colFieldXZ = false;
 
 
 	//現在の座標に移動ベクトルを足す
-	m_NextPos.x += m_Vec.x;
-	m_NextPos.y += m_Vec.y;
-	m_NextPos.z += m_Vec.z;
+	m_NextPos = VAdd(m_NextPos, m_Vec);
+
 	//アニメーションを進める
 	m_pModel->update();
 
 	m_pModel->setPos(m_Pos);
 	m_pModel->setRot(VGet(0.0f, m_angle, 0.0f));
 
+	//X軸の入力状態が0じゃないとき
 	if (m_input.Rx != 0)
 	{
-		m_input.Rx /= 10;
+		if (m_input.Rx < 0)
+		{
+			m_input.Rx = -100;
+		}
+
+		if (m_input.Rx > 0)
+		{
+			m_input.Rx = 100;
+		}
 	}
 
+	//Y軸の入力状態が0じゃないとき
 	if (m_input.Ry != 0)
 	{
-		m_input.Ry /= 10;
+		if (m_input.Ry < 0)
+		{
+			m_input.Ry = -100;
+		}
+
+		if (m_input.Ry > 0)
+		{
+			m_input.Ry = 100;
+		}
 	}
 
+	if (m_updateFunc != &Player::updateIdle)
+	{
+		m_input.Rx = 0;
+		m_input.Ry = 0;
+	}
+
+	//毎フレーム少しずつ値を足していく
+	m_inputX = (m_inputX * 0.85) + (m_input.Rx * 0.15);
+	m_inputZ = (m_inputZ * 0.85) + (m_input.Ry * 0.15);
+
 	//カメラの位置、どこからどこを見ているかを設定
-	m_cameraPos.x = ((m_cameraPos.x * 0.8f) + (m_Pos.x * 0.2f)) + static_cast<float>(m_input.Rx);
-	m_cameraPos.z = ((m_cameraPos.z * 0.8f) + (m_Pos.z * 0.2f)) - static_cast<float>(m_input.Ry);
-	//m_cameraPos.z = kCameraPosZ + m_Pos.z;
-	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z + kCameraPosZ), VGet(m_cameraPos.x, 0, m_cameraPos.z));
+	m_cameraTargetPos.x = ((m_cameraTargetPos.x * 0.8f) + (m_Pos.x * 0.2f)) + static_cast<float>(m_inputX);
+	m_cameraTargetPos.z = ((m_cameraTargetPos.z * 0.8f) + (m_Pos.z * 0.2f)) - static_cast<float>(m_inputZ);
+
+	m_cameraPos.x = m_cameraTargetPos.x;
+	m_cameraPos.z = m_cameraTargetPos.z + kCameraPosZ;
+	
+	//カメラの位置設定(カメラの位置、カメラが見る位置)
+	SetCameraPositionAndTarget_UpVecY(m_cameraPos, m_cameraTargetPos);
 
 
 	//SetLightPosition(VGet(m_Pos.x, 500 , m_Pos.z));
@@ -216,6 +221,7 @@ void Player::ClearCharaMotion()
 
 void Player::updateIdle()
 {
+	//上下左右どれかが入力されたらupdateMoveに遷移
 	if (Pad::isPress(PAD_INPUT_UP) || Pad::isPress(PAD_INPUT_DOWN) ||
 		Pad::isPress(PAD_INPUT_LEFT) || Pad::isPress(PAD_INPUT_RIGHT))
 	{
@@ -224,9 +230,10 @@ void Player::updateIdle()
 		return;
 	}
 
-	
+	// 入力状態を取得
+	GetJoypadDirectInputState(DX_INPUT_PAD1, &m_input);
 
-	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているとき
+	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているときupdateJumpに遷移
 	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY) 
 	{
 		m_Vec.y = kJumpPower;
@@ -251,6 +258,7 @@ void Player::updateMove()
 	IsMove(PressLeft, PressUp, PressRight, PressBottom, kMoveSpeed);
 	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
 
+	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているときupdateJumpに遷移
 	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY)
 	{
 		m_Vec.y = kJumpPower;
@@ -269,6 +277,7 @@ void Player::updateMove()
 		m_Vec.z = vec.y;
 	}
 
+	//上下左右の入力がないときupdateIdleに遷移
 	if (!PressLeft && !PressRight &&
 		!PressUp && !PressBottom)
 	{
@@ -291,6 +300,7 @@ void Player::updateJump()
 	IsMove(PressLeft, PressUp, PressRight, PressBottom, kMoveJumpSpeed);
 	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
 
+	//地面についてかつ、降下中の場合updateIdleに遷移
 	if (m_colFieldY && m_Vec.y < 0.0f)
 	{
 		m_pModel->changeAnimation(kIdleAnimNo, true, true, 2);
