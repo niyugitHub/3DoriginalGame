@@ -82,5 +82,8 @@ private:
 
 	// ショットのポインタ
 	std::vector<Shot*> m_pShot;
+
+	//パッドアナログ情報取得
+	DINPUT_JOYSTATE m_input;
 };
 

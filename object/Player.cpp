@@ -52,6 +52,8 @@ Player::Player(VECTOR pos) :
 	m_cameraAngle(0.0f),
 	m_colFieldY(false),
 	m_colFieldXZ(false)
+	/*m_inputX(0),
+	m_inputY(0)*/
 {
 	m_Pos = pos;
 	m_NextPos = m_Pos;
@@ -83,6 +85,10 @@ void Player::Update()
 		{
 			return !shot->GetExist();
 		});
+
+	// 入力状態を取得
+	GetJoypadDirectInputState(DX_INPUT_PAD1, &m_input);
+
 
 	// remove系の関数はちょっと罠があり、これを呼び出すだけでは、
 	// 実際には消えていない。
@@ -140,10 +146,21 @@ void Player::Update()
 	m_pModel->setPos(m_Pos);
 	m_pModel->setRot(VGet(0.0f, m_angle, 0.0f));
 
+	if (m_input.Rx != 0)
+	{
+		m_input.Rx /= 10;
+	}
+
+	if (m_input.Ry != 0)
+	{
+		m_input.Ry /= 10;
+	}
+
 	//カメラの位置、どこからどこを見ているかを設定
-	m_cameraPos.x = (m_cameraPos.x * 0.8f) + (m_Pos.x * 0.2f);
-	m_cameraPos.z = kCameraPosZ + m_Pos.z;
-	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z), VGet(m_cameraPos.x, 0, m_Pos.z));
+	m_cameraPos.x = ((m_cameraPos.x * 0.8f) + (m_Pos.x * 0.2f)) + static_cast<float>(m_input.Rx);
+	m_cameraPos.z = ((m_cameraPos.z * 0.8f) + (m_Pos.z * 0.2f)) - static_cast<float>(m_input.Ry);
+	//m_cameraPos.z = kCameraPosZ + m_Pos.z;
+	SetCameraPositionAndTarget_UpVecY(VGet(m_cameraPos.x, m_cameraPos.y, m_cameraPos.z + kCameraPosZ), VGet(m_cameraPos.x, 0, m_cameraPos.z));
 
 
 	//SetLightPosition(VGet(m_Pos.x, 500 , m_Pos.z));
@@ -158,6 +175,12 @@ void Player::Draw()
 	}
 
 	m_pModel->draw();
+
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "X:%d Y:%d Z:%d", m_input.X, m_input.Y, m_input.Z);
+	DrawFormatString(0, 16, GetColor(255, 255, 255), "Rx:%d Ry:%d Rz:%d", m_input.Rx, m_input.Ry, m_input.Rz);
+//	DrawFormatString(0, 16, GetColor(255, 255, 255), "Rx:%d Ry:%d Rz:%d", input.Rx, input.Ry, input.Rz);
+
+//	printfDx("%d,%d\n", m_inputX, m_inputY);
 	
 	//printfDx("%f\n", m_Vec.x);
 	//	printfDx("%f\n", static_cast<float>(m_Vec.z));
@@ -200,6 +223,8 @@ void Player::updateIdle()
 		m_pModel->changeAnimation(kModeAnimNo, true, true, 2);
 		return;
 	}
+
+	
 
 	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているとき
 	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY) 

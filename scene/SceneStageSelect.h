@@ -22,6 +22,8 @@ public:
 
 private:
 	int m_stageNum; // ステージ番号
+	int m_stageX;
+	int m_stageY;
 	void ChangeStage();
 
 	std::shared_ptr<FieldBase> m_Field;

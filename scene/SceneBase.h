@@ -32,6 +32,7 @@ public:
 	int getFadeBright() const { return m_fadeBright; }
 
 protected:
+	//‰¼UI
 	struct UI
 	{
 		Vec2 pos;

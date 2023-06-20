@@ -29,7 +29,8 @@ SceneBase* SceneTitle::update()
 
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
-		return new SceneOption(this);
+		//自身のポインター、ゲーム中のオプション画面かのフラグを引数に持つ
+		return new SceneOption(this,false);
 	}
 
 	return this;

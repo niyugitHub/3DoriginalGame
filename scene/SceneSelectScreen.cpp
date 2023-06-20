@@ -38,7 +38,8 @@ SceneBase* SceneSelectScreen::update()
 	}
 	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kOption)
 	{
-		return new SceneOption(this);
+		//自身のポインター、ゲーム中のオプション画面かのフラグを引数に持つ
+		return new SceneOption(this,false);
 	}
 	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kTitle)
 	{
@@ -56,8 +57,10 @@ void SceneSelectScreen::draw()
 	{
 		if (m_selectScreen == i)
 		{
-			DrawBox(m_UI[i].pos.x - 20, m_UI[i].pos.y - 20,
-				m_UI[i].size.x + 20, m_UI[i].size.y + 20,
+			DrawBox(static_cast<int>(m_UI[i].pos.x - 20), 
+				static_cast<int>(m_UI[i].pos.y - 20),
+				static_cast<int>(m_UI[i].size.x + 20), 
+				static_cast<int>(m_UI[i].size.y + 20),
 				0xffffff, true);
 		}
 		DrawBox(m_UI[i].pos.x, m_UI[i].pos.y,

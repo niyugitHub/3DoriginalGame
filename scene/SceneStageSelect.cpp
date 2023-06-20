@@ -25,6 +25,8 @@ namespace
 
 SceneStageSelect::SceneStageSelect() : 
 	m_stageNum(0),
+	m_stageX(0),
+	m_stageY(0),
 	m_Field(nullptr)
 {
 	float X = 300;
@@ -129,52 +131,52 @@ void SceneStageSelect::SelectStage(int stageNum)
 
 void SceneStageSelect::ChangeStage()
 {
-	//ステージX番号
-	static int stageX = 0;
-	//ステージY番号
-	static int stageY = 0;
+	////ステージX番号
+	//static int m_stageX = 0;
+	////ステージY番号
+	//static int m_stageY = 0;
 
 	if (Pad::isTrigger(PAD_INPUT_LEFT) && m_stageNum != 10)
 	{
-		stageX--;
-		if (stageX < 0) //範囲外アクセス防止
+		m_stageX--;
+		if (m_stageX < 0) //範囲外アクセス防止
 		{
-			stageX = kStageNumX - 1;
+			m_stageX = kStageNumX - 1;
 		}
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_RIGHT) && m_stageNum != 10)
 	{
-		stageX++;
-		if (stageX > kStageNumX - 1) //範囲外アクセス防止
+		m_stageX++;
+		if (m_stageX > kStageNumX - 1) //範囲外アクセス防止
 		{
-			stageX = 0;
+			m_stageX = 0;
 		}
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_UP))
 	{
-		stageY--;
-		if (stageY < 0) //範囲外アクセス防止
+		m_stageY--;
+		if (m_stageY < 0) //範囲外アクセス防止
 		{
-			stageY = kStageNumY;
+			m_stageY = kStageNumY;
 		}
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_DOWN))
 	{
-		stageY++;
-		if (stageY > kStageNumY) //範囲外アクセス防止
+		m_stageY++;
+		if (m_stageY > kStageNumY) //範囲外アクセス防止
 		{
-			stageY = 0;
+			m_stageY = 0;
 		}
 	}
 
-	if (stageY == kStageNumY)
+	if (m_stageY == kStageNumY)
 	{
 		m_stageNum = 10;
 		return;
 	}
 	//m_stageNumに決定表代入
-	m_stageNum = kStage[stageY][stageX];
+	m_stageNum = kStage[m_stageY][m_stageX];
 }
