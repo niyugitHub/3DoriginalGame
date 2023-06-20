@@ -53,6 +53,8 @@ private:
 
 	VECTOR m_cameraPos; //カメラポジション
 
+	VECTOR m_cameraTargetPos; //カメラターゲット
+
 	VECTOR m_Pos; // プレイヤーの座標
 
 	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
@@ -85,5 +87,8 @@ private:
 
 	//パッドアナログ情報取得
 	DINPUT_JOYSTATE m_input;
+
+	int m_inputX;//X軸情報
+	int m_inputZ;//Y軸情報
 };
 
