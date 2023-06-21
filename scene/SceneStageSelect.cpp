@@ -8,6 +8,12 @@
 #include "field/Field2.h"
 #include "field/Field3.h"
 #include "field/Field4.h"
+#include "field/Field5.h"
+#include "field/Field6.h"
+#include "field/Field7.h"
+#include "field/Field8.h"
+#include "field/Field9.h"
+#include "field/Field10.h"
 #include"game.h"
 
 namespace
@@ -115,16 +121,22 @@ void SceneStageSelect::SelectStage(int stageNum)
 		m_Field = std::make_shared<Field4>();
 		break;
 	case 4:
+		m_Field = std::make_shared<Field5>();
 		break;
 	case 5:
+		m_Field = std::make_shared<Field6>();
 		break;
 	case 6:
+		m_Field = std::make_shared<Field7>();
 		break;
 	case 7:
+		m_Field = std::make_shared<Field8>();
 		break;
 	case 8:
+		m_Field = std::make_shared<Field9>();
 		break;
 	case 9:
+		m_Field = std::make_shared<Field10>();
 		break;
 	};
 }

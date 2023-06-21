@@ -105,11 +105,6 @@ void FieldBase::Update()
 		model->update();
 	}
 
-	for (auto& model : m_pModelBlue)
-	{
-		model->update();
-	}
-
 	for (auto& model : m_pModelGreen)
 	{
 		model->update();

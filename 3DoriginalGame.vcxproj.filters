@@ -114,6 +114,21 @@
     <ClCompile Include="scene\SceneSelectScreen.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
+    <ClCompile Include="object\field\Field6.cpp">
+      <Filter>ソース ファイル\object\field</Filter>
+    </ClCompile>
+    <ClCompile Include="object\field\Field7.cpp">
+      <Filter>ソース ファイル\object\field</Filter>
+    </ClCompile>
+    <ClCompile Include="object\field\Field8.cpp">
+      <Filter>ソース ファイル\object\field</Filter>
+    </ClCompile>
+    <ClCompile Include="object\field\Field9.cpp">
+      <Filter>ソース ファイル\object\field</Filter>
+    </ClCompile>
+    <ClCompile Include="object\field\Field10.cpp">
+      <Filter>ソース ファイル\object\field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -192,6 +207,21 @@
       <Filter>ヘッダー ファイル\object\field</Filter>
     </ClInclude>
     <ClInclude Include="object\field\Field5.h">
+      <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\field\Field6.h">
+      <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\field\Field7.h">
+      <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\field\Field8.h">
+      <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\field\Field9.h">
+      <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\field\Field10.h">
       <Filter>ヘッダー ファイル\object\field</Filter>
     </ClInclude>
   </ItemGroup>

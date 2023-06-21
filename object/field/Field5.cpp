@@ -6,8 +6,8 @@ namespace
 	//	const char* const kFileName2 = "data/fieldGreen.mv1";
 
 	//地面に敷き詰めるブロックの数
-	constexpr int kBlockNumX = 15;
-	constexpr int kBlockNumZ = 30;
+	constexpr int kBlockNumX = 40;
+	constexpr int kBlockNumZ = 13;
 
 	constexpr int kBlockNum = kBlockNumX * kBlockNumZ;
 
@@ -21,10 +21,10 @@ namespace
 
 Field5::Field5()
 {
-	m_stageNum = 2;
+	m_stageNum = 5;
 	m_data.fileName = kFileStage;
 	m_lookBlock = kRed;
-	m_blockKinds = kGreen;
+	m_blockKinds = kBlue;
 	m_data.blockNumX = kBlockNumX;
 	m_data.blockNumZ = kBlockNumZ;
 

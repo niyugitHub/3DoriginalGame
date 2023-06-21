@@ -6,8 +6,8 @@ namespace
 	//	const char* const kFileName2 = "data/fieldGreen.mv1";
 
 	//地面に敷き詰めるブロックの数
-	constexpr int kBlockNumX = 15;
-	constexpr int kBlockNumZ = 30;
+	constexpr int kBlockNumX = 30;
+	constexpr int kBlockNumZ = 10;
 
 	constexpr int kBlockNum = kBlockNumX * kBlockNumZ;
 
