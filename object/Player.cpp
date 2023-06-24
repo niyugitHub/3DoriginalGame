@@ -23,7 +23,7 @@ namespace
 	constexpr int kIdleAnimNo = 3;	// 待機モーション
 	constexpr int kModeAnimNo = 11;// 移動モーション
 	constexpr int kJumpAnimNo = 6;// ジャンプモーション
-	constexpr int kPunchAnimNo = 10;// ショットモーション
+	constexpr int kPunchAnimNo = 10;// パンチモーション
 	constexpr int kClearAnimNo = 16;// クリアモーション
 
 	// 当たり判定のサイズ
@@ -58,6 +58,7 @@ Player::Player(VECTOR pos) :
 {
 	m_Pos = pos;
 	m_NextPos = m_Pos;
+	m_attackPos = m_Pos;
 	m_Vec = VGet(0, 0, 0);
 
 	m_cameraPos = VGet(m_Pos.x, kCameraPosY, kCameraPosZ);
@@ -242,6 +243,17 @@ void Player::updateIdle()
 		return;
 	}
 
+	if (Pad::isTrigger(PAD_INPUT_3) && m_colFieldY)
+	{
+		m_isAttackFlag = true;
+		//ベクトルを0に
+		m_Vec.x = 0;
+		m_Vec.z = 0;
+		m_updateFunc = &Player::updatePunch;
+		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
+		return;
+	}
+
 	m_Vec.x = min(max(m_Vec.x - kMoveSpeed, 0), m_Vec.x + kMoveSpeed);
 	m_Vec.z = min(max(m_Vec.z - kMoveSpeed, 0), m_Vec.z + kMoveSpeed);
 
@@ -264,6 +276,17 @@ void Player::updateMove()
 		m_Vec.y = kJumpPower;
 		m_updateFunc = &Player::updateJump;
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
+		return;
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_3) && m_colFieldY)
+	{
+		//ベクトルを0に
+		m_isAttackFlag = true;
+		m_Vec.x = 0;
+		m_Vec.z = 0;
+		m_updateFunc = &Player::updatePunch;
+		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
 		return;
 	}
 
@@ -306,6 +329,24 @@ void Player::updateJump()
 		m_pModel->changeAnimation(kIdleAnimNo, true, true, 2);
 		m_updateFunc = &Player::updateIdle;
 	}
+}
+
+void Player::updatePunch()
+{
+	if (m_pModel->isAnimEnd())
+	{
+		m_updateFunc = &Player::updateIdle;
+		m_pModel->changeAnimation(kIdleAnimNo, true, true, 1);
+		m_isAttackFlag = false;
+		return;
+	}
+}
+
+void Player::SetAttackPos()
+{
+	/*MATRIX cameraRotMtx = MGetRotY(m_angle);
+	
+	m_attackPos = VTransform(m_Pos, cameraRotMtx);*/
 }
 
 void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed)

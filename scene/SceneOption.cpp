@@ -16,9 +16,9 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 
 	m_isSceneMain = isSceneMain;
 
-	m_UI[0].pos = { 400.0f,250.0f };
+	m_UI[0].pos = { 560.0f,250.0f };
 	m_UI[0].size = { m_UI[0].pos.x + 800.0f,m_UI[0].pos.y + 200.0f };
-	m_UI[1].pos = { 800,600 };
+	m_UI[1].pos = { 560.0f,600.0f };
 	m_UI[1].size = { m_UI[1].pos.x + 800.0f,m_UI[1].pos.y + 200.0f };
 	m_UI[2].pos = { 0,Game::kScreenHeight - 200 };
 	m_UI[2].size = { 300 ,Game::kScreenHeight };
@@ -38,6 +38,8 @@ void SceneOption::end()
 
 SceneBase* SceneOption::update()
 {
+	SelectUpdate();
+
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
 		return m_pScene;
@@ -56,7 +58,10 @@ SceneBase* SceneOption::update()
 
 void SceneOption::draw()
 {
-	m_pScene->draw();
+	if (m_isSceneMain)
+	{
+		m_pScene->draw();
+	}
 
 	DrawBox(0, 0, 100, 100, 0xffffff, true);
 
@@ -73,5 +78,28 @@ void SceneOption::draw()
 		DrawBox(m_UI[i].pos.x, m_UI[i].pos.y,
 			m_UI[i].size.x, m_UI[i].size.y,
 			0x0000ff, true);
+	}
+}
+
+void SceneOption::SelectUpdate()
+{
+	if (Pad::isTrigger(PAD_INPUT_DOWN))
+	{
+		m_selectOption++;
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_UP))
+	{
+		m_selectOption--;
+	}
+
+	if (m_selectOption > kBack)
+	{
+		m_selectOption = kBgm;
+	}
+
+	if (m_selectOption < kBgm)
+	{
+		m_selectOption = kBack;
 	}
 }

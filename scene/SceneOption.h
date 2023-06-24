@@ -15,6 +15,9 @@ public:
 	virtual void draw() override;
 
 private:
+
+	void SelectUpdate();
+
 	enum
 	{
 		kBgm,//BGM

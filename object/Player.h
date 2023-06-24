@@ -33,10 +33,16 @@ public:
 
 	void ClearCharaMotion(); //クリアしたときのキャラクターの動き変更
 
+	void SetAttackFlag(bool attackFlag) { m_isAttackFlag = attackFlag; }
+	bool GetAttackFlag() { return m_isAttackFlag; }
+
 private:
 	void updateIdle();	//アイドル状態時のアップデート
 	void updateMove();	//移動状態時のアップデート
 	void updateJump();	//ジャンプ状態時のアップデート
+	void updatePunch(); //攻撃状態時のアップデート
+
+	void SetAttackPos();
 	
 	//移動時の処理
 	void IsMove(bool Left,bool Up,bool Right,bool Bottom, float MoveSpeed);
@@ -60,6 +66,8 @@ private:
 	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
 
 	VECTOR m_Vec; // プレイヤーの移動速度
+
+	VECTOR m_attackPos;//攻撃座標
 
 	// 再生しているアニメーション番号
 	int m_animNo;
@@ -90,5 +98,8 @@ private:
 
 	int m_inputX;//X軸情報
 	int m_inputZ;//Y軸情報
+
+	//攻撃中かどうか
+	bool m_isAttackFlag = false;
 };
 

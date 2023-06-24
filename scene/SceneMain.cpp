@@ -200,10 +200,11 @@ void SceneMain::IsColl()
 		VECTOR toSwitch = VSub(PlayerPos, switchPos);
 
 		float dist = VSize(toSwitch);
-		if (dist < (m_Player->GetRadius() + pSwitch->GetRadius()))
+		if (dist < (m_Player->GetRadius() + pSwitch->GetRadius()) && m_Player->GetAttackFlag())
 		{
 			// “–‚½‚Á‚½
 			m_SwitchColl = true;
+			m_Player->SetAttackFlag(false);
 			break;
 			
 		}

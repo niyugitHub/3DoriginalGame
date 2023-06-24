@@ -100,5 +100,14 @@ protected:
 
 	//スター取得状態(スターの数は3つ)
 	bool m_getStar[3];
+
+	//ゲームが始まってからの時間
+	int m_gameFrameCount;
+
+	//スターをもらうための制限時間
+	int m_limitFrame;
+
+	//アイテムを取得したかどうか
+	bool m_getItem;
 };
 
