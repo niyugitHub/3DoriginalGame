@@ -2,7 +2,7 @@
 #include<DxLib.h>
 #include<memory>
 #include<vector>
-#include"Vec2.h"
+#include "../util/Vec2.h"
 
 class Model;
 class Shot;

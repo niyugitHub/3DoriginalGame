@@ -21,7 +21,7 @@ namespace
 
 Field7::Field7()
 {
-	m_stageNum = 5;
+	m_stageNum = 7;
 	m_data.fileName = kFileStage;
 	m_lookBlock = kRed;
 	m_blockKinds = kGreen;

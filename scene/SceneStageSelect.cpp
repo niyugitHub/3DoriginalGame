@@ -1,20 +1,21 @@
 #include "SceneStageSelect.h"
-#include"Pad.h"
+#include "../util/Pad.h"
 #include"SceneMain.h"
 #include"SceneOption.h"
 #include"SceneSelectScreen.h"
 #include <DxLib.h>
-#include "field/Field1.h"
-#include "field/Field2.h"
-#include "field/Field3.h"
-#include "field/Field4.h"
-#include "field/Field5.h"
-#include "field/Field6.h"
-#include "field/Field7.h"
-#include "field/Field8.h"
-#include "field/Field9.h"
-#include "field/Field10.h"
-#include"game.h"
+#include "../object/field/Field1.h"
+#include "../object/field/Field2.h"
+#include "../object/field/Field3.h"
+#include "../object/field/Field4.h"
+#include "../object/field/Field5.h"
+#include "../object/field/Field6.h"
+#include "../object/field/Field7.h"
+#include "../object/field/Field8.h"
+#include "../object/field/Field9.h"
+#include "../object/field/Field10.h"
+#include"../game.h"
+#include"../SaveData.h"
 
 namespace
 {
@@ -27,6 +28,9 @@ namespace
 		{0,1,2,3,4},
 		{5,6,7,8,9}
 	};
+
+	constexpr int kCoinWidth = 60; //コインの幅
+	constexpr int kCoinHeight = 120; //コインの幅
 }
 
 SceneStageSelect::SceneStageSelect() : 
@@ -50,6 +54,16 @@ SceneStageSelect::SceneStageSelect() :
 		{
 			X = 300;
 			Y = 600;
+		}
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			m_coinPos[i][j] = m_UI[i].pos;
+			m_coinPos[i][j].x += kCoinWidth * j + 10;
+			m_coinPos[i][j].y += kCoinHeight;
 		}
 	}
 
@@ -94,13 +108,26 @@ void SceneStageSelect::draw()
 	{
 		if (m_stageNum == i)
 		{
-			DrawBox(m_UI[i].pos.x - 20, m_UI[i].pos.y - 20,
-				m_UI[i].size.x + 20, m_UI[i].size.y + 20,
+			DrawBox(static_cast<int>(m_UI[i].pos.x - 20), static_cast<int>(m_UI[i].pos.y - 20),
+				static_cast<int>(m_UI[i].size.x + 20), static_cast<int>(m_UI[i].size.y + 20),
 				0xffffff, true);
 		}
-		DrawBox(m_UI[i].pos.x, m_UI[i].pos.y,
-			m_UI[i].size.x, m_UI[i].size.y,
+		DrawBox(static_cast<int>(m_UI[i].pos.x), static_cast<int>(m_UI[i].pos.y),
+			static_cast<int>(m_UI[i].size.x), static_cast<int>(m_UI[i].size.y),
 			0x0000ff, true);
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (SaveData::GetStar(i, j))
+			{
+				DrawBox(static_cast<int>(m_coinPos[i][j].x), static_cast<int>(m_coinPos[i][j].y),
+					static_cast<int>(m_coinPos[i][j].x + 50), static_cast<int>(m_coinPos[i][j].y + 50),
+					0x00ff00, true);
+			}
+		}
 	}
 }
 

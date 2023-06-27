@@ -1,6 +1,4 @@
 #include "Field1.h"
-#include "Model.h"
-#include"../Switch.h"
 
 namespace
 {

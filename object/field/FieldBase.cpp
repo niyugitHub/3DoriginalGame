@@ -1,9 +1,10 @@
 #include "FieldBase.h"
-#include "Model.h"
-#include"Pad.h"
+#include "../Model.h"
+#include "../../util/Pad.h"
 #include"../Switch.h"
 #include"../Goal.h"
-#include"SaveData.h"
+#include"../Item.h"
+#include"../../SaveData.h"
 #include<cassert>
 #include <iostream>
 
@@ -30,15 +31,26 @@ namespace
 	constexpr float kFieldSideLengthZ = kBlockSideLength * kBlockNumZ;
 
 	//スターの数
-	constexpr int kStarNum = 3;
+	//constexpr int kStarNum = 3;
 }
 
-FieldBase::FieldBase()
+FieldBase::FieldBase() : 
+	m_lookBlock(kRed),
+	m_blockKinds(kBlue),
+	m_playerPos(VGet(0,0,0)),
+	m_stageNum(0),
+	m_gameFrameCount(0),
+	m_limitFrame(3600),
+	m_getItem(false)
 {
-	for (int i = 0; i < kStarNum; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		m_getStar[i] = false;
 	}
+
+	m_data.blockNumX = 0;
+	m_data.blockNumZ = 0;
+	m_data.fileName = "";
 	
 	////3Dモデルをロード
 	//m_pModel.push_back(std::make_shared<Model>(kFileName));
@@ -115,6 +127,13 @@ void FieldBase::Update()
 		Switch->SetColorNum(m_lookBlock);
 		Switch->Update();
 	}
+
+	if (!m_pItem->GetExist())
+	{
+		m_getItem = true;
+	}
+
+	m_gameFrameCount++;
 }
 
 void FieldBase::Draw()
@@ -158,6 +177,11 @@ void FieldBase::Draw()
 	}
 
 	m_pGoal->Draw();
+
+	if (m_pItem->GetExist())
+	{
+		m_pItem->Draw();
+	}
 }
 
 void FieldBase::FirstModelLoad()
@@ -332,6 +356,15 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 			m_playerPos = VGet(x, 100, z);
 			continue;
 		}
+
+		if (m_blockNum[i] == 6)
+		{
+			m_pModel.push_back(std::make_shared<Model>(Model1));
+			m_pModel.back()->setUseCollision(true, true);
+			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			m_pItem = std::make_shared<Item>(VGet(x, 100, z));
+			continue;
+		}
 	}
 }
 
@@ -356,5 +389,17 @@ float FieldBase::GetFieldSizeZ()
 
 void FieldBase::StageClear()
 {
-	SaveData::Update(m_stageNum, m_getStar);
+	m_getStar[0] = true;
+
+	if (m_getItem)
+	{
+		m_getStar[1] = true;
+	}
+
+	if (m_gameFrameCount < m_limitFrame)
+	{
+		m_getStar[2] = true;
+	}
+	//セーブデータのアップデート(配列が0からなのでm_stageNumに-1をする)
+	SaveData::Update(m_stageNum - 1, m_getStar);
 }

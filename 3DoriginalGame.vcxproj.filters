@@ -69,7 +69,7 @@
     <ClCompile Include="scene\SceneGameClear.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="object\Model.cpp">
       <Filter>ソース ファイル\object</Filter>
     </ClCompile>
     <ClCompile Include="object\field\FieldBase.cpp">
@@ -129,6 +129,9 @@
     <ClCompile Include="object\field\Field10.cpp">
       <Filter>ソース ファイル\object\field</Filter>
     </ClCompile>
+    <ClCompile Include="object\Item.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -161,7 +164,7 @@
     <ClInclude Include="scene\SceneGameClear.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
+    <ClInclude Include="object\Model.h">
       <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
     <ClInclude Include="object\field\FieldBase.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="object\field\Field10.h">
       <Filter>ヘッダー ファイル\object\field</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Item.h">
+      <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

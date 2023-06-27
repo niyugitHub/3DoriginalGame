@@ -21,7 +21,7 @@ namespace
 
 Field6::Field6()
 {
-	m_stageNum = 5;
+	m_stageNum = 6;
 	m_data.fileName = kFileStage;
 	m_lookBlock = kRed;
 	m_blockKinds = kGreen;

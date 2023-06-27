@@ -3,9 +3,9 @@
 #include "SceneStageSelect.h"
 #include "SceneTitle.h"
 #include"DxLib.h"
-#include "Pad.h"
-#include"Player.h"
-#include"field/FieldBase.h"
+#include "../util/Pad.h"
+#include"../object/Player.h"
+#include"../object/field/FieldBase.h"
 
 SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<FieldBase> pField) : 
 	m_selectNum(kStageSelect)

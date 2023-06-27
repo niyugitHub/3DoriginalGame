@@ -2,7 +2,7 @@
 #include "SceneStageSelect.h"
 #include "SceneTitle.h"
 #include "SceneOption.h"
-#include "Pad.h"
+#include "../util/Pad.h"
 #include <DxLib.h>
 
 SceneSelectScreen::SceneSelectScreen() : 
@@ -63,8 +63,8 @@ void SceneSelectScreen::draw()
 				static_cast<int>(m_UI[i].size.y + 20),
 				0xffffff, true);
 		}
-		DrawBox(m_UI[i].pos.x, m_UI[i].pos.y,
-			m_UI[i].size.x, m_UI[i].size.y,
+		DrawBox(static_cast<int>(m_UI[i].pos.x), static_cast<int>(m_UI[i].pos.y),
+			static_cast<int>(m_UI[i].size.x), static_cast<int>(m_UI[i].size.y),
 			0x0000ff,true);
 	}
 }
