@@ -15,6 +15,7 @@ namespace
 }
 
 Switch::Switch(VECTOR pos) : 
+	m_Color(VGet(0,0,0)),
 	m_Pos(pos),
 	m_colorNum(2) // Ô‚Ì”’l‚ª2‚Ì‚½‚ß‰Šú‰»‚Å2‚ğ“ü‚ê‚é
 {
@@ -51,8 +52,8 @@ void Switch::Update()
 void Switch::Draw()
 {
 	DrawSphere3D(m_Pos, kColRadius,50,
-		GetColor(m_Color.x, m_Color.y, m_Color.z),
-		GetColor(m_Color.x, m_Color.y, m_Color.z),
+		GetColor(static_cast<int>(m_Color.x), static_cast<int>(m_Color.y), static_cast<int>(m_Color.z)),
+		GetColor(static_cast<int>(m_Color.x), static_cast<int>(m_Color.y), static_cast<int>(m_Color.z)),
 		true);
 }
 

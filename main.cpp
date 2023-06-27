@@ -1,7 +1,7 @@
 #include "DxLib.h"
 
 #include "game.h"
-#include "SceneManager.h"
+#include "scene/SceneManager.h"
 #include "SaveData.h"
 
 // ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚è‚Ü‚·

@@ -91,3 +91,11 @@ void SaveData::Draw()
 	}
 }
 
+bool SaveData::GetStar(int i, int j)
+{
+	if (i >= kStageNum || j >= kStarNum) return false;
+	if (kGetStar[i][j]) return true;
+
+	return false;
+}
+

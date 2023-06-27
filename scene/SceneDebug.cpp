@@ -1,9 +1,9 @@
 #include "DxLib.h"
-#include "game.h"
+#include "../game.h"
 #include "SceneDebug.h"
 #include "SceneMain.h"
 
-#include "Pad.h"
+#include "../util/Pad.h"
 
 #include <cassert>
 

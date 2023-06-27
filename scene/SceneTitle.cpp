@@ -1,5 +1,5 @@
 #include "SceneTitle.h"
-#include "Pad.h"
+#include "../util/Pad.h"
 #include <DxLib.h>
 #include"SceneSelectScreen.h"
 #include"SceneOption.h"

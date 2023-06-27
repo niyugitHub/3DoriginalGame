@@ -6,6 +6,7 @@
 class Model;
 class Switch;
 class Goal;
+class Item;
 
 class FieldBase
 {
@@ -63,6 +64,8 @@ public:
 
 	std::shared_ptr<Goal> GetGoal() { return m_pGoal; }
 
+	std::shared_ptr<Item> GetItem() { return m_pItem; }
+
 	int GetLookBlock() { return m_lookBlock; }
 
 protected:
@@ -83,6 +86,9 @@ protected:
 
 	//ゴールのポインター
 	std::shared_ptr<Goal> m_pGoal;
+
+	//アイテムのポインター
+	std::shared_ptr<Item> m_pItem;
 
 	//ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum; 
@@ -108,6 +114,6 @@ protected:
 	int m_limitFrame;
 
 	//アイテムを取得したかどうか
-	bool m_getItem;
+	bool m_getItem = false;
 };
 

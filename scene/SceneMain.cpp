@@ -1,18 +1,19 @@
 #include "DxLib.h"
-#include "game.h"
+#include "../game.h"
 #include "SceneMain.h"
 #include "SceneDebug.h"
 #include "../object/field/FieldBase.h"
 #include "../object/field/Field1.h"
-#include "Player.h"
+#include "../object/Player.h"
 #include "SceneGameClear.h"
 #include "SceneOption.h"
-#include"Model.h"
-#include"Shot.h"
-#include"Switch.h"
-#include"Goal.h"
+#include"../object/Model.h"
+#include"../object/Shot.h"
+#include"../object/Switch.h"
+#include"../object/Goal.h"
+#include"../object/Item.h"
 
-#include "Pad.h"
+#include "../util/Pad.h"
 
 #include <cassert>
 
@@ -194,6 +195,18 @@ void SceneMain::draw()
 void SceneMain::IsColl()
 {
 	VECTOR PlayerPos = m_Player->GetPos();
+
+	if (m_Field->GetItem()->GetExist())
+	{
+		VECTOR ItemToPlayer = VSub(PlayerPos,m_Field->GetItem()->GetPos());
+		float dist = VSize(ItemToPlayer);
+
+		if (dist < (m_Player->GetRadius() + m_Field->GetItem()->GetRadius()))
+		{
+			m_Field->GetItem()->SetExist();
+		}
+	}
+
 	for (auto& pSwitch : m_Field->GetSwitch())
 	{
 		VECTOR switchPos = pSwitch->GetPos();

@@ -1,6 +1,6 @@
 #include "SceneBase.h"
 #include "DxLib.h"
-#include "game.h"
+#include "../game.h"
 
 namespace
 {

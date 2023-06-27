@@ -29,5 +29,7 @@ private:
 	std::shared_ptr<FieldBase> m_Field;
 
 	std::array<UI, 11> m_UI;//UIî•ñ
+
+	Vec2 m_coinPos[10][3];
 };
 

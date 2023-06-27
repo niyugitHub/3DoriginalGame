@@ -4,8 +4,8 @@
 #include"SceneMain.h"
 #include"SceneStageSelect.h"
 #include<DxLib.h>
-#include"Pad.h"
-#include"game.h"
+#include "../util/Pad.h"
+#include"../game.h"
 
 
 SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) : 
@@ -71,12 +71,12 @@ void SceneOption::draw()
 	{
 		if (m_selectOption == i)
 		{
-			DrawBox(m_UI[i].pos.x - 20, m_UI[i].pos.y - 20,
-				m_UI[i].size.x + 20, m_UI[i].size.y + 20,
+			DrawBox(static_cast<int>(m_UI[i].pos.x - 20), static_cast<int>(m_UI[i].pos.y - 20),
+				static_cast<int>(m_UI[i].size.x + 20), static_cast<int>(m_UI[i].size.y + 20),
 				0xffffff, true);
 		}
-		DrawBox(m_UI[i].pos.x, m_UI[i].pos.y,
-			m_UI[i].size.x, m_UI[i].size.y,
+		DrawBox(static_cast<int>(m_UI[i].pos.x), static_cast<int>(m_UI[i].pos.y),
+			static_cast<int>(m_UI[i].size.x), static_cast<int>(m_UI[i].size.y),
 			0x0000ff, true);
 	}
 }

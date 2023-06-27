@@ -1,7 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 #include <array>
-#include <Vec2.h>
+#include "../util/Vec2.h"
 
 class SceneSelectScreen : public SceneBase
 {

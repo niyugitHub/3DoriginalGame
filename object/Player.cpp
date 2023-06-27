@@ -1,5 +1,5 @@
 #include "Player.h"
-#include"Pad.h"
+#include"../util/Pad.h"
 #include"Model.h"
 #include"Shot.h"
 #include <cassert>
@@ -12,12 +12,26 @@ namespace
 	// 旋回速度
 	constexpr float kRotSpeed = 0.15f;
 
-	// 最大移動速度
-	constexpr float kMaxMoveSpeed = 7.0f;
 
-	// 一フレームごとの移動速度上昇
-	constexpr float kMoveSpeed = 1.0f; //地面にいるとき
-	constexpr float kMoveJumpSpeed = 0.4f;//ジャンプ中
+#ifdef _DEBUG
+	
+		// 最大移動速度
+		constexpr float kMaxMoveSpeed = 21.0f;
+
+		// 一フレームごとの移動速度上昇
+		constexpr float kMoveSpeed = 3.0f; //地面にいるとき
+		constexpr float kMoveJumpSpeed = 1.2f;//ジャンプ中
+	
+#else
+	
+		// 最大移動速度
+		constexpr float kMaxMoveSpeed = 7.0f;
+
+		// 一フレームごとの移動速度上昇
+		constexpr float kMoveSpeed = 1.0f; //地面にいるとき
+		constexpr float kMoveJumpSpeed = 0.4f;//ジャンプ中
+	
+#endif
 
 	// アニメーション番号
 	constexpr int kIdleAnimNo = 3;	// 待機モーション
@@ -155,8 +169,8 @@ void Player::Update()
 	}
 
 	//毎フレーム少しずつ値を足していく
-	m_inputX = (m_inputX * 0.85) + (m_input.Rx * 0.15);
-	m_inputZ = (m_inputZ * 0.85) + (m_input.Ry * 0.15);
+	m_inputX = static_cast<int>(m_inputX * 0.85) + static_cast<int>(m_input.Rx * 0.15);
+	m_inputZ = static_cast<int>(m_inputZ * 0.85) + static_cast<int>(m_input.Ry * 0.15);
 
 	//カメラの位置、どこからどこを見ているかを設定
 	m_cameraTargetPos.x = ((m_cameraTargetPos.x * 0.8f) + (m_Pos.x * 0.2f)) + static_cast<float>(m_inputX);
