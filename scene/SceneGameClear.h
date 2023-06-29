@@ -3,12 +3,14 @@
 #include <memory>
 class FieldBase;
 class Player;
+class Camera;
 class Map;
 
 class SceneGameClear : public SceneBase
 {
 public:
-	SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<FieldBase> pField);
+	SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<FieldBase> pField,
+		std::shared_ptr<Camera>pCamera);
 	virtual ~SceneGameClear();
 
 	virtual void init();
@@ -30,6 +32,6 @@ private:
 	int m_selectNum; //ëIÇÒÇæî‘çÜ
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<FieldBase> m_pField;
-
+	std::shared_ptr<Camera> m_pCamera;
 };
 

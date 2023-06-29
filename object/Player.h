@@ -57,10 +57,6 @@ private:
 	
 	int m_modelHandle; // モデルハンドル
 
-	VECTOR m_cameraPos; //カメラポジション
-
-	VECTOR m_cameraTargetPos; //カメラターゲット
-
 	VECTOR m_Pos; // プレイヤーの座標
 
 	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
@@ -92,12 +88,6 @@ private:
 
 	// ショットのポインタ
 	std::vector<Shot*> m_pShot;
-
-	//パッドアナログ情報取得
-	DINPUT_JOYSTATE m_input;
-
-	int m_inputX;//X軸情報
-	int m_inputZ;//Y軸情報
 
 	//攻撃中かどうか
 	bool m_isAttackFlag = false;

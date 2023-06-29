@@ -5,6 +5,7 @@
 #include "../object/field/FieldBase.h"
 #include "../object/field/Field1.h"
 #include "../object/Player.h"
+#include "../object/Camera.h"
 #include "SceneGameClear.h"
 #include "SceneOption.h"
 #include"../object/Model.h"
@@ -28,6 +29,7 @@ SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
 {
 	m_Field = Field;
 	m_Player = std::make_shared<Player>(m_Field->GetPlayerPos());
+	m_Camera = std::make_shared<Camera>(m_Player);
 //	m_Player->SetPos(m_Field->GetPlayerPos());
 
 	//3DŠÖ˜A‚ÌÝ’è
@@ -120,13 +122,14 @@ SceneBase* SceneMain::update()
 	}
 
 	m_Player->Update();
+	m_Camera->Update(m_Player);
 	m_Field->Update();
 	
 	if (m_GameClear)
 	{
 		m_Player->ClearCharaMotion();
 		m_Field->StageClear();
-		return new SceneGameClear(m_Player, m_Field);
+		return new SceneGameClear(m_Player, m_Field,m_Camera);
 	}
 
 //	int a = m_Field->GetModel().size();

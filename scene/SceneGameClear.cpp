@@ -5,13 +5,16 @@
 #include"DxLib.h"
 #include "../util/Pad.h"
 #include"../object/Player.h"
+#include"../object/Camera.h"
 #include"../object/field/FieldBase.h"
 
-SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<FieldBase> pField) : 
+SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<FieldBase> pField,
+	std::shared_ptr<Camera>pCamera) :
 	m_selectNum(kStageSelect)
 {
 	m_pPlayer = pPlayer;
 	m_pField = pField;
+	m_pCamera = pCamera;
 }
 
 SceneGameClear::~SceneGameClear()
@@ -25,6 +28,7 @@ void SceneGameClear::init()
 SceneBase* SceneGameClear::update()
 {
 	m_pPlayer->ClearUpdate();
+	m_pCamera->ClearUpdate(m_pPlayer);
 
 	DecisionNum(m_selectNum);
 

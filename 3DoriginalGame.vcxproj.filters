@@ -132,11 +132,11 @@
     <ClCompile Include="object\Item.cpp">
       <Filter>ソース ファイル\object</Filter>
     </ClCompile>
+    <ClCompile Include="object\Camera.cpp">
+      <Filter>ソース ファイル\object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scene\SceneBase.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
@@ -228,6 +228,12 @@
       <Filter>ヘッダー ファイル\object\field</Filter>
     </ClInclude>
     <ClInclude Include="object\Item.h">
+      <Filter>ヘッダー ファイル\object</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Camera.h">
       <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
   </ItemGroup>

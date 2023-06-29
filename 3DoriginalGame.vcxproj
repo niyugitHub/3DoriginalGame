@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="object\Camera.cpp" />
     <ClCompile Include="object\Item.cpp" />
     <ClCompile Include="object\field\Field10.cpp" />
     <ClCompile Include="object\field\Field6.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="object\Camera.h" />
     <ClInclude Include="object\Item.h" />
     <ClInclude Include="object\field\Field10.h" />
     <ClInclude Include="object\field\Field6.h" />

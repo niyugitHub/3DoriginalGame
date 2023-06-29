@@ -52,9 +52,9 @@ namespace
 	//ショットスピード
 	constexpr float kShotSpeed = 20.0f;
 
-	// カメラの位置
-	constexpr float kCameraPosY = 1500.0f;
-	constexpr float kCameraPosZ = -800.0f;
+	//// カメラの位置
+	//constexpr float kCameraPosY = 1500.0f;
+	//constexpr float kCameraPosZ = -800.0f;
 }
 
 Player::Player(VECTOR pos) :
@@ -64,19 +64,13 @@ Player::Player(VECTOR pos) :
 	m_angle(DX_PI_F),
 	m_cameraAngle(0.0f),
 	m_colFieldY(false),
-	m_colFieldXZ(false),
-	m_inputX(0),
-	m_inputZ(0)
-	/*m_inputX(0),
-	m_inputY(0)*/
+	m_colFieldXZ(false)
 {
 	m_Pos = pos;
 	m_NextPos = m_Pos;
 	m_attackPos = m_Pos;
 	m_Vec = VGet(0, 0, 0);
 
-	m_cameraPos = VGet(m_Pos.x, kCameraPosY, kCameraPosZ);
-	m_cameraTargetPos = VGet(m_Pos.x, 0, 0);
 	//3Dモデルの生成
 	m_pModel = std::make_shared<Model>(kEnemyModelFileName);
 	m_pModel->setAnimation(kIdleAnimNo, true, true);
@@ -133,58 +127,6 @@ void Player::Update()
 
 	m_pModel->setPos(m_Pos);
 	m_pModel->setRot(VGet(0.0f, m_angle, 0.0f));
-
-	//X軸の入力状態が0じゃないとき
-	if (m_input.Rx != 0)
-	{
-		if (m_input.Rx < 0)
-		{
-			m_input.Rx = -100;
-		}
-
-		if (m_input.Rx > 0)
-		{
-			m_input.Rx = 100;
-		}
-	}
-
-	//Y軸の入力状態が0じゃないとき
-	if (m_input.Ry != 0)
-	{
-		if (m_input.Ry < 0)
-		{
-			m_input.Ry = -100;
-		}
-
-		if (m_input.Ry > 0)
-		{
-			m_input.Ry = 100;
-		}
-	}
-
-	if (m_updateFunc != &Player::updateIdle)
-	{
-		m_input.Rx = 0;
-		m_input.Ry = 0;
-	}
-
-	//毎フレーム少しずつ値を足していく
-	m_inputX = static_cast<int>(m_inputX * 0.85) + static_cast<int>(m_input.Rx * 0.15);
-	m_inputZ = static_cast<int>(m_inputZ * 0.85) + static_cast<int>(m_input.Ry * 0.15);
-
-	//カメラの位置、どこからどこを見ているかを設定
-	m_cameraTargetPos.x = ((m_cameraTargetPos.x * 0.8f) + (m_Pos.x * 0.2f)) + static_cast<float>(m_inputX);
-	m_cameraTargetPos.z = ((m_cameraTargetPos.z * 0.8f) + (m_Pos.z * 0.2f)) - static_cast<float>(m_inputZ);
-
-	m_cameraPos.x = m_cameraTargetPos.x;
-	m_cameraPos.z = m_cameraTargetPos.z + kCameraPosZ;
-	
-	//カメラの位置設定(カメラの位置、カメラが見る位置)
-	SetCameraPositionAndTarget_UpVecY(m_cameraPos, m_cameraTargetPos);
-
-
-	//SetLightPosition(VGet(m_Pos.x, 500 , m_Pos.z));
-	//SetLightDirection(VGet(m_Pos.x, 0 , m_Pos.z));
 }
 
 void Player::Draw()
@@ -196,8 +138,6 @@ void Player::Draw()
 
 	m_pModel->draw();
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "X:%d Y:%d Z:%d", m_input.X, m_input.Y, m_input.Z);
-	DrawFormatString(0, 16, GetColor(255, 255, 255), "Rx:%d Ry:%d Rz:%d", m_input.Rx, m_input.Ry, m_input.Rz);
 //	DrawFormatString(0, 16, GetColor(255, 255, 255), "Rx:%d Ry:%d Rz:%d", input.Rx, input.Ry, input.Rz);
 
 //	printfDx("%d,%d\n", m_inputX, m_inputY);
@@ -215,18 +155,11 @@ float Player::GetRadius()
 void Player::ClearUpdate()
 {
 	//プレイヤーの目の前にカメラを置く
-	m_angle = max(0, m_angle - kRotSpeed);
-
-	VECTOR flontCamera = VAdd(m_Pos, VGet(0.0f, 300.0f, -600.0f));
-
-	m_cameraPos.x = (m_cameraPos.x * 0.95f) + (flontCamera.x * 0.05f);
-	m_cameraPos.y = (m_cameraPos.y * 0.95f) + (flontCamera.y * 0.05f);
-	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (flontCamera.z * 0.05f); 
+	m_angle = max(0, m_angle - kRotSpeed);	
 
 	//アニメーションを進める
 	m_pModel->update();
 	m_pModel->setRot(VGet(0.0f, m_angle, 0.0f));
-	SetCameraPositionAndTarget_UpVecY(m_cameraPos, m_Pos);
 }
 
 void Player::ClearCharaMotion()
@@ -244,9 +177,6 @@ void Player::updateIdle()
 		m_pModel->changeAnimation(kModeAnimNo, true, true, 2);
 		return;
 	}
-
-	// 入力状態を取得
-	GetJoypadDirectInputState(DX_INPUT_PAD1, &m_input);
 
 	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているときupdateJumpに遷移
 	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY) 

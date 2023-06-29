@@ -4,6 +4,7 @@
 
 class FieldBase;
 class Player;
+class Camera;
 class Map;
 
 class SceneMain : public SceneBase
@@ -23,6 +24,7 @@ public:
 	bool StageClear();
 private:
 	std::shared_ptr<Player> m_Player;
+	std::shared_ptr<Camera> m_Camera;
 	std::shared_ptr<FieldBase> m_Field;
 	bool m_GameClear;	//ƒNƒŠƒA‚µ‚½‚©‚Ç‚¤‚©
 
