@@ -13,7 +13,7 @@
 #include"../object/Switch.h"
 #include"../object/Goal.h"
 #include"../object/Item.h"
-
+#include"../SoundManager.h"
 #include "../util/Pad.h"
 
 #include <cassert>
@@ -60,6 +60,8 @@ SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
 	// シャドウマップの生成
 	m_shadowMap = MakeShadowMap(4096, 4096);
 	SetShadowMapLightDirection(m_shadowMap, GetLightDirection());
+
+	SoundManager::GetInstance().PlayMusic("sound/playScene.mp3");
 }
 
 SceneMain::~SceneMain()

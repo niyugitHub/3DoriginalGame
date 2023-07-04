@@ -47,7 +47,8 @@ public:
 	// 現在のアニメーションが終了しているかどうかを取得する(Loopアニメの場合は取得できない = falseを返す)
 	bool isAnimEnd();
 
-	
+	//デバッグ用当たり判定
+	void DebugColl();
 
 private:
 	//アニメーション情報

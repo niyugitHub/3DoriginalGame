@@ -169,6 +169,7 @@
     <ClCompile Include="scene\SceneManager.cpp" />
     <ClCompile Include="scene\SceneMain.cpp" />
     <ClCompile Include="object\Switch.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="util\ImageUI.cpp" />
     <ClCompile Include="util\Pad.cpp" />
     <ClCompile Include="util\Vec2.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="object\Switch.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="util\ImageUI.h" />
     <ClInclude Include="util\Pad.h" />
     <ClInclude Include="util\Vec2.h" />

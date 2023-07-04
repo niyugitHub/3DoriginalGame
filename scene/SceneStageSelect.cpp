@@ -17,6 +17,7 @@
 #include"../game.h"
 #include"../SaveData.h"
 #include "../util/ImageUI.h"
+#include "../SoundManager.h"
 
 namespace
 {
@@ -120,8 +121,11 @@ SceneBase* SceneStageSelect::update()
 {
 	ChangeStage();
 
+	SelectSE();
+
 	if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum != 10)
 	{
+		SoundManager::GetInstance().StopBGMAndSE();
 		SelectStage(m_stageNum);
 		return new SceneMain(m_Field);
 	}

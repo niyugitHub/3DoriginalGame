@@ -7,6 +7,7 @@
 #include "../util/Pad.h"
 #include"../game.h"
 #include "../util/ImageUI.h"
+#include"../SoundManager.h"
 
 namespace
 {
@@ -17,6 +18,8 @@ namespace
 		"data/image/OptionSceneSE.png",
 		"data/image/back.png"
 	};
+
+	const char* const kCorsorFileName = "data/image/cursor.png";
 }
 
 SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) : 
@@ -45,6 +48,11 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
+
+	m_volumeBGM = SoundManager::GetInstance().GetBGMVolume() / 63;
+	m_volumeSE = SoundManager::GetInstance().GetSEVolume() / 63;
+
+	m_corsorHandle = LoadGraph(kCorsorFileName);
 }
 
 SceneOption::~SceneOption()
@@ -63,18 +71,33 @@ SceneBase* SceneOption::update()
 {
 	SelectUpdate();
 
+	SelectSE();
+
+	if (m_selectOption == kBgm)
+	{
+		AccelerateChangeBGMVoluem();
+	}
+
+	if (m_selectOption == kSe)
+	{
+		AccelerateChangeSEVoluem();
+	}
+
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
+		SoundManager::GetInstance().SaveSoundConfig();
 		return m_pScene;
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_1) && m_selectOption == kBack)
 	{
+		SoundManager::GetInstance().SaveSoundConfig();
 		return m_pScene;
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_1) && m_isSceneMain)
 	{
+		SoundManager::GetInstance().SaveSoundConfig();
 		return new SceneStageSelect;
 	}
 
@@ -96,6 +119,10 @@ void SceneOption::draw()
 	DrawString(0, 400, "ƒIƒvƒVƒ‡ƒ“‰æ–Ê", 0xffffff);
 
 	m_pImageUI->Draw(m_selectOption);
+
+	DrawGraph(505 + m_volumeBGM * 202, 355, m_corsorHandle, true);
+
+	DrawGraph(505 + m_volumeSE * 202, 700, m_corsorHandle, true);
 }
 
 void SceneOption::SelectUpdate()
@@ -119,4 +146,36 @@ void SceneOption::SelectUpdate()
 	{
 		m_selectOption = kBack;
 	}
+}
+
+void SceneOption::AccelerateChangeBGMVoluem()
+{
+	auto& soundMgr = SoundManager::GetInstance();
+	if (Pad::isTrigger(PAD_INPUT_LEFT) && m_volumeBGM > 0)
+	{
+		m_volumeBGM--;
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_RIGHT) && m_volumeBGM < 4)
+	{
+		m_volumeBGM++;
+	}
+
+	soundMgr.SetBGMVolume(m_volumeBGM * 64);
+}
+
+void SceneOption::AccelerateChangeSEVoluem()
+{
+	auto& soundMgr = SoundManager::GetInstance();
+	if (Pad::isTrigger(PAD_INPUT_LEFT) && m_volumeSE > 0)
+	{
+		m_volumeSE--;
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_RIGHT) && m_volumeSE < 4)
+	{
+		m_volumeSE++;
+	}
+
+	soundMgr.SetSEVolume(m_volumeSE * 64);
 }

@@ -3,6 +3,7 @@
 #include "game.h"
 #include "scene/SceneManager.h"
 #include "SaveData.h"
+#include"SoundManager.h"
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -21,6 +22,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
+
+	auto& soundManager = SoundManager::GetInstance();
 
 	SceneManager scene;
 	scene.init();
