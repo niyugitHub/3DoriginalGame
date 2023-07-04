@@ -353,7 +353,7 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
 			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//è„ñ Ç™y=0.0fÇ…Ç»ÇÈÇÊÇ§Ç…îzíu
-			m_playerPos = VGet(x, 100, z);
+			m_playerPos = VGet(x, 0, z);
 			continue;
 		}
 

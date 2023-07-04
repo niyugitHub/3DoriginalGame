@@ -16,6 +16,7 @@
 #include "../object/field/Field10.h"
 #include"../game.h"
 #include"../SaveData.h"
+#include "../util/ImageUI.h"
 
 namespace
 {
@@ -31,44 +32,76 @@ namespace
 
 	constexpr int kCoinWidth = 60; //コインの幅
 	constexpr int kCoinHeight = 120; //コインの幅
+	
+	//ファイル名
+	const char* const kFileName[11] =
+	{
+		"data/image/stage1.png",
+		"data/image/stage2.png",
+		"data/image/stage3.png",
+		"data/image/stage4.png",
+		"data/image/stage5.png",
+		"data/image/stage6.png",
+		"data/image/stage7.png",
+		"data/image/stage8.png",
+		"data/image/stage9.png",
+		"data/image/stage10.png",
+		"data/image/back.png",
+	};
+
+	const char* const kCoinName = "data/image/Coin.png";
 }
 
 SceneStageSelect::SceneStageSelect() : 
 	m_stageNum(0),
 	m_stageX(0),
 	m_stageY(0),
+	m_coinHandle(-1),
 	m_Field(nullptr)
 {
-	float X = 300;
-	float Y = 300;
+	float X = 440;
+	float Y = 440;
+
+	int sizeX, sizeY;
+
 	int count = 0;
 	for (auto& UI : m_UI)
 	{
 		UI.pos = { X,Y };
-		UI.size = { UI.pos.x + 200.0f,UI.pos.y + 200 };
+		UI.handle = LoadGraph(kFileName[count]);
+		GetGraphSize(UI.handle, &sizeX, &sizeY);
+		UI.size = { static_cast<float>(sizeX / 2),static_cast<float>(sizeY / 2) };
 
 		X += 280;
 		count++;
 
 		if (count == 5)
 		{
-			X = 300;
-			Y = 600;
+			X = 440;
+			Y = 740;
 		}
 	}
+
+	m_coinHandle = LoadGraph(kCoinName);
 
 	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{
-			m_coinPos[i][j] = m_UI[i].pos;
+			m_coinPos[i][j] = { m_UI[i].pos.x - 90,m_UI[i].pos.y - 80 };
 			m_coinPos[i][j].x += kCoinWidth * j + 10;
 			m_coinPos[i][j].y += kCoinHeight;
 		}
 	}
 
-	m_UI[10].pos = { 0,Game::kScreenHeight - 200 };
-	m_UI[10].size = { 300 ,Game::kScreenHeight };
+	m_UI[10].pos = { 150,Game::kScreenHeight - 100 };
+
+	m_pImageUI = std::make_shared<ImageUI>();
+
+	for (int i = 0; i < m_UI.size(); i++)
+	{
+		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
+	}
 }
 
 SceneStageSelect::~SceneStageSelect()
@@ -104,18 +137,7 @@ void SceneStageSelect::draw()
 	DrawString(300, 300, "SceneStageSelect", 0xffffff);
 	DrawFormatString(300, 400, 0xffffff, "%d", m_stageNum);
 
-	for (int i = 0; i < m_UI.size(); i++)
-	{
-		if (m_stageNum == i)
-		{
-			DrawBox(static_cast<int>(m_UI[i].pos.x - 20), static_cast<int>(m_UI[i].pos.y - 20),
-				static_cast<int>(m_UI[i].size.x + 20), static_cast<int>(m_UI[i].size.y + 20),
-				0xffffff, true);
-		}
-		DrawBox(static_cast<int>(m_UI[i].pos.x), static_cast<int>(m_UI[i].pos.y),
-			static_cast<int>(m_UI[i].size.x), static_cast<int>(m_UI[i].size.y),
-			0x0000ff, true);
-	}
+	m_pImageUI->Draw(m_stageNum);
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -123,9 +145,8 @@ void SceneStageSelect::draw()
 		{
 			if (SaveData::GetStar(i, j))
 			{
-				DrawBox(static_cast<int>(m_coinPos[i][j].x), static_cast<int>(m_coinPos[i][j].y),
-					static_cast<int>(m_coinPos[i][j].x + 50), static_cast<int>(m_coinPos[i][j].y + 50),
-					0x00ff00, true);
+				DrawGraph(static_cast<int>(m_coinPos[i][j].x), static_cast<int>(m_coinPos[i][j].y),
+					m_coinHandle, true);
 			}
 		}
 	}
