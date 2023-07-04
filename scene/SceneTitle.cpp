@@ -3,6 +3,8 @@
 #include <DxLib.h>
 #include"SceneSelectScreen.h"
 #include"SceneOption.h"
+#include "../util/ImageUI.h"
+
 
 SceneTitle::SceneTitle()
 {

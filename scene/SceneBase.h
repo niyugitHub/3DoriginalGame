@@ -1,6 +1,8 @@
 #pragma once
 #include"../util/Vec2.h"
+#include<memory>
 
+class ImageUI;
 // ゲームシーン基底クラス
 class SceneBase
 {
@@ -37,7 +39,10 @@ protected:
 	{
 		Vec2 pos;
 		Vec2 size;
+		int handle;
 	};
+
+	std::shared_ptr<ImageUI> m_pImageUI;//UIポインター
 private:
 	// フェード関連処理
 	int m_fadeColor;

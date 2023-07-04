@@ -4,16 +4,40 @@
 #include "SceneOption.h"
 #include "../util/Pad.h"
 #include <DxLib.h>
+#include "../util/ImageUI.h"
+
+namespace
+{
+	//ƒtƒ@ƒCƒ‹–¼
+	const char* const kEnemyModelFileName[3] =
+	{
+		"data/image/SceneSelectPlay.png",
+		"data/image/SceneSelectOption.png",
+		"data/image/SceneSelectTitle.png"
+	};
+}
 
 SceneSelectScreen::SceneSelectScreen() : 
 	m_selectScreen(kStageSelect)
 {
-	m_UI[0].pos = { 200.0f,200.0f };
-	m_UI[0].size = { m_UI[0].pos.x + 300.0f,m_UI[0].pos.y + 500.0f };
-	m_UI[1].pos = { 800,200 };
-	m_UI[1].size = { m_UI[1].pos.x + 500.0f,m_UI[1].pos.y + 200.0f };
-	m_UI[2].pos = { 800.0f,500.0f };
-	m_UI[2].size = { m_UI[2].pos.x + 500.0f,m_UI[2].pos.y + 200.0f };
+	int sizeX,sizeY;
+	m_UI[0].pos = { 450.0f,540.0f };
+	m_UI[1].pos = { 1350,340 };
+	m_UI[2].pos = { 1350.0f,760.0f };
+
+	for (int i = 0; i < m_UI.size(); i++)
+	{
+		m_UI[i].handle = LoadGraph(kEnemyModelFileName[i]);
+		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
+		m_UI[i].size = { static_cast<float>(sizeX / 2),static_cast<float>(sizeY / 2) };
+	}
+
+	m_pImageUI = std::make_shared<ImageUI>();
+
+	for (int i = 0; i < m_UI.size(); i++)
+	{
+		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
+	}
 }
 
 SceneSelectScreen::~SceneSelectScreen()
@@ -53,7 +77,8 @@ void SceneSelectScreen::draw()
 {
 	DrawFormatString(300, 0, 0xffffff, "%d", m_selectScreen);
 
-	for (int i = 0; i < m_UI.size(); i++)
+	m_pImageUI->Draw(m_selectScreen);
+	/*for (int i = 0; i < m_UI.size(); i++)
 	{
 		if (m_selectScreen == i)
 		{
@@ -66,7 +91,7 @@ void SceneSelectScreen::draw()
 		DrawBox(static_cast<int>(m_UI[i].pos.x), static_cast<int>(m_UI[i].pos.y),
 			static_cast<int>(m_UI[i].size.x), static_cast<int>(m_UI[i].size.y),
 			0x0000ff,true);
-	}
+	}*/
 }
 
 void SceneSelectScreen::DecisionNum(int& selectNum)
