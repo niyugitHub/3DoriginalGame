@@ -9,6 +9,7 @@
 #include"../object/field/FieldBase.h"
 #include"../SoundManager.h"
 #include "../util/ImageUI.h"
+#include"../object/Item.h"
 
 namespace
 {
@@ -20,7 +21,10 @@ namespace
 		"data/image/GameClearStageSelect.png"
 	};
 
-	const char* const kCorsorFileName = "data/image/cursor.png";
+	const char* const kCoinFileName = "data/image/co.png";
+
+	//スクロール終了時の値
+	constexpr int kStopScroll = 10;
 }
 
 //シーンに入ってからのフレーム数を数える
@@ -31,6 +35,7 @@ SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	std::shared_ptr<Camera>pCamera) :
 	m_selectNum(kStageSelect)
 {
+	m_coinHandle = LoadGraph(kCoinFileName);
 	int sizeX, sizeY;
 
 	m_pPlayer = pPlayer;
@@ -42,18 +47,16 @@ SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_UI[0].pos = { 1300,500 };
 	m_UI[1].pos = { 1100,800 };
 	m_UI[2].pos = { 1500,800 };
+	m_coinPos[0] = { 1055,510 };
+	m_coinPos[1] = { 1290,510 };
+	m_coinPos[2] = { 1528,510 };
 
+	m_pImageUI = std::make_shared<ImageUI>();
 	for (int i = 0; i < m_UI.size(); i++)
 	{
 		m_UI[i].handle = LoadGraph(kGameClearFileName[i]);
 		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
 		m_UI[i].size = { static_cast<float>(sizeX / 2),static_cast<float>(sizeY / 2) };
-	}
-
-	m_pImageUI = std::make_shared<ImageUI>();
-
-	for (int i = 0; i < m_UI.size(); i++)
-	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
 }
@@ -75,21 +78,23 @@ SceneBase* SceneGameClear::update()
 
 	if (frameCount > 150)
 	{
-		scroll = max(scroll - (scroll * 0.05f), 0);
+		scroll = max(static_cast<int>(scroll - (scroll * 0.05f)), 0);
 	}
 
 	// m_selectNumの数値を変化させるための関数
 	DecisionNum(m_selectNum);
 
 	//PAD1を押した、m_selectNumが各値のとき(今流れてるBGMを止めて、新しいBGMを再生)
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kStageSelect)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kStageSelect && scroll < kStopScroll)
 	{
 		SoundManager::GetInstance().StopBGMAndSE();
 		SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
 		return new SceneStageSelect;
 	}
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kRestart)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kRestart && scroll < kStopScroll)
 	{
+		m_pField->ResetTime();
+		m_pField->GetItem()->SetExist(true);
 		SoundManager::GetInstance().StopBGMAndSE();
 		//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
 		return new SceneMain(m_pField);
@@ -104,6 +109,16 @@ void SceneGameClear::draw()
 	m_pPlayer->Draw();
 
 	m_pImageUI->Draw(m_selectNum, scroll);
+
+	for (int i = 0; i < m_coinPos.size(); i++)
+	{
+		if (m_pField->GetStar(i))
+		{
+			DrawExtendGraph(static_cast<int>(m_coinPos[i].x) + scroll - 125, static_cast<int>(m_coinPos[i].y) - 125,
+				static_cast<int>(m_coinPos[i].x) + scroll + 125, static_cast<int>(m_coinPos[i].y) + 125,
+				m_coinHandle, true);
+		}
+	}
 
 	/*DrawString(0, 0,
 		"ゲームクリア！", 0xffffff);

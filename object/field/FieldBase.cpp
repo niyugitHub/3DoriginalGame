@@ -1,5 +1,6 @@
 #include "FieldBase.h"
 #include "../Model.h"
+#include"../Block.h"
 #include "../../util/Pad.h"
 #include"../Switch.h"
 #include"../Goal.h"
@@ -80,17 +81,17 @@ FieldBase::~FieldBase()
 
 void FieldBase::Init(loadData data)
 {
-	FirstModelLoad(); // 最初に複製するためにモデルを用意する
+//	FirstModelLoad(); // 最初に複製するためにモデルを用意する
 
 	LoadFile(data.fileName);
 
 //	m_blockNum.push_back(8); //とりあえずスイッチ用意(8がスイッチ)
 
 	//最初にロードしたモデルと合わせてモデルを100個生成
-	int orgModel1 = m_pModel[0]->getModelHandle();
-	int orgModel2 = m_pModel[1]->getModelHandle();
-	int orgModel3 = m_pModel[2]->getModelHandle();
-	int orgModel4 = m_pModel[3]->getModelHandle();
+	int orgModel1 = MV1LoadModel(kFileName1);
+	int orgModel2 = MV1LoadModel(kFileName2);
+	int orgModel3 = MV1LoadModel(kFileName3);;
+	int orgModel4 = MV1LoadModel(kFileName4);;
 	/*for (auto& block : m_blockNum)
 	{
 		m_pModel.push_back(std::make_shared<Model>(orgModel));
@@ -102,24 +103,9 @@ void FieldBase::Init(loadData data)
 
 void FieldBase::Update()
 {
-	for (auto& model : m_pModel)
+	for (auto& block : m_pBlock)
 	{
-		model->update();
-	}
-
-	for (auto& model : m_pModelRed)
-	{
-		model->update();
-	}
-
-	for (auto& model : m_pModelBlue)
-	{
-		model->update();
-	}
-
-	for (auto& model : m_pModelGreen)
-	{
-		model->update();
+		block->Update();
 	}
 
 	for (auto& Switch : m_pSwitch)
@@ -128,46 +114,21 @@ void FieldBase::Update()
 		Switch->Update();
 	}
 
-	if (!m_pItem->GetExist())
-	{
-		m_getItem = true;
-	}
-
 	m_gameFrameCount++;
 }
 
 void FieldBase::Draw()
 {
-	for (auto& model : m_pModel)
+	for (auto& block : m_pBlock)
 	{
-		model->draw();
-		//DrawString(500, 0, "さふぇｄ；ｊヵ", 0xffffff);
-	}
-
-	if (m_lookBlock == kRed)
-	{
-		for (auto& model : m_pModelRed)
+		if (block->GetBlockKind() == Block::kField)
 		{
-			model->draw();
-			DrawString(500, 0, "赤", 0xffffff);
+			block->Draw();
 		}
-	}
 
-	if (m_lookBlock == kBlue)
-	{
-		for (auto& model : m_pModelBlue)
+		if (block->GetBlockKind() == m_lookBlock)
 		{
-			model->draw();
-			DrawString(500, 0, "青", 0xffffff);
-		}
-	}
-
-	if (m_lookBlock == kGreen)
-	{
-		for (auto& model : m_pModelGreen)
-		{
-			model->draw();
-			DrawString(500, 0, "緑", 0xffffff);
+			block->Draw();
 		}
 	}
 
@@ -182,30 +143,32 @@ void FieldBase::Draw()
 	{
 		m_pItem->Draw();
 	}
+
+	printfDx("%d\n", m_gameFrameCount);
 }
 
-void FieldBase::FirstModelLoad()
-{
-	//3Dモデルをロード
-	m_pModel.push_back(std::make_shared<Model>(kFileName1));
-	m_pModel.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
-	m_pModel.back()->setUseCollision(true, true);
-
-	//3Dモデルをロード
-	m_pModel.push_back(std::make_shared<Model>(kFileName2));
-	m_pModel.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
-	m_pModel.back()->setUseCollision(true, true);
-
-	//3Dモデルをロード
-	m_pModel.push_back(std::make_shared<Model>(kFileName3));
-	m_pModel.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
-	m_pModel.back()->setUseCollision(true, true);
-
-	//3Dモデルをロード
-	m_pModel.push_back(std::make_shared<Model>(kFileName4));
-	m_pModel.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
-	m_pModel.back()->setUseCollision(true, true);
-}
+//void FieldBase::FirstModelLoad()
+//{
+//	//3Dモデルをロード
+//	m_pBlock.push_back(std::make_shared<Model>(kFileName1));
+//	m_pBlock.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
+//	m_pBlock.back()->setUseCollision(true, true);
+//
+//	//3Dモデルをロード
+//	m_pBlock.push_back(std::make_shared<Model>(kFileName2));
+//	m_pBlock.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
+//	m_pBlock.back()->setUseCollision(true, true);
+//
+//	//3Dモデルをロード
+//	m_pBlock.push_back(std::make_shared<Model>(kFileName3));
+//	m_pBlock.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
+//	m_pBlock.back()->setUseCollision(true, true);
+//
+//	//3Dモデルをロード
+//	m_pBlock.push_back(std::make_shared<Model>(kFileName4));
+//	m_pBlock.back()->setPos(VGet(200.0f, -10000.0f, 200.0f));
+//	m_pBlock.back()->setUseCollision(true, true);
+//}
 
 void FieldBase::LoadFile(const char* fileName)
 {
@@ -301,69 +264,60 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		float posZ = static_cast<float>(z);
 		if (m_blockNum[i] == 10)
 		{
-			m_pModel.push_back(std::make_shared<Model>(Model1));
-			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_pGoal = std::make_shared<Goal>(VGet(posX, 100, posZ));
 			continue;
 		}
 
 		if (m_blockNum[i] == 8)
 		{
-			m_pModel.push_back(std::make_shared<Model>(Model1));
-			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
-
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_pSwitch.push_back(std::make_shared<Switch>(VGet(posX, 100, posZ)));
 			continue;
 		}
 
 		if (m_blockNum[i] == kField)
 		{
-			m_pModel.push_back(std::make_shared<Model>(Model1));
-			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
 		if (m_blockNum[i] == kRed)
 		{
-			m_pModelRed.push_back(std::make_shared<Model>(Model2));
-			m_pModelRed.back()->setUseCollision(true, true);
-			m_pModelRed.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kRed),Model2));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
 		if (m_blockNum[i] == kBlue)
 		{
-			m_pModelBlue.push_back(std::make_shared<Model>(Model3));
-			m_pModelBlue.back()->setUseCollision(true, true);
-			m_pModelBlue.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kBlue),Model3));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
 		if (m_blockNum[i] == kGreen)
 		{
-			m_pModelGreen.push_back(std::make_shared<Model>(Model4));
-			m_pModelGreen.back()->setUseCollision(true, true);
-			m_pModelGreen.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kGreen),Model4));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
 		if (m_blockNum[i] == 5)
 		{
-			m_pModel.push_back(std::make_shared<Model>(Model1));
-			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_playerPos = VGet(posX, 0, posZ);
 			continue;
 		}
 
 		if (m_blockNum[i] == 6)
 		{
-			m_pModel.push_back(std::make_shared<Model>(Model1));
-			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_pItem = std::make_shared<Item>(VGet(posX, 100, posZ));
 			continue;
 		}
@@ -393,7 +347,7 @@ void FieldBase::StageClear()
 {
 	m_getStar[0] = true;
 
-	if (m_getItem)
+	if (!m_pItem->GetExist())
 	{
 		m_getStar[1] = true;
 	}

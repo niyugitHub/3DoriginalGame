@@ -3,7 +3,7 @@
 #include <memory>
 #include<DxLib.h>
 
-class Model;
+class Block;
 class Switch;
 class Goal;
 class Item;
@@ -26,7 +26,7 @@ public:
 	void Update();
 	void Draw();
 	
-	void FirstModelLoad(); // モデルロード(最初の一個だけ)
+	//void FirstModelLoad(); // モデルロード(最初の一個だけ)
 
 	void LoadFile(const char* fileName);
 
@@ -52,13 +52,7 @@ public:
 	/*int GetBlockNumX() { return m_blockNum.x; }
 	int GetBlockNumZ() { return m_blockNum.z; }*/
 
-	std::vector<std::shared_ptr<Model>> GetModel() { return m_pModel; }
-
-	std::vector<std::shared_ptr<Model>> GetModelRed() { return m_pModelRed; }
-
-	std::vector<std::shared_ptr<Model>> GetModelBlue() { return m_pModelBlue; }
-
-	std::vector<std::shared_ptr<Model>> GetModelGreen() { return m_pModelGreen; }
+	std::vector<std::shared_ptr<Block>> GetBlock() { return m_pBlock; }
 
 	std::vector<std::shared_ptr<Switch>> GetSwitch() { return m_pSwitch; }
 
@@ -68,18 +62,13 @@ public:
 
 	int GetLookBlock() { return m_lookBlock; }
 
+	bool GetStar(int i) { return m_getStar[i]; }
+
+	void ResetTime() { m_gameFrameCount = 0; }
+
 protected:
-	//モデルのポインター
-	std::vector<std::shared_ptr<Model>> m_pModel;
-
-	//モデルのポインター(赤)
-	std::vector<std::shared_ptr<Model>> m_pModelRed;
-
-	//モデルのポインター(青)
-	std::vector<std::shared_ptr<Model>> m_pModelBlue;
-
-	//モデルのポインター(緑)
-	std::vector<std::shared_ptr<Model>> m_pModelGreen;
+	//フィールドのポインター
+	std::vector<std::shared_ptr<Block>> m_pBlock;
 
 	//スイッチのポインター
 	std::vector<std::shared_ptr<Switch>> m_pSwitch;
