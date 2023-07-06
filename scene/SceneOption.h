@@ -27,12 +27,13 @@ private:
 	{
 		kBgm,//BGM
 		kSe,//SE
+		kStageSelect, //ステージセレクトに戻る
 		kBack//戻る
 	};
 
 	SceneBase* m_pScene;
 
-	std::array<UI,3> m_UI;
+	std::array<UI,4> m_UI;
 
 	bool m_isSceneMain;//ゲーム中のオプションかどうか
 

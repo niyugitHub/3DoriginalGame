@@ -12,10 +12,11 @@
 namespace
 {
 	//ファイル名
-	const char* const kEnemyModelFileName[3] =
+	const char* const kEnemyModelFileName[4] =
 	{
 		"data/image/OptionSceneBGM.png",
 		"data/image/OptionSceneSE.png",
+		"data/image/Option_SelectStage.png",
 		"data/image/back.png"
 	};
 
@@ -31,9 +32,21 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 
 	m_isSceneMain = isSceneMain;
 
-	m_UI[0].pos = { 960.0f,350.0f };
-	m_UI[1].pos = { 960.0f,700.0f };
-	m_UI[2].pos = { 150,Game::kScreenHeight - 100 };
+	if (m_isSceneMain)
+	{
+		m_UI[0].pos = { 960.0f,200.0f };
+		m_UI[1].pos = { 960.0f,500.0f };
+		m_UI[2].pos = { 960.0f,800.0f };
+		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
+	}
+
+	else
+	{
+		m_UI[0].pos = { 960.0f,350.0f };
+		m_UI[1].pos = { 960.0f,700.0f };
+		m_UI[2].pos = { 960.0f,10000.0f };
+		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
+	}
 
 	for (int i = 0; i < m_UI.size(); i++)
 	{
@@ -95,10 +108,11 @@ SceneBase* SceneOption::update()
 		return m_pScene;
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_1) && m_isSceneMain)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_isSceneMain && m_selectOption == kStageSelect)
 	{
 		SoundManager::GetInstance().SaveSoundConfig();
-		return new SceneStageSelect;
+		SoundManager::GetInstance().StopBGMAndSE();
+		SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");		return new SceneStageSelect;
 	}
 
 	//オプションの番号を決定
@@ -130,11 +144,19 @@ void SceneOption::SelectUpdate()
 	if (Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 		m_selectOption++;
+		if (m_selectOption == kStageSelect && !m_isSceneMain)
+		{
+			m_selectOption++;
+		}
 	}
 
 	if (Pad::isTrigger(PAD_INPUT_UP))
 	{
 		m_selectOption--;
+		if (m_selectOption == kStageSelect && !m_isSceneMain)
+		{
+			m_selectOption--;
+		}
 	}
 
 	if (m_selectOption > kBack)

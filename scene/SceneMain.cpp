@@ -201,6 +201,7 @@ void SceneMain::IsColl()
 {
 	VECTOR PlayerPos = m_Player->GetPos();
 
+	//アイテムを取得したかどうか
 	if (m_Field->GetItem()->GetExist())
 	{
 		VECTOR ItemToPlayer = VSub(PlayerPos,m_Field->GetItem()->GetPos());
@@ -212,6 +213,7 @@ void SceneMain::IsColl()
 		}
 	}
 
+	//スイッチとの当たり判定
 	for (auto& pSwitch : m_Field->GetSwitch())
 	{
 		VECTOR switchPos = pSwitch->GetPos();
@@ -261,8 +263,6 @@ void SceneMain::IsColl()
 		if (result.HitNum > 0)
 		{
 			m_HitCount++;
-		//	printfDx("Hit %d\n", m_HitCount);
-			//pModel->OnDamage(10);
 
 			m_Player->SetcolFieldY(true);
 

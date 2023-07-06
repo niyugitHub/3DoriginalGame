@@ -13,7 +13,7 @@ public:
 	void Update(std::shared_ptr<Player> player);
 
 	//ステージクリアした際のカメラアップデート
-	void ClearUpdate(std::shared_ptr<Player> player);
+	void ClearUpdate(std::shared_ptr<Player> player, bool menuScreen);
 
 private:
 	//カメラポジション

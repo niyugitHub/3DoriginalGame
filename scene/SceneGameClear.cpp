@@ -28,9 +28,12 @@ void SceneGameClear::init()
 
 SceneBase* SceneGameClear::update()
 {
+	//シーンに入ってからのフレーム数を数える
+	static int frameCount = 0;
+	frameCount++;
 	//クリアした際のプレイヤー、カメラのアップデート
 	m_pPlayer->ClearUpdate();
-	m_pCamera->ClearUpdate(m_pPlayer);
+	m_pCamera->ClearUpdate(m_pPlayer, frameCount > 150);
 
 	// m_selectNumの数値を変化させるための関数
 	DecisionNum(m_selectNum);
