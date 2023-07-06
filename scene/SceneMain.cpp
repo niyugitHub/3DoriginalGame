@@ -55,7 +55,7 @@ SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
 	//m_Field->Init();
 
 	//SetLightPosition(VGet(-1500, -1500 , 1000));
-	SetLightDirection(VGet(300, -1000, 300));
+	SetLightDirection(VGet(0, -50, 30));
 	//SetLightDirection(GetLightDirection());
 	// シャドウマップの生成
 	m_shadowMap = MakeShadowMap(4096, 4096);
@@ -108,23 +108,24 @@ void SceneMain::end()
 
 SceneBase* SceneMain::update()
 {
-	/*if (Pad::isTrigger(PAD_INPUT_1))
-	{
-		m_Player->ClearCharaMotion();
-		m_Field->StageClear();
-		return new SceneGameClear(m_Player, m_Field);
-	}*/
-
+	static int gameOverCount = 0;
+	
 	if (StageClear())
 	{
 		m_GameClear = true;
 	}
-	if (Pad::isTrigger(PAD_INPUT_DOWN))
-	{
-	}
 
 	m_Player->Update();
-	m_Camera->Update(m_Player);
+
+	if (m_Player->GetPos().y < -500)
+	{
+		m_Camera->GameOverUpdate(m_Player);
+		gameOverCount++;
+	}
+	else
+	{
+		m_Camera->Update(m_Player);
+	}
 	m_Field->Update();
 	
 	if (m_GameClear)
@@ -140,8 +141,14 @@ SceneBase* SceneMain::update()
 
 	updateFade();
 
-	if (m_Player->GetPos().y < -500)
+	if (gameOverCount > 60)
 	{
+		startFadeOut();
+	}
+
+	if (gameOverCount > 100)
+	{
+		gameOverCount = 0;
 		return new SceneMain(m_Field);
 	}
 

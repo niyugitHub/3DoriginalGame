@@ -79,7 +79,7 @@ void SceneSelectScreen::draw()
 {
 	DrawFormatString(300, 0, 0xffffff, "%d", m_selectScreen);
 
-	m_pImageUI->Draw(m_selectScreen);
+	m_pImageUI->Draw(m_selectScreen,0);
 	/*for (int i = 0; i < m_UI.size(); i++)
 	{
 		if (m_selectScreen == i)

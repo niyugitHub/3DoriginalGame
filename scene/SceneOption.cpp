@@ -12,7 +12,7 @@
 namespace
 {
 	//ファイル名
-	const char* const kEnemyModelFileName[4] =
+	const char* const kOptionFileName[4] =
 	{
 		"data/image/OptionSceneBGM.png",
 		"data/image/OptionSceneSE.png",
@@ -50,7 +50,7 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 
 	for (int i = 0; i < m_UI.size(); i++)
 	{
-		m_UI[i].handle = LoadGraph(kEnemyModelFileName[i]);
+		m_UI[i].handle = LoadGraph(kOptionFileName[i]);
 		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
 		m_UI[i].size = { static_cast<float>(sizeX / 2),static_cast<float>(sizeY / 2) };
 	}
@@ -132,7 +132,7 @@ void SceneOption::draw()
 
 	DrawString(0, 400, "オプション画面", 0xffffff);
 
-	m_pImageUI->Draw(m_selectOption);
+	m_pImageUI->Draw(m_selectOption,0);
 
 	DrawGraph(505 + m_volumeBGM * 202, 355, m_corsorHandle, true);
 
