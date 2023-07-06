@@ -71,18 +71,29 @@ void Camera::Update(std::shared_ptr<Player> player)
 
 void Camera::ClearUpdate(std::shared_ptr<Player> player, bool menuScreen)
 {
-	VECTOR flontCamera = VAdd(player->GetPos(), VGet(0.0f, 300.0f, -600.0f));
+	VECTOR tarGetCamera = VAdd(player->GetPos(), VGet(0.0f, 300.0f, -600.0f));
 	if (menuScreen)
 	{
-		flontCamera = VAdd(VGet(player->GetPos().x, player->GetPos().y, player->GetPos().z), VGet(350.0f, 300.0f, -600.0f));
+		tarGetCamera = VAdd(VGet(player->GetPos().x, player->GetPos().y, player->GetPos().z), VGet(350.0f, 300.0f, -600.0f));
 	}
 
-	m_cameraPos.x = (m_cameraPos.x * 0.96f) + (flontCamera.x * 0.04f);
-	m_cameraPos.y = (m_cameraPos.y * 0.95f) + (flontCamera.y * 0.05f);
-	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (flontCamera.z * 0.05f);
+	m_cameraPos.x = (m_cameraPos.x * 0.96f) + (tarGetCamera.x * 0.04f);
+	m_cameraPos.y = (m_cameraPos.y * 0.95f) + (tarGetCamera.y * 0.05f);
+	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (tarGetCamera.z * 0.05f);
 
 	SetCameraPositionAndTarget_UpVecY(m_cameraPos, VGet(m_cameraPos.x,player->GetPos().y + 200, player->GetPos().z));
 
 	//SetLightPosition(VGet(player->GetPos().x + 10000, 200, player->GetPos().z + 1000000));
-	//	SetLightDirection(VGet(m_Pos.x, m_Pos.y, m_Pos.z));
+	SetLightDirection(VGet(0,-30,30));
+}
+
+void Camera::GameOverUpdate(std::shared_ptr<Player> player)
+{
+	VECTOR tarGetCamera = player->GetPos();
+
+	m_cameraPos.x = (m_cameraPos.x * 0.95f) + (tarGetCamera.x * 0.05f);
+	m_cameraPos.y = (m_cameraPos.y * 0.99f) + (tarGetCamera.y * 0.01f);
+	m_cameraPos.z = (m_cameraPos.z * 0.95f) + (tarGetCamera.z * 0.05f);
+
+	SetCameraPositionAndTarget_UpVecY(m_cameraPos, VGet(m_cameraPos.x, player->GetPos().y, player->GetPos().z));
 }

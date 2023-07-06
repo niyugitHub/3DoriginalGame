@@ -141,7 +141,7 @@ void SceneStageSelect::draw()
 	DrawString(300, 300, "SceneStageSelect", 0xffffff);
 	DrawFormatString(300, 400, 0xffffff, "%d", m_stageNum);
 
-	m_pImageUI->Draw(m_stageNum);
+	m_pImageUI->Draw(m_stageNum,0);
 
 	for (int i = 0; i < 10; i++)
 	{

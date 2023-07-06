@@ -21,7 +21,7 @@ public:
 	/// 画像表示
 	/// </summary>
 	/// <param name="selectNum">選ばれた番号の画像だけ少し大きくする</param>
-	void Draw(int selectNum);
+	void Draw(int selectNum,int scroll);
 private:
 	//Uiのポインター
 	std::vector<std::shared_ptr<Image>>m_pImage;
@@ -42,7 +42,7 @@ public:
 	/// 画像表示
 	/// </summary>
 	/// <param name="select">画像が選ばれてるかどうか</param>
-	void Draw(bool select);
+	void Draw(bool select,int scroll);
 
 private:
 	Vec2 m_pos;//画像位置(真ん中)

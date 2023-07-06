@@ -23,16 +23,16 @@ void ImageUI::Update()
 {
 }
 
-void ImageUI::Draw(int selectNum)
+void ImageUI::Draw(int selectNum, int scroll)
 {
 	for (int i = 0; i < m_pImage.size(); i++)
 	{
 		if (i == selectNum)
 		{
-			m_pImage[i]->Draw(true);
+			m_pImage[i]->Draw(true, scroll);
 			continue;
 		}
-		m_pImage[i]->Draw(false);
+		m_pImage[i]->Draw(false, scroll);
 	}
 }
 
@@ -55,9 +55,9 @@ void Image::Update()
 {
 }
 
-void Image::Draw(bool select)
+void Image::Draw(bool select,int scroll)
 {
-	int posX = static_cast<int>(m_pos.x);
+	int posX = static_cast<int>(m_pos.x) + scroll;
 	int posY = static_cast<int>(m_pos.y);
 	int sizeX = static_cast<int>(m_size.x);
 	int sizeY = static_cast<int>(m_size.y);

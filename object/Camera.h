@@ -15,6 +15,9 @@ public:
 	//ステージクリアした際のカメラアップデート
 	void ClearUpdate(std::shared_ptr<Player> player, bool menuScreen);
 
+	//ゲームオーバー時のカメラアップデート
+	void GameOverUpdate(std::shared_ptr<Player> player);
+
 private:
 	//カメラポジション
 	VECTOR m_cameraPos;

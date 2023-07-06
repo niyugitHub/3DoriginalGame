@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 #include <memory>
+#include<array>
 class FieldBase;
 class Player;
 class Camera;
@@ -22,16 +23,17 @@ public:
 private:
 	enum
 	{
-		kStageSelect,	//ステージセレクト
-		kRestart,		//もう一度同じステージを遊ぶ
-		kTitle			//タイトルに戻る
+		kRestart = 1,		//もう一度同じステージを遊ぶ
+		kStageSelect = 2,	//ステージセレクト
 	};
 
 	void DecisionNum(int& selectNum);	//決定表
 
-	int m_selectNum; //選んだ番号
+	int m_selectNum  = 1; //選んだ番号
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<FieldBase> m_pField;
 	std::shared_ptr<Camera> m_pCamera;
+
+	std::array<UI, 3> m_UI;
 };
 
