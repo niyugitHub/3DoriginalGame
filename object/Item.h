@@ -13,8 +13,7 @@ public:
 	VECTOR GetPos() { return m_Pos; }
 
 	bool GetExist() { return m_Exist; }
-	void SetExist() { m_Exist = false; }
-private:
+	void SetExist(bool exist) { m_Exist = exist; };
 	VECTOR m_Pos;//åªç›à íu
 
 	bool m_Exist = true;//ë∂ç›ämîF

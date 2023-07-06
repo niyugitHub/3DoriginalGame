@@ -33,7 +33,5 @@ Field2::Field2()
 
 Field2::~Field2()
 {
-	m_pModel.erase(m_pModel.begin(), m_pModel.end());
-	m_pModelRed.erase(m_pModelRed.begin(), m_pModelRed.end());
-	m_pModelBlue.erase(m_pModelBlue.begin(), m_pModelBlue.end());
+	m_pBlock.erase(m_pBlock.begin(), m_pBlock.end());
 }

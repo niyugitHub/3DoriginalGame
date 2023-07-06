@@ -38,9 +38,9 @@ protected:
 	//仮UI
 	struct UI
 	{
-		Vec2 pos;
-		Vec2 size;
-		int handle;
+		Vec2 pos = { 0.0f,0.0f };
+		Vec2 size = {0.0f,0.0f};
+		int handle = -1;
 	};
 
 	std::shared_ptr<ImageUI> m_pImageUI;//UIポインター
