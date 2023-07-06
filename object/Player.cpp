@@ -2,6 +2,7 @@
 #include"../util/Pad.h"
 #include"Model.h"
 #include"Shot.h"
+#include"../SoundManager.h"
 #include <cassert>
 
 namespace
@@ -23,13 +24,20 @@ namespace
 		constexpr float kMoveJumpSpeed = 1.2f;//ジャンプ中
 	
 #else
-	
+		//// 最大移動速度
+		//constexpr float kMaxMoveSpeed = 7.5f;
+
+		//// 一フレームごとの移動速度上昇
+		//constexpr float kMoveSpeed = 1.0f; //地面にいるとき
+		//constexpr float kMoveJumpSpeed = 0.4f;//ジャンプ中
+
 		// 最大移動速度
-		constexpr float kMaxMoveSpeed = 7.0f;
+		constexpr float kMaxMoveSpeed = 21.0f;
 
 		// 一フレームごとの移動速度上昇
-		constexpr float kMoveSpeed = 1.0f; //地面にいるとき
-		constexpr float kMoveJumpSpeed = 0.4f;//ジャンプ中
+		constexpr float kMoveSpeed = 3.0f; //地面にいるとき
+		constexpr float kMoveJumpSpeed = 1.2f;//ジャンプ中
+	
 	
 #endif
 
@@ -182,6 +190,7 @@ void Player::updateIdle()
 	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY) 
 	{
 		m_Vec.y = kJumpPower;
+		SoundManager::GetInstance().Play("jump");
 		m_updateFunc = &Player::updateJump;
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
 		return;
@@ -193,6 +202,7 @@ void Player::updateIdle()
 		//ベクトルを0に
 		m_Vec.x = 0;
 		m_Vec.z = 0;
+		SoundManager::GetInstance().Play("punch");
 		m_updateFunc = &Player::updatePunch;
 		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
 		return;
@@ -218,6 +228,7 @@ void Player::updateMove()
 	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY)
 	{
 		m_Vec.y = kJumpPower;
+		SoundManager::GetInstance().Play("jump");
 		m_updateFunc = &Player::updateJump;
 		m_pModel->changeAnimation(kJumpAnimNo, false, true, 1);
 		return;
@@ -229,6 +240,7 @@ void Player::updateMove()
 		m_isAttackFlag = true;
 		m_Vec.x = 0;
 		m_Vec.z = 0;
+		SoundManager::GetInstance().Play("punch");
 		m_updateFunc = &Player::updatePunch;
 		m_pModel->changeAnimation(kPunchAnimNo, false, true, 1);
 		return;

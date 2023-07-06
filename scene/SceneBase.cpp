@@ -1,6 +1,8 @@
 #include "SceneBase.h"
 #include "DxLib.h"
 #include "../game.h"
+#include"../SoundManager.h"
+#include"../util/Pad.h"
 
 namespace
 {
@@ -59,4 +61,18 @@ bool SceneBase::isFadingOut() const
 void SceneBase::startFadeOut()
 {
 	m_fadeSpeed = kFadeSpeed;
+}
+
+void SceneBase::SelectSE()
+{
+	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_UP) ||
+		Pad::isTrigger(PAD_INPUT_RIGHT) || Pad::isTrigger(PAD_INPUT_DOWN))
+	{
+		SoundManager::GetInstance().Play("cursorMove");
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_1))
+	{
+		SoundManager::GetInstance().Play("decision");
+	}
 }

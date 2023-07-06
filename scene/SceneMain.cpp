@@ -13,7 +13,7 @@
 #include"../object/Switch.h"
 #include"../object/Goal.h"
 #include"../object/Item.h"
-
+#include"../SoundManager.h"
 #include "../util/Pad.h"
 
 #include <cassert>
@@ -60,6 +60,8 @@ SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
 	// シャドウマップの生成
 	m_shadowMap = MakeShadowMap(4096, 4096);
 	SetShadowMapLightDirection(m_shadowMap, GetLightDirection());
+
+	SoundManager::GetInstance().PlayMusic("sound/playScene.mp3");
 }
 
 SceneMain::~SceneMain()
@@ -199,6 +201,7 @@ void SceneMain::IsColl()
 {
 	VECTOR PlayerPos = m_Player->GetPos();
 
+	//アイテムを取得したかどうか
 	if (m_Field->GetItem()->GetExist())
 	{
 		VECTOR ItemToPlayer = VSub(PlayerPos,m_Field->GetItem()->GetPos());
@@ -210,6 +213,7 @@ void SceneMain::IsColl()
 		}
 	}
 
+	//スイッチとの当たり判定
 	for (auto& pSwitch : m_Field->GetSwitch())
 	{
 		VECTOR switchPos = pSwitch->GetPos();
@@ -259,8 +263,6 @@ void SceneMain::IsColl()
 		if (result.HitNum > 0)
 		{
 			m_HitCount++;
-		//	printfDx("Hit %d\n", m_HitCount);
-			//pModel->OnDamage(10);
 
 			m_Player->SetcolFieldY(true);
 

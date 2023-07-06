@@ -196,6 +196,11 @@ bool Model::isAnimEnd()
 	return false;
 }
 
+void Model::DebugColl()
+{
+	MV1SetMaterialDifColor(m_modelHandle, 0, GetColorF(1.0f, 1.0f, 1.0f, 1.0f));
+}
+
 void Model::clearAnimData(AnimData& anim)
 {
 	anim.animNo = -1;

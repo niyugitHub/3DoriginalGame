@@ -295,14 +295,16 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 	//地面に並べる
 	for (int i = 0; i < m_blockNum.size(); i++)
 	{
-		float x = 200.0f * static_cast<float>(i % m_data.blockNumX) - m_data.blockNumX / 2;
-		float z = 200.0f * static_cast<float>(m_data.blockNumZ - (i / m_data.blockNumX)) - m_data.blockNumX / 2;
+		int x = 200 * (i % m_data.blockNumX) - m_data.blockNumX / 2;
+		int z = 200 * (m_data.blockNumZ - (i / m_data.blockNumX)) - m_data.blockNumX / 2;
+		float posX = static_cast<float>(x);
+		float posZ = static_cast<float>(z);
 		if (m_blockNum[i] == 10)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
-			m_pGoal = std::make_shared<Goal>(VGet(x, 100, z));
+			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pGoal = std::make_shared<Goal>(VGet(posX, 100, posZ));
 			continue;
 		}
 
@@ -310,9 +312,9 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 
-			m_pSwitch.push_back(std::make_shared<Switch>(VGet(x, 100, z)));
+			m_pSwitch.push_back(std::make_shared<Switch>(VGet(posX, 100, posZ)));
 			continue;
 		}
 
@@ -320,7 +322,7 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
@@ -328,7 +330,7 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pModelRed.push_back(std::make_shared<Model>(Model2));
 			m_pModelRed.back()->setUseCollision(true, true);
-			m_pModelRed.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			m_pModelRed.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
@@ -336,7 +338,7 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pModelBlue.push_back(std::make_shared<Model>(Model3));
 			m_pModelBlue.back()->setUseCollision(true, true);
-			m_pModelBlue.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			m_pModelBlue.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
@@ -344,7 +346,7 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pModelGreen.push_back(std::make_shared<Model>(Model4));
 			m_pModelGreen.back()->setUseCollision(true, true);
-			m_pModelGreen.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
+			m_pModelGreen.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
@@ -352,8 +354,8 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
-			m_playerPos = VGet(x, 0, z);
+			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_playerPos = VGet(posX, 0, posZ);
 			continue;
 		}
 
@@ -361,8 +363,8 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pModel.push_back(std::make_shared<Model>(Model1));
 			m_pModel.back()->setUseCollision(true, true);
-			m_pModel.back()->setPos(VGet(x, -kBlockSideLength / 2.0f, z));//上面がy=0.0fになるように配置
-			m_pItem = std::make_shared<Item>(VGet(x, 100, z));
+			m_pModel.back()->setPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pItem = std::make_shared<Item>(VGet(posX, 100, posZ));
 			continue;
 		}
 	}

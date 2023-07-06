@@ -56,6 +56,8 @@ SceneBase* SceneSelectScreen::update()
 {
 	DecisionNum(m_selectScreen);
 
+	SelectSE();
+
 	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kStageSelect)
 	{
 		return new SceneStageSelect;

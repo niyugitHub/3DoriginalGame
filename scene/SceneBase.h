@@ -34,6 +34,7 @@ public:
 	int getFadeBright() const { return m_fadeBright; }
 
 protected:
+	void SelectSE();//ƒV[ƒ“‚ğ‘I‚ÔÛ‚ÌSE
 	//‰¼UI
 	struct UI
 	{
