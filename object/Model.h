@@ -48,7 +48,7 @@ public:
 	bool isAnimEnd();
 
 	//デバッグ用当たり判定
-	void DebugColl();
+	void SetDebugHandle(int handle);
 
 private:
 	//アニメーション情報
@@ -93,5 +93,11 @@ private:
 	//アニメーションの切り替え情報
 	int m_animChangeFrame;			// 現在の切り替えフレーム数
 	int m_animChangeFrameTotal;		// 切り替えにかける総フレーム数
+
+
+
+
+	//デバッグ用変数
+	bool debugModelChange = false;
 };
 
