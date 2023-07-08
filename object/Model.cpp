@@ -196,9 +196,15 @@ bool Model::isAnimEnd()
 	return false;
 }
 
-void Model::DebugColl()
+void Model::SetDebugHandle(int handle)
 {
-	MV1SetMaterialDifColor(m_modelHandle, 0, GetColorF(1.0f, 1.0f, 1.0f, 1.0f));
+	if (debugModelChange) return;
+
+	debugModelChange = true;
+
+	m_modelHandle = -1;
+	m_modelHandle = MV1DuplicateModel(handle);
+	MV1SetPosition(m_modelHandle, m_Pos);
 }
 
 void Model::clearAnimData(AnimData& anim)

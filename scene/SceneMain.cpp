@@ -21,9 +21,11 @@
 
 namespace
 {
-	
+	//デバック用モデル
+	const char* const kFileDebug = "data/fieldYellow.mv1";
 }
 
+//ゲームオーバーと判断されてからカウント
 static int gameOverCount = 0;
 
 SceneMain::SceneMain(std::shared_ptr<FieldBase> Field) :
@@ -213,6 +215,10 @@ void SceneMain::draw()
 
 void SceneMain::IsColl()
 {
+	//デバック用モデルハンドル
+	static int debugHandle = MV1LoadModel(kFileDebug);
+
+
 	VECTOR PlayerPos = m_Player->GetPos();
 
 	//アイテムを取得したかどうか
@@ -276,6 +282,8 @@ void SceneMain::IsColl()
 		//ポリゴンが一つでもあたっていた場合
 		if (result.HitNum > 0)
 		{
+			pModel->GetBlock()->SetDebugHandle(debugHandle);
+
 			m_HitCount++;
 
 			m_Player->SetcolFieldY(true);
