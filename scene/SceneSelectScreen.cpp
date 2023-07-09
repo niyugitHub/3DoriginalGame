@@ -25,7 +25,7 @@ SceneSelectScreen::SceneSelectScreen() :
 	m_UI[1].pos = { 1350,340 };
 	m_UI[2].pos = { 1350.0f,760.0f };
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_UI[i].handle = LoadGraph(kEnemyModelFileName[i]);
 		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
@@ -34,7 +34,7 @@ SceneSelectScreen::SceneSelectScreen() :
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}

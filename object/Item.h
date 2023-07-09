@@ -14,8 +14,10 @@ public:
 
 	bool GetExist() { return m_Exist; }
 	void SetExist(bool exist) { m_Exist = exist; };
+
+private:
 	VECTOR m_Pos;//現在位置
 
-	bool m_Exist = true;//存在確認
+	bool m_Exist;//存在確認
 };
 

@@ -63,9 +63,6 @@
     <ClCompile Include="object\Player.cpp">
       <Filter>ソース ファイル\object</Filter>
     </ClCompile>
-    <ClCompile Include="object\Map.cpp">
-      <Filter>ソース ファイル\object</Filter>
-    </ClCompile>
     <ClCompile Include="scene\SceneGameClear.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
@@ -165,9 +162,6 @@
       <Filter>ヘッダー ファイル\util</Filter>
     </ClInclude>
     <ClInclude Include="object\Player.h">
-      <Filter>ヘッダー ファイル\object</Filter>
-    </ClInclude>
-    <ClInclude Include="object\Map.h">
       <Filter>ヘッダー ファイル\object</Filter>
     </ClInclude>
     <ClInclude Include="scene\SceneGameClear.h">

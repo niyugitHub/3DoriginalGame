@@ -35,7 +35,7 @@ namespace Pad
 			int padState = GetJoypadInputState(kUsePadData[padNo]);
 			if ( (playLogNo >= 0) && (padNo == 0) )
 			{
-				if (keyLog.size() > playLogNo)
+				if (static_cast<int>(keyLog.size()) > playLogNo)
 				{
 					padState = keyLog[playLogNo];
 					playLogNo++;

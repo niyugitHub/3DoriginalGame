@@ -17,8 +17,8 @@ private:
 		unsigned short volumeBGM;	// 0～255
 	};
 
-	int volumeSE_ = 255;
-	int volumeBGM_ = 255;
+	unsigned short volumeSE_ = 255;
+	unsigned short volumeBGM_ = 255;
 
 	std::unordered_map<std::string, int> nameAndHandleTable_;
 	int LoadSoundFile(const char* fileName);
@@ -57,14 +57,14 @@ public:
 	/// SEのボリュームを設定する
 	/// </summary>
 	/// <param name="volume"></param>
-	void SetSEVolume( int volume);
+	void SetSEVolume(unsigned short volume);
 	int GetSEVolume() const ;
 
 	/// <summary>
 	/// BGMのボリュームを設定する
 	/// </summary>
 	/// <param name="volume"></param>
-	void SetBGMVolume( int volume);
+	void SetBGMVolume(unsigned short volume);
 	 int GetBGMVolume() const ;
 
 	 /// <summary>

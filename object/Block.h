@@ -19,7 +19,7 @@ public:
 
 	~Block();
 
-	void Update();
+	void Update(int colorNum);
 
 	void Draw();
 
@@ -35,4 +35,6 @@ private:
 	int m_modelHandle;
 
 	std::shared_ptr<Model>m_pModel;
+
+	int m_fadeBright;
 };

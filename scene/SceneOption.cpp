@@ -48,7 +48,7 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
 	}
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_UI[i].handle = LoadGraph(kOptionFileName[i]);
 		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
@@ -57,7 +57,7 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
@@ -183,7 +183,7 @@ void SceneOption::AccelerateChangeBGMVoluem()
 		m_volumeBGM++;
 	}
 
-	soundMgr.SetBGMVolume(m_volumeBGM * 64);
+	soundMgr.SetBGMVolume(static_cast<unsigned short>(m_volumeBGM * 64));
 }
 
 void SceneOption::AccelerateChangeSEVoluem()
@@ -199,5 +199,5 @@ void SceneOption::AccelerateChangeSEVoluem()
 		m_volumeSE++;
 	}
 
-	soundMgr.SetSEVolume(m_volumeSE * 64);
+	soundMgr.SetSEVolume(static_cast<unsigned short>(m_volumeSE * 64));
 }

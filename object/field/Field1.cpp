@@ -1,13 +1,18 @@
 #include "Field1.h"
+#include<DxLib.h>
 
 namespace
 {
 	const char* const kFileStage = "data/stage/stage1.csv";
+//	const char* const kFileStage = "data/stage/debug.csv";
 //	const char* const kFileName2 = "data/fieldGreen.mv1";
 
 	//地面に敷き詰めるブロックの数
 	constexpr int kBlockNumX = 15;
 	constexpr int kBlockNumZ = 30;
+
+	/*constexpr int kBlockNumX = 100;
+	constexpr int kBlockNumZ = 100;*/
 
 	constexpr int kBlockNum = kBlockNumX * kBlockNumZ;
 

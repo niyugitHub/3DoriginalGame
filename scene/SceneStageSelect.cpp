@@ -99,7 +99,7 @@ SceneStageSelect::SceneStageSelect() :
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}

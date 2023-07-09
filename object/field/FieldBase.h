@@ -79,7 +79,7 @@ protected:
 	//アイテムのポインター
 	std::shared_ptr<Item> m_pItem;
 
-	//ブロックの番号(番号によってブロックの色が変わる)
+	////ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum; 
 
 	int m_lookBlock;//今見えるブロックの番号
@@ -103,6 +103,6 @@ protected:
 	int m_limitFrame;
 
 	//アイテムを取得したかどうか
-	bool m_getItem = false;
+	bool m_getItem;
 };
 
