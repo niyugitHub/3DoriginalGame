@@ -25,7 +25,7 @@ void ImageUI::Update()
 
 void ImageUI::Draw(int selectNum, int scroll)
 {
-	for (int i = 0; i < m_pImage.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_pImage.size()); i++)
 	{
 		if (i == selectNum)
 		{

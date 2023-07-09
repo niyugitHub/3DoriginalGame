@@ -139,11 +139,6 @@ void Player::Update()
 
 void Player::Draw()
 {
-	for (auto& pShot : m_pShot)
-	{
-		pShot->Draw();
-	}
-
 	m_pModel->draw();
 
 //	DrawFormatString(0, 16, GetColor(255, 255, 255), "Rx:%d Ry:%d Rz:%d", input.Rx, input.Ry, input.Rz);

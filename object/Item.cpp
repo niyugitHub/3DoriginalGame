@@ -7,7 +7,8 @@ namespace
 }
 
 Item::Item(VECTOR pos) : 
-	m_Pos(pos)
+	m_Pos(pos),
+	m_Exist(true)
 {
 }
 

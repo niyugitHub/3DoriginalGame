@@ -41,17 +41,17 @@ FieldBase::FieldBase() :
 	m_playerPos(VGet(0,0,0)),
 	m_stageNum(0),
 	m_gameFrameCount(0),
-	m_limitFrame(3600),
-	m_getItem(false)
+	m_getItem(false),
+	m_limitFrame(3600)
 {
 	for (int i = 0; i < 3; i++)
 	{
 		m_getStar[i] = false;
 	}
 
+	m_data.fileName = "";
 	m_data.blockNumX = 0;
 	m_data.blockNumZ = 0;
-	m_data.fileName = "";
 	
 	////3Dモデルをロード
 	//m_pModel.push_back(std::make_shared<Model>(kFileName));
@@ -83,6 +83,7 @@ void FieldBase::Init(loadData data)
 {
 //	FirstModelLoad(); // 最初に複製するためにモデルを用意する
 
+	//ファイルのロード
 	LoadFile(data.fileName);
 
 //	m_blockNum.push_back(8); //とりあえずスイッチ用意(8がスイッチ)
@@ -98,6 +99,7 @@ void FieldBase::Init(loadData data)
 		m_pModel.back()->setUseCollision(true, true);
 	}*/
 
+	//モデルロード
 	ModelLoad(orgModel1, orgModel2, orgModel3, orgModel4);
 }
 
@@ -105,7 +107,7 @@ void FieldBase::Update()
 {
 	for (auto& block : m_pBlock)
 	{
-		block->Update();
+		block->Update(m_lookBlock);
 	}
 
 	for (auto& Switch : m_pSwitch)
@@ -121,12 +123,15 @@ void FieldBase::Draw()
 {
 	for (auto& block : m_pBlock)
 	{
-		if (block->GetBlockKind() == Block::kField)
+		if (block->GetBlockKind() != Block::kField)
 		{
 			block->Draw();
 		}
+	}
 
-		if (block->GetBlockKind() == m_lookBlock)
+	for (auto& block : m_pBlock)
+	{
+		if (block->GetBlockKind() == Block::kField)
 		{
 			block->Draw();
 		}
@@ -256,7 +261,7 @@ void FieldBase::LoadFile(const char* fileName)
 void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 {
 	//地面に並べる
-	for (int i = 0; i < m_blockNum.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_blockNum.size()); i++)
 	{
 		int x = 200 * (i % m_data.blockNumX) - m_data.blockNumX / 2;
 		int z = 200 * (m_data.blockNumZ - (i / m_data.blockNumX)) - m_data.blockNumX / 2;
