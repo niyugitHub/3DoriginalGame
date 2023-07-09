@@ -112,7 +112,8 @@ SceneBase* SceneOption::update()
 	{
 		SoundManager::GetInstance().SaveSoundConfig();
 		SoundManager::GetInstance().StopBGMAndSE();
-		SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");		return new SceneStageSelect;
+		SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");		
+		return new SceneStageSelect;
 	}
 
 	//ƒIƒvƒVƒ‡ƒ“‚Ì”Ô†‚ğŒˆ’è

@@ -26,6 +26,8 @@ Block::~Block()
 
 void Block::Update(int colorNum)
 {
+	m_pModel->update();
+
 	if (m_blockKind == colorNum)
 	{
 		m_fadeBright = min(m_fadeBright + kFadeSpeed, kFadeMax);
@@ -34,23 +36,22 @@ void Block::Update(int colorNum)
 	{
 		m_fadeBright = max(m_fadeBright - kFadeSpeed, kFadeMin);
 	}
-
-	m_pModel->update();
 }
 
 void Block::Draw()
 {
-	if (m_blockKind == kField)
-	{
 		m_pModel->draw();
+	/*if (m_blockKind == kField)
+	{
 	}
 	else
 	{
 		m_pModel->blockDraw(m_fadeBright);
-	}
+	}*/
 }
 
 void Block::SetPos(VECTOR pos)
 {
+	m_pos = pos;
 	m_pModel->setPos(pos);
 }

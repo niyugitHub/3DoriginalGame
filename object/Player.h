@@ -18,7 +18,6 @@ public:
 	void Draw();
 
 	VECTOR GetPos() { return m_Pos; }
-//	void SetPos(VECTOR pos) { m_Pos = m_NextPos = pos; }
 	VECTOR GetNextPos() { return m_NextPos; }
 
 	float GetRadius();
@@ -33,6 +32,8 @@ public:
 
 	void SetAttackFlag(bool attackFlag) { m_isAttackFlag = attackFlag; }
 	bool GetAttackFlag() { return m_isAttackFlag; }
+
+	bool GetJumpFall();
 
 private:
 	void updateIdle();	//アイドル状態時のアップデート
@@ -69,6 +70,9 @@ private:
 
 	//フィールドとの当たり判定XZ
 	bool m_colFieldXZ;
+	
+	////ジャンプ中に落ちているかどうか
+	//bool m_isJumpFall;
 	
 	VECTOR m_Pos; // プレイヤーの座標
 	

@@ -28,6 +28,7 @@ public:
 	std::shared_ptr<Model> GetBlock() { return m_pModel; }
 
 	void SetPos(VECTOR pos);
+	VECTOR GetPos() { return m_pos; }
 
 private:
 	int m_blockKind;
@@ -37,4 +38,6 @@ private:
 	std::shared_ptr<Model>m_pModel;
 
 	int m_fadeBright;
+
+	VECTOR m_pos;
 };
