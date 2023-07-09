@@ -127,6 +127,7 @@ SceneBase* SceneStageSelect::update()
 	{
 		SoundManager::GetInstance().StopBGMAndSE();
 		SelectStage(m_stageNum);
+		m_Field->Init();
 		return new SceneMain(m_Field);
 	}
 	else if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum == 10)

@@ -79,12 +79,12 @@ FieldBase::~FieldBase()
 	
 }
 
-void FieldBase::Init(loadData data)
+void FieldBase::Init()
 {
 //	FirstModelLoad(); // 最初に複製するためにモデルを用意する
 
 	//ファイルのロード
-	LoadFile(data.fileName);
+	LoadFile(m_data.fileName);
 
 //	m_blockNum.push_back(8); //とりあえずスイッチ用意(8がスイッチ)
 
@@ -210,6 +210,11 @@ void FieldBase::LoadFile(const char* fileName)
 			chr == EOF)
 		{
 			// dataTblにデータを入れる
+			if (tempNum == 1) tempNum = Block::kField;
+			if (tempNum == 2) tempNum = Block::kRed;
+			if (tempNum == 3) tempNum = Block::kBlue;
+			if (tempNum == 4) tempNum = Block::kGreen;
+
 			m_blockNum.push_back(tempNum);
 			tempNum = 0;
 
@@ -283,28 +288,28 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 			continue;
 		}
 
-		if (m_blockNum[i] == kField)
+		if (m_blockNum[i] == Block::kField)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
-		if (m_blockNum[i] == kRed)
+		if (m_blockNum[i] == Block::kRed)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kRed),Model2));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
-		if (m_blockNum[i] == kBlue)
+		if (m_blockNum[i] == Block::kBlue)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kBlue),Model3));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
-		if (m_blockNum[i] == kGreen)
+		if (m_blockNum[i] == Block::kGreen)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kGreen),Model4));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
@@ -352,15 +357,10 @@ void FieldBase::StageClear()
 {
 	m_getStar[0] = true;
 
-	if (!m_pItem->GetExist())
-	{
-		m_getStar[1] = true;
-	}
+	m_getStar[1] = !m_pItem->GetExist();
 
-	if (m_gameFrameCount < m_limitFrame)
-	{
-		m_getStar[2] = true;
-	}
+	m_getStar[2] = m_gameFrameCount < m_limitFrame;
+
 	//セーブデータのアップデート(配列が0からなのでm_stageNumに-1をする)
 	SaveData::Update(m_stageNum - 1, m_getStar);
 }

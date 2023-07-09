@@ -31,7 +31,7 @@ private:
 
 	void DecisionNum(int& selectNum);	//Œˆ’è•\
 
-	int m_selectNum  = 1; //‘I‚ñ‚¾”Ô†
+	int m_selectNum  = kRestart; //‘I‚ñ‚¾”Ô†
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<FieldBase> m_pField;
 	std::shared_ptr<Camera> m_pCamera;
