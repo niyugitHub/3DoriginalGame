@@ -123,18 +123,7 @@ void FieldBase::Draw()
 {
 	for (auto& block : m_pBlock)
 	{
-		if (block->GetBlockKind() != Block::kField)
-		{
-			block->Draw();
-		}
-	}
-
-	for (auto& block : m_pBlock)
-	{
-		if (block->GetBlockKind() == Block::kField)
-		{
-			block->Draw();
-		}
+		block->Draw();
 	}
 
 	for (auto& Switch : m_pSwitch)
