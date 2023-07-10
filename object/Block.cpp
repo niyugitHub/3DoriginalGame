@@ -40,14 +40,14 @@ void Block::Update(int colorNum)
 
 void Block::Draw()
 {
-		m_pModel->draw();
-	/*if (m_blockKind == kField)
+	if (m_blockKind == kField)
 	{
+		m_pModel->draw();
 	}
 	else
 	{
 		m_pModel->blockDraw(m_fadeBright);
-	}*/
+	}
 }
 
 void Block::SetPos(VECTOR pos)

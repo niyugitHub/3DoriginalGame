@@ -17,6 +17,8 @@ public:
 	int GetVolumeBGM() { return m_volumeBGM; }
 	int GetVolumeSE() { return m_volumeSE; }
 
+	virtual void normalUpdate() override;
+
 private:
 
 	void SelectUpdate();
@@ -43,5 +45,7 @@ private:
 	int m_volumeSE;//SEボリューム(5段階)
 
 	int m_corsorHandle;//カーソルハンドル
+
+	SceneBase* m_nextScene;
 };
 

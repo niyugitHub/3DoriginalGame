@@ -33,6 +33,10 @@ public:
 	/// <returns>0(フェードしていない)～255(真っ黒)</returns>
 	int getFadeBright() const { return m_fadeBright; }
 
+	virtual void fadeinUpdate();
+	virtual void normalUpdate() {}
+	virtual void fadeoutUpdate();
+
 protected:
 	void SelectSE();//シーンを選ぶ際のSE
 	//仮UI
@@ -43,7 +47,12 @@ protected:
 		int handle = -1;
 	};
 
+
+	//メンバ関数ポインタ
+	void (SceneBase::* m_updateFunc)();
+
 	std::shared_ptr<ImageUI> m_pImageUI;//UIポインター
+
 private:
 	// フェード関連処理
 	int m_fadeColor;

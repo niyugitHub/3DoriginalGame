@@ -15,6 +15,8 @@ public:
 	virtual SceneBase* update() override;
 	virtual void draw() override;
 
+	virtual void normalUpdate() override;
+
 private:
 
 	enum
@@ -28,6 +30,8 @@ private:
 
 	int m_selectScreen;	//‰½‚ğ‘I‘ğ‚·‚é‚©
 	std::array<UI, 3> m_UI;//UIî•ñ
+
+	SceneBase* m_nextScene;
 };
 
 
