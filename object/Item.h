@@ -17,5 +17,11 @@ public:
 	VECTOR m_Pos;//åªç›à íu
 
 	bool m_Exist = true;//ë∂ç›ämîF
+
+private:
+	int m_modelHandle = -1;
+	float m_vecY;
+	float m_size;
+
 };
 

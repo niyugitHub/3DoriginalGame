@@ -16,4 +16,6 @@ public:
 	VECTOR GetPos() { return m_Pos; }
 private:
 	VECTOR m_Pos;//åªç›à íu
+
+	int m_modelHandle = -1;
 };
