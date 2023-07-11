@@ -24,7 +24,8 @@ namespace
 }
 
 SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) : 
-	m_selectOption(0)
+	m_selectOption(0),
+	m_nextScene(nullptr)
 {
 	int sizeX, sizeY;
 	//前のシーン代入
@@ -48,7 +49,7 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
 	}
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_UI[i].handle = LoadGraph(kOptionFileName[i]);
 		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
@@ -57,7 +58,7 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
@@ -74,6 +75,9 @@ SceneOption::~SceneOption()
 
 void SceneOption::init()
 {
+	m_updateFunc = &SceneBase::fadeinUpdate;
+	m_pImageUI->Init();
+	m_pImageUI->SetResetCount();
 }
 
 void SceneOption::end()
@@ -82,41 +86,14 @@ void SceneOption::end()
 
 SceneBase* SceneOption::update()
 {
-	SelectUpdate();
+	(this->*m_updateFunc)();
 
-	SelectSE();
-
-	if (m_selectOption == kBgm)
+	if (m_pImageUI->GetFadeout())
 	{
-		AccelerateChangeBGMVoluem();
+		m_nextScene->init();
+		
+		return m_nextScene;
 	}
-
-	if (m_selectOption == kSe)
-	{
-		AccelerateChangeSEVoluem();
-	}
-
-	if (Pad::isTrigger(PAD_INPUT_8))
-	{
-		SoundManager::GetInstance().SaveSoundConfig();
-		return m_pScene;
-	}
-
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectOption == kBack)
-	{
-		SoundManager::GetInstance().SaveSoundConfig();
-		return m_pScene;
-	}
-
-	if (Pad::isTrigger(PAD_INPUT_1) && m_isSceneMain && m_selectOption == kStageSelect)
-	{
-		SoundManager::GetInstance().SaveSoundConfig();
-		SoundManager::GetInstance().StopBGMAndSE();
-		SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");		return new SceneStageSelect;
-	}
-
-	//オプションの番号を決定
-
 
 	return this;
 }
@@ -134,9 +111,55 @@ void SceneOption::draw()
 
 	m_pImageUI->Draw(m_selectOption,0);
 
-	DrawGraph(505 + m_volumeBGM * 202, 355, m_corsorHandle, true);
+	DrawGraph(505 + m_volumeBGM * 202 + m_pImageUI->GetScrollSize(0), 355, m_corsorHandle, true);
 
-	DrawGraph(505 + m_volumeSE * 202, 700, m_corsorHandle, true);
+	DrawGraph(505 + m_volumeSE * 202 + m_pImageUI->GetScrollSize(1), 700, m_corsorHandle, true);
+}
+
+void SceneOption::normalUpdate()
+{
+	SelectUpdate();
+
+	SelectSE();
+
+	m_nextScene = nullptr;
+
+	if (m_selectOption == kBgm)
+	{
+		AccelerateChangeBGMVoluem();
+	}
+
+	if (m_selectOption == kSe)
+	{
+		AccelerateChangeSEVoluem();
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_8))
+	{
+		SoundManager::GetInstance().SaveSoundConfig();
+		m_nextScene = m_pScene;
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectOption == kBack)
+	{
+		SoundManager::GetInstance().SaveSoundConfig();
+		m_nextScene = m_pScene;
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_1) && m_isSceneMain && m_selectOption == kStageSelect)
+	{
+		SoundManager::GetInstance().SaveSoundConfig();
+		SoundManager::GetInstance().StopBGMAndSE();
+		SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
+		m_nextScene = new SceneStageSelect;
+	}
+
+	if (m_nextScene != nullptr)
+	{
+		m_updateFunc = &SceneBase::fadeoutUpdate;
+	}
+	//オプションの番号を決定
+
 }
 
 void SceneOption::SelectUpdate()
@@ -183,7 +206,7 @@ void SceneOption::AccelerateChangeBGMVoluem()
 		m_volumeBGM++;
 	}
 
-	soundMgr.SetBGMVolume(m_volumeBGM * 64);
+	soundMgr.SetBGMVolume(static_cast<unsigned short>(m_volumeBGM * 64));
 }
 
 void SceneOption::AccelerateChangeSEVoluem()
@@ -199,5 +222,5 @@ void SceneOption::AccelerateChangeSEVoluem()
 		m_volumeSE++;
 	}
 
-	soundMgr.SetSEVolume(m_volumeSE * 64);
+	soundMgr.SetSEVolume(static_cast<unsigned short>(m_volumeSE * 64));
 }

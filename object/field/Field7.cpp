@@ -27,8 +27,6 @@ Field7::Field7()
 	m_blockKinds = kGreen;
 	m_data.blockNumX = kBlockNumX;
 	m_data.blockNumZ = kBlockNumZ;
-
-	Init(m_data);
 }
 
 Field7::~Field7()

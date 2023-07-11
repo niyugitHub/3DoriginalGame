@@ -41,17 +41,17 @@ FieldBase::FieldBase() :
 	m_playerPos(VGet(0,0,0)),
 	m_stageNum(0),
 	m_gameFrameCount(0),
-	m_limitFrame(3600),
-	m_getItem(false)
+	m_getItem(false),
+	m_limitFrame(3600)
 {
 	for (int i = 0; i < 3; i++)
 	{
 		m_getStar[i] = false;
 	}
 
+	m_data.fileName = "";
 	m_data.blockNumX = 0;
 	m_data.blockNumZ = 0;
-	m_data.fileName = "";
 	
 	////3Dモデルをロード
 	//m_pModel.push_back(std::make_shared<Model>(kFileName));
@@ -79,11 +79,12 @@ FieldBase::~FieldBase()
 	
 }
 
-void FieldBase::Init(loadData data)
+void FieldBase::Init()
 {
 //	FirstModelLoad(); // 最初に複製するためにモデルを用意する
 
-	LoadFile(data.fileName);
+	//ファイルのロード
+	LoadFile(m_data.fileName);
 
 //	m_blockNum.push_back(8); //とりあえずスイッチ用意(8がスイッチ)
 
@@ -98,6 +99,7 @@ void FieldBase::Init(loadData data)
 		m_pModel.back()->setUseCollision(true, true);
 	}*/
 
+	//モデルロード
 	ModelLoad(orgModel1, orgModel2, orgModel3, orgModel4);
 }
 
@@ -105,7 +107,7 @@ void FieldBase::Update()
 {
 	for (auto& block : m_pBlock)
 	{
-		block->Update();
+		block->Update(m_lookBlock);
 	}
 
 	for (auto& Switch : m_pSwitch)
@@ -123,15 +125,7 @@ void FieldBase::Draw()
 {
 	for (auto& block : m_pBlock)
 	{
-		if (block->GetBlockKind() == Block::kField)
-		{
-			block->Draw();
-		}
-
-		if (block->GetBlockKind() == m_lookBlock)
-		{
-			block->Draw();
-		}
+		block->Draw();
 	}
 
 	for (auto& Switch : m_pSwitch)
@@ -207,6 +201,11 @@ void FieldBase::LoadFile(const char* fileName)
 			chr == EOF)
 		{
 			// dataTblにデータを入れる
+			if (tempNum == 1) tempNum = Block::kField;
+			if (tempNum == 2) tempNum = Block::kRed;
+			if (tempNum == 3) tempNum = Block::kBlue;
+			if (tempNum == 4) tempNum = Block::kGreen;
+
 			m_blockNum.push_back(tempNum);
 			tempNum = 0;
 
@@ -258,7 +257,7 @@ void FieldBase::LoadFile(const char* fileName)
 void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 {
 	//地面に並べる
-	for (int i = 0; i < m_blockNum.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_blockNum.size()); i++)
 	{
 		int x = 200 * (i % m_data.blockNumX) - m_data.blockNumX / 2;
 		int z = 200 * (m_data.blockNumZ - (i / m_data.blockNumX)) - m_data.blockNumX / 2;
@@ -280,28 +279,28 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 			continue;
 		}
 
-		if (m_blockNum[i] == kField)
+		if (m_blockNum[i] == Block::kField)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
-		if (m_blockNum[i] == kRed)
+		if (m_blockNum[i] == Block::kRed)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kRed),Model2));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
-		if (m_blockNum[i] == kBlue)
+		if (m_blockNum[i] == Block::kBlue)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kBlue),Model3));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
-		if (m_blockNum[i] == kGreen)
+		if (m_blockNum[i] == Block::kGreen)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kGreen),Model4));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
@@ -349,15 +348,10 @@ void FieldBase::StageClear()
 {
 	m_getStar[0] = true;
 
-	if (!m_pItem->GetExist())
-	{
-		m_getStar[1] = true;
-	}
+	m_getStar[1] = !m_pItem->GetExist();
 
-	if (m_gameFrameCount < m_limitFrame)
-	{
-		m_getStar[2] = true;
-	}
+	m_getStar[2] = m_gameFrameCount < m_limitFrame;
+
 	//セーブデータのアップデート(配列が0からなのでm_stageNumに-1をする)
 	SaveData::Update(m_stageNum - 1, m_getStar);
 }

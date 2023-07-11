@@ -101,8 +101,8 @@ void Player::Update()
 		m_Pos.x = m_NextPos.x;
 		m_Pos.z = m_NextPos.z;
 	}
-	//Y軸から見てフィールドと当たってない場合
-	if (!m_colFieldY)
+	//Y軸から見てフィールドと当たってない場合、もしくはジャンプで上昇中の場合
+	if (!m_colFieldY || !GetJumpFall())
 	{
 		m_Pos.y = m_NextPos.y;
 		//ジャンプ中じゃないとき
@@ -139,11 +139,6 @@ void Player::Update()
 
 void Player::Draw()
 {
-	for (auto& pShot : m_pShot)
-	{
-		pShot->Draw();
-	}
-
 	m_pModel->draw();
 
 //	DrawFormatString(0, 16, GetColor(255, 255, 255), "Rx:%d Ry:%d Rz:%d", input.Rx, input.Ry, input.Rz);
@@ -173,6 +168,11 @@ void Player::ClearUpdate()
 void Player::ClearCharaMotion()
 {
 	m_pModel->changeAnimation(kClearAnimNo, true, true, 2);
+}
+
+bool Player::GetJumpFall()
+{
+	return (m_Vec.y <= 0.0f);
 }
 
 void Player::updateIdle()

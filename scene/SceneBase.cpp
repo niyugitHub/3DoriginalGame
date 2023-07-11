@@ -3,6 +3,7 @@
 #include "../game.h"
 #include"../SoundManager.h"
 #include"../util/Pad.h"
+#include"../util/ImageUI.h"
 
 namespace
 {
@@ -16,6 +17,7 @@ SceneBase::SceneBase()
 	m_fadeColor = GetColor(0, 0, 0);
 	m_fadeBright = 255;
 	m_fadeSpeed = -kFadeSpeed;
+	m_updateFunc = &SceneBase::fadeinUpdate;
 }
 
 void SceneBase::updateFade()
@@ -75,4 +77,20 @@ void SceneBase::SelectSE()
 	{
 		SoundManager::GetInstance().Play("decision");
 	}
+}
+
+void SceneBase::fadeinUpdate()
+{
+	m_pImageUI->FadeinUpdate();
+
+	if (m_pImageUI->GetFadein())
+	{
+		m_updateFunc = &SceneBase::normalUpdate;
+		m_pImageUI->SetResetCount();
+	}
+}
+
+void SceneBase::fadeoutUpdate()
+{
+	m_pImageUI->FadeoutUpdate();
 }

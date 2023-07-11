@@ -18,7 +18,6 @@ public:
 	void Draw();
 
 	VECTOR GetPos() { return m_Pos; }
-//	void SetPos(VECTOR pos) { m_Pos = m_NextPos = pos; }
 	VECTOR GetNextPos() { return m_NextPos; }
 
 	float GetRadius();
@@ -27,14 +26,14 @@ public:
 
 	void SetcolFieldXZ(bool colFieldXZ) { m_colFieldXZ = colFieldXZ; }
 
-	std::vector<Shot*> GetShot() { return m_pShot; } //ショットの情報取得
-
 	void ClearUpdate(); //クリアしたときのアップデート
 
 	void ClearCharaMotion(); //クリアしたときのキャラクターの動き変更
 
 	void SetAttackFlag(bool attackFlag) { m_isAttackFlag = attackFlag; }
 	bool GetAttackFlag() { return m_isAttackFlag; }
+
+	bool GetJumpFall();
 
 private:
 	void updateIdle();	//アイドル状態時のアップデート
@@ -52,25 +51,14 @@ private:
 	Vec2 IsShot(Vec2 ShotSpeed);
 
 private:
-	//プレイヤーのモデル
-	std::shared_ptr<Model> m_pModel;
+	//メンバ関数ポインタ
+	void (Player::* m_updateFunc)();
 	
 	int m_modelHandle; // モデルハンドル
-
-	VECTOR m_Pos; // プレイヤーの座標
-
-	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
-
-	VECTOR m_Vec; // プレイヤーの移動速度
-
-	VECTOR m_attackPos;//攻撃座標
-
+	
 	// 再生しているアニメーション番号
 	int m_animNo;
-
-	//フレームカウント
-	int m_frameCount;
-
+	
 	//プレイヤーの向いている方向
 	float m_angle;
 
@@ -82,12 +70,20 @@ private:
 
 	//フィールドとの当たり判定XZ
 	bool m_colFieldXZ;
-
-	//メンバ関数ポインタ
-	void (Player::* m_updateFunc)();
-
-	// ショットのポインタ
-	std::vector<Shot*> m_pShot;
+	
+	////ジャンプ中に落ちているかどうか
+	//bool m_isJumpFall;
+	
+	VECTOR m_Pos; // プレイヤーの座標
+	
+	VECTOR m_NextPos; // 次のフレームのプレイヤーの座標
+	
+	VECTOR m_attackPos;//攻撃座標
+	
+	VECTOR m_Vec; // プレイヤーの移動速度
+	
+	//プレイヤーのモデル
+	std::shared_ptr<Model> m_pModel;
 
 	//攻撃中かどうか
 	bool m_isAttackFlag = false;

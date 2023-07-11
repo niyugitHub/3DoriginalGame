@@ -22,7 +22,7 @@ public:
 	FieldBase();
 	virtual ~FieldBase();
 
-	void Init(loadData data);
+	void Init();
 	void Update();
 	void Draw();
 	
@@ -67,6 +67,29 @@ public:
 	void ResetTime() { m_gameFrameCount = 0; }
 
 protected:
+	int m_lookBlock;//今見えるブロックの番号
+	int m_blockKinds;//ステージで使われるブロックの種類
+	
+	//プレイヤー初期位置
+	VECTOR m_playerPos;
+	
+	//ステージ番号
+	int m_stageNum;
+
+	//ゲームが始まってからの時間
+	int m_gameFrameCount;
+
+	//アイテムを取得したかどうか
+	bool m_getItem;
+
+	//スターをもらうための制限時間
+	int m_limitFrame;
+
+	//スター取得状態(スターの数は3つ)
+	bool m_getStar[3];
+
+	loadData m_data; // ロードデータ
+
 	//フィールドのポインター
 	std::vector<std::shared_ptr<Block>> m_pBlock;
 
@@ -79,30 +102,7 @@ protected:
 	//アイテムのポインター
 	std::shared_ptr<Item> m_pItem;
 
-	//ブロックの番号(番号によってブロックの色が変わる)
+	////ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum; 
-
-	int m_lookBlock;//今見えるブロックの番号
-	int m_blockKinds;//ステージで使われるブロックの種類
-
-	loadData m_data; // ロードデータ
-
-	//プレイヤー初期位置
-	VECTOR m_playerPos;
-
-	//ステージ番号
-	int m_stageNum;
-
-	//スター取得状態(スターの数は3つ)
-	bool m_getStar[3];
-
-	//ゲームが始まってからの時間
-	int m_gameFrameCount;
-
-	//スターをもらうための制限時間
-	int m_limitFrame;
-
-	//アイテムを取得したかどうか
-	bool m_getItem = false;
 };
 

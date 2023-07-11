@@ -76,8 +76,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dxlib(C++)\3DoriginalGame\object;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>Default</LanguageStandard>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -93,9 +95,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dxlib(C++)\3DoriginalGame\object;C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\Dxlib(C++)\3DoriginalGame\util;C:\Dxlib(C++)\3DoriginalGame;C:\Dxlib(C++)\3DoriginalGame\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MinSpace</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -111,8 +115,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;E:\3DoriginalGame\util;E:\3DoriginalGame\scene;E:\3DoriginalGame\object;E:\3DoriginalGame;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>Default</LanguageStandard>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -128,9 +134,11 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用;E:\3D個人制作\object;E:\3D個人制作;E:\3D個人制作\util;E:\3D個人制作\scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\DxLib_VC\プロジェクトに追加すべきファイル_VC用</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MinSpace</Optimization>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -158,7 +166,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object\Model.cpp" />
     <ClCompile Include="object\field\FieldBase.cpp" />
-    <ClCompile Include="object\Map.cpp" />
     <ClCompile Include="object\Player.cpp" />
     <ClCompile Include="object\Shot.cpp" />
     <ClCompile Include="SaveData.cpp" />
@@ -195,7 +202,6 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="object\Model.h" />
     <ClInclude Include="object\field\FieldBase.h" />
-    <ClInclude Include="object\Map.h" />
     <ClInclude Include="object\Player.h" />
     <ClInclude Include="object\Shot.h" />
     <ClInclude Include="SaveData.h" />

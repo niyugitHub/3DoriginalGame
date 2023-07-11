@@ -17,6 +17,8 @@ public:
 	void update();
 	void draw();
 
+	void blockDraw(int fadeBright);
+
 	//モデルハンドル取得
 	int getModelHandle() const { return m_modelHandle; }
 
@@ -48,7 +50,7 @@ public:
 	bool isAnimEnd();
 
 	//デバッグ用当たり判定
-	void DebugColl();
+	void SetDebugHandle(int handle);
 
 private:
 	//アニメーション情報
@@ -73,25 +75,36 @@ private:
 	void updateAnimBlendRate();
 
 private:
-	// モデルのハンドル
-	int m_modelHandle;
-
 	// 当たり判定情報を使用する
 	bool m_isUseCollision;
+
 	// 当たり判定情報を毎フレーム更新する
+
 	bool m_isUpdateCollision;
-	// 当たり判定として使用するフレームのインデックス
-	int m_colFrameIndex;
+	// モデルのハンドル
+
+	int m_modelHandle;
+	//アニメーションの切り替え情報
+
+	int m_animChangeFrame;			// 現在の切り替えフレーム数
+	int m_animChangeFrameTotal;		// 切り替えにかける総フレーム数
 
 	// アニメーション変更速度
 	int m_animSpeed;
+
+	// 当たり判定として使用するフレームのインデックス
+	int m_colFrameIndex;
+
 
 	// アニメーションのアタッチ番号
 	AnimData m_animPrev;	// 変更前アニメーション情報
 	AnimData m_animNext;	// 変更後アニメーションデータ
 
-	//アニメーションの切り替え情報
-	int m_animChangeFrame;			// 現在の切り替えフレーム数
-	int m_animChangeFrameTotal;		// 切り替えにかける総フレーム数
+
+
+
+
+	//デバッグ用変数
+	bool m_debugModelChange = false;
 };
 

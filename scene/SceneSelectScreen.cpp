@@ -18,14 +18,15 @@ namespace
 }
 
 SceneSelectScreen::SceneSelectScreen() : 
-	m_selectScreen(kStageSelect)
+	m_selectScreen(kStageSelect),
+	m_nextScene(nullptr)
 {
 	int sizeX,sizeY;
 	m_UI[0].pos = { 450.0f,540.0f };
 	m_UI[1].pos = { 1350,340 };
 	m_UI[2].pos = { 1350.0f,760.0f };
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_UI[i].handle = LoadGraph(kEnemyModelFileName[i]);
 		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
@@ -34,7 +35,7 @@ SceneSelectScreen::SceneSelectScreen() :
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
@@ -46,6 +47,9 @@ SceneSelectScreen::~SceneSelectScreen()
 
 void SceneSelectScreen::init()
 {
+	m_updateFunc = &SceneBase::fadeinUpdate;
+	m_pImageUI->Init();
+	m_pImageUI->SetResetCount();
 }
 
 void SceneSelectScreen::end()
@@ -54,22 +58,11 @@ void SceneSelectScreen::end()
 
 SceneBase* SceneSelectScreen::update()
 {
-	DecisionNum(m_selectScreen);
+	(this->*m_updateFunc)();
 
-	SelectSE();
-
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kStageSelect)
+	if (m_pImageUI->GetFadeout())
 	{
-		return new SceneStageSelect;
-	}
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kOption)
-	{
-		//自身のポインター、ゲーム中のオプション画面かのフラグを引数に持つ
-		return new SceneOption(this,false);
-	}
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kTitle)
-	{
-		return new SceneTitle;
+		return m_nextScene;
 	}
 
 	return this;
@@ -130,5 +123,33 @@ void SceneSelectScreen::DecisionNum(int& selectNum)
 		break;
 	default:
 		break;
+	}
+}
+
+void SceneSelectScreen::normalUpdate()
+{
+	DecisionNum(m_selectScreen);
+
+	SelectSE();
+
+	m_nextScene = nullptr;
+
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kStageSelect)
+	{
+		m_nextScene =  new SceneStageSelect;
+	}
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kOption)
+	{
+		//自身のポインター、ゲーム中のオプション画面かのフラグを引数に持つ
+		m_nextScene = new SceneOption(this, false);
+	}
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kTitle)
+	{
+		m_nextScene = new SceneTitle;
+	}
+
+	if (m_nextScene != nullptr)
+	{
+		m_updateFunc = &SceneBase::fadeoutUpdate;
 	}
 }

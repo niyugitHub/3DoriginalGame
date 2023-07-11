@@ -52,7 +52,7 @@ SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	m_coinPos[2] = { 1528,510 };
 
 	m_pImageUI = std::make_shared<ImageUI>();
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_UI[i].handle = LoadGraph(kGameClearFileName[i]);
 		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
@@ -110,7 +110,7 @@ void SceneGameClear::draw()
 
 	m_pImageUI->Draw(m_selectNum, scroll);
 
-	for (int i = 0; i < m_coinPos.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_coinPos.size()); i++)
 	{
 		if (m_pField->GetStar(i))
 		{

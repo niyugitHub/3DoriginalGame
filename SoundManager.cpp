@@ -86,7 +86,7 @@ void SoundManager::PlayMusic(const char* path)
 	SetVolumeMusic(volumeBGM_);
 }
 
-void SoundManager::SetSEVolume(int volume)
+void SoundManager::SetSEVolume(unsigned short volume)
 {
 	for (auto& record : nameAndHandleTable_)
 	{
@@ -100,7 +100,7 @@ int SoundManager::GetSEVolume() const
 	return volumeSE_;
 }
 
-void SoundManager::SetBGMVolume(int volume)
+void SoundManager::SetBGMVolume(unsigned short volume)
 {
 	SetVolumeMusic(volume);
 	volumeBGM_ = volume;

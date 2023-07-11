@@ -2,18 +2,18 @@
 
 namespace
 {
-	// �����蔻��̃T�C�Y
+	// “–‚½‚è”»’è‚ÌƒTƒCƒY
 	constexpr float kColRadius = 100.0f;
 
-	// �l�Q�t�@�C����
+	// lŽQƒtƒ@ƒCƒ‹–¼
 	const char* const kItemName = "data/carrot.mv1";
 
-	//�@���f���̃T�C�Y
+	//@ƒ‚ƒfƒ‹‚ÌƒTƒCƒY
 	constexpr float kMaxSize = 4.0f;
 	constexpr float kMinSize = 3.0f;
 	constexpr float kChangeSizeSpeed = 0.01f;
 	
-	// ���W�ړ�
+	// À•WˆÚ“®
 	constexpr float kMaxPosY = 100.0f;
 	constexpr float kMinPosY = 0.0f;
 	constexpr float kChangePosY = 1.0f;
@@ -21,8 +21,12 @@ namespace
 
 Item::Item(VECTOR pos) : 
 	m_Pos(pos),
+
 	m_size(kMinSize),
 	m_vecY(0.0f)
+
+	m_Exist(true)
+
 {
 	m_modelHandle = MV1LoadModel(kItemName);
 	MV1SetScale(m_modelHandle, VGet(m_size, m_size, m_size));
@@ -36,8 +40,8 @@ Item::~Item()
 
 void Item::Update()
 {
-	static float ChangeSizeSpeed = kChangeSizeSpeed;//���f���̃T�C�Y��ύX�����邽�߂̕ϐ�
-	static float ChangePosSpeed = kChangePosY;//���f���̍��W��ύX�����邽�߂̕ϐ�
+	static float ChangeSizeSpeed = kChangeSizeSpeed;//ƒ‚ƒfƒ‹‚ÌƒTƒCƒY‚ð•ÏX‚³‚¹‚é‚½‚ß‚Ì•Ï”
+	static float ChangePosSpeed = kChangePosY;//ƒ‚ƒfƒ‹‚ÌÀ•W‚ð•ÏX‚³‚¹‚é‚½‚ß‚Ì•Ï”
 
 	m_size += ChangeSizeSpeed;
 	m_vecY += ChangePosSpeed;

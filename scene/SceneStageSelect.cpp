@@ -58,7 +58,8 @@ SceneStageSelect::SceneStageSelect() :
 	m_stageX(0),
 	m_stageY(0),
 	m_coinHandle(-1),
-	m_Field(nullptr)
+	m_Field(nullptr),
+	m_nextScene(nullptr)
 {
 	float X = 440;
 	float Y = 440;
@@ -99,7 +100,7 @@ SceneStageSelect::SceneStageSelect() :
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
-	for (int i = 0; i < m_UI.size(); i++)
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
@@ -111,6 +112,9 @@ SceneStageSelect::~SceneStageSelect()
 
 void SceneStageSelect::init()
 {
+	m_updateFunc = &SceneBase::fadeinUpdate;;
+	m_pImageUI->Init();
+	m_pImageUI->SetResetCount();
 }
 
 void SceneStageSelect::end()
@@ -119,20 +123,13 @@ void SceneStageSelect::end()
 
 SceneBase* SceneStageSelect::update()
 {
-	ChangeStage();
+	(this->*m_updateFunc)();
 
-	SelectSE();
+	if (m_pImageUI->GetFadeout())
+	{
+		return m_nextScene;
+	}
 
-	if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum != 10)
-	{
-		SoundManager::GetInstance().StopBGMAndSE();
-		SelectStage(m_stageNum);
-		return new SceneMain(m_Field);
-	}
-	else if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum == 10)
-	{
-		return new SceneSelectScreen;
-	}
 	return this;
 }
 
@@ -149,7 +146,7 @@ void SceneStageSelect::draw()
 		{
 			if (SaveData::GetStar(i, j))
 			{
-				DrawGraph(static_cast<int>(m_coinPos[i][j].x), static_cast<int>(m_coinPos[i][j].y),
+				DrawGraph(static_cast<int>(m_coinPos[i][j].x) + m_pImageUI->GetScrollSize(i), static_cast<int>(m_coinPos[i][j].y),
 					m_coinHandle, true);
 			}
 		}
@@ -191,6 +188,32 @@ void SceneStageSelect::SelectStage(int stageNum)
 		m_Field = std::make_shared<Field10>();
 		break;
 	};
+}
+
+void SceneStageSelect::normalUpdate()
+{
+	ChangeStage();
+
+	SelectSE();
+
+	m_nextScene = nullptr;
+
+	if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum != 10)
+	{
+		SoundManager::GetInstance().StopBGMAndSE();
+		SelectStage(m_stageNum);
+		m_Field->Init();
+		m_nextScene = new SceneMain(m_Field);
+	}
+	else if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum == 10)
+	{
+		m_nextScene = new SceneSelectScreen;
+	}
+
+	if (m_nextScene != nullptr)
+	{
+		m_updateFunc = &SceneBase::fadeoutUpdate;
+	}
 }
 
 void SceneStageSelect::ChangeStage()
