@@ -16,8 +16,18 @@ public:
 	void SetExist(bool exist) { m_Exist = exist; };
 
 private:
-	VECTOR m_Pos;//���݈ʒu
+	VECTOR m_Pos;//Œ»ÝˆÊ’u
 
-	bool m_Exist;//���݊m�F
+
+	bool m_Exist = true;//‘¶ÝŠm”F
+
+private:
+	int m_modelHandle = -1;
+	float m_vecY;
+	float m_size;
+
+
+	bool m_Exist;//‘¶ÝŠm”F
+
 };
 

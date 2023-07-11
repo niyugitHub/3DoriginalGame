@@ -116,6 +116,8 @@ void FieldBase::Update()
 		Switch->Update();
 	}
 
+	m_pItem->Update();
+
 	m_gameFrameCount++;
 }
 
