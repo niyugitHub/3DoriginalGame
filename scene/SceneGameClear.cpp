@@ -2,7 +2,6 @@
 #include "SceneMain.h"
 #include "SceneStageSelect.h"
 #include "SceneTitle.h"
-#include"DxLib.h"
 #include "../util/Pad.h"
 #include"../object/Player.h"
 #include"../object/Camera.h"
@@ -10,6 +9,7 @@
 #include"../SoundManager.h"
 #include "../util/ImageUI.h"
 #include"../object/Item.h"
+#include"../game.h"
 
 namespace
 {
@@ -20,6 +20,9 @@ namespace
 		"data/image/GameClearRetry.png",
 		"data/image/GameClearStageSelect.png"
 	};
+
+	// エフェクト名
+	const char* const kEffectFileName = "data/effect/laser.efk";
 
 	const char* const kCoinFileName = "data/image/co.png";
 
@@ -59,6 +62,23 @@ SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 		m_UI[i].size = { static_cast<float>(sizeX / 2),static_cast<float>(sizeY / 2) };
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
+
+	for (auto & effect : m_data)
+	{
+		effect.resourceHandle = LoadEffekseerEffect(kEffectFileName);
+		effect.pos.x = GetRand(Game::kScreenWidth - 200) + 100;
+		effect.pos.y = GetRand(Game::kScreenHeight);
+
+		effect.playingEffectHandle = PlayEffekseer2DEffect(effect.resourceHandle);
+		// エフェクトの拡大率を設定する。
+		// Effekseerで作成したエフェクトは2D表示の場合、小さすぎることが殆どなので必ず拡大する。
+		SetScalePlayingEffekseer2DEffect(effect.playingEffectHandle, 25.0f, 25.0f, 25.0f);
+		SetSpeedPlayingEffekseer2DEffect(effect.resourceHandle, 0.2f);
+
+		int ColorNum = GetRand(2);
+		EffectColor(effect.color, ColorNum);
+		SetColorPlayingEffekseer2DEffect(effect.playingEffectHandle, effect.color.x, effect.color.y, effect.color.z, 255);
+	}
 }
 
 SceneGameClear::~SceneGameClear()
@@ -79,6 +99,29 @@ SceneBase* SceneGameClear::update()
 	if (frameCount > 150)
 	{
 		scroll = max(static_cast<int>(scroll - (scroll * 0.05f)), 0);
+	}
+
+	for (auto& effect : m_data)
+	{
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer2DEffect(effect.playingEffectHandle, effect.pos.x, effect.pos.y, 0);
+		effect.pos.y -= 15;
+
+		if (effect.pos.y < 0)
+		{
+			effect.pos.y = Game::kScreenHeight;
+			effect.pos.x = GetRand(Game::kScreenWidth - 200) + 100;
+
+			effect.playingEffectHandle = PlayEffekseer2DEffect(effect.resourceHandle);
+			// エフェクトの拡大率を設定する。
+			// Effekseerで作成したエフェクトは2D表示の場合、小さすぎることが殆どなので必ず拡大する。
+			SetScalePlayingEffekseer2DEffect(effect.playingEffectHandle, 25.0f, 25.0f, 25.0f);
+			SetSpeedPlayingEffekseer2DEffect(effect.resourceHandle, 0.2f);
+
+			int ColorNum = GetRand(2);
+			EffectColor(effect.color, ColorNum);
+			SetColorPlayingEffekseer2DEffect(effect.playingEffectHandle, effect.color.x, effect.color.y, effect.color.z, 1000);
+		}
 	}
 
 	// m_selectNumの数値を変化させるための関数
@@ -105,7 +148,14 @@ SceneBase* SceneGameClear::update()
 
 void SceneGameClear::draw()
 {
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer2D();
+
+	// Effekseerにより再生中のエフェクトを描画する。
+	DrawEffekseer2D();
+
 	m_pField->Draw();
+
 	m_pPlayer->Draw();
 
 	m_pImageUI->Draw(m_selectNum, scroll);
@@ -119,6 +169,7 @@ void SceneGameClear::draw()
 				m_coinHandle, true);
 		}
 	}
+
 
 	/*DrawString(0, 0,
 		"ゲームクリア！", 0xffffff);
@@ -141,4 +192,11 @@ void SceneGameClear::DecisionNum(int& selectNum)
 			selectNum = kStageSelect;
 		}
 	}
+}
+
+void SceneGameClear::EffectColor(VECTOR& color, int colorNum)
+{
+	color.x = (colorNum == 0) ? 255 : 50;
+	color.y = (colorNum == 1) ? 255 : 50;
+	color.z = (colorNum == 2) ? 255 : 50;
 }

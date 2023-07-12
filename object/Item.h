@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include<DxLib.h>
+
 class Item
 {
 public:
@@ -13,21 +14,14 @@ public:
 	VECTOR GetPos() { return m_Pos; }
 
 	bool GetExist() { return m_Exist; }
-	void SetExist(bool exist) { m_Exist = exist; };
+	void SetExist(bool exist) { m_Exist = exist; }
 
 private:
-	VECTOR m_Pos;//Œ»ÝˆÊ’u
+	VECTOR m_Pos; //アイテム座標
 
-
-	bool m_Exist = true;//‘¶ÝŠm”F
-
-private:
 	int m_modelHandle = -1;
 	float m_vecY;
 	float m_size;
 
-
-	bool m_Exist;//‘¶ÝŠm”F
-
+	bool m_Exist; //存在するか
 };
-

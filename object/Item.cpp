@@ -1,32 +1,29 @@
-#include "Item.h"
+﻿#include"Item.h"
 
 namespace
 {
-	// “–‚½‚è”»’è‚ÌƒTƒCƒY
+	// 半径の大きさ
 	constexpr float kColRadius = 100.0f;
 
-	// lŽQƒtƒ@ƒCƒ‹–¼
+	// アイテムファイル名
 	const char* const kItemName = "data/carrot.mv1";
 
-	//@ƒ‚ƒfƒ‹‚ÌƒTƒCƒY
+	// サイズの変動のための変数
 	constexpr float kMaxSize = 4.0f;
 	constexpr float kMinSize = 3.0f;
 	constexpr float kChangeSizeSpeed = 0.01f;
 	
-	// À•WˆÚ“®
+	// 座標移動のための変数
 	constexpr float kMaxPosY = 100.0f;
 	constexpr float kMinPosY = 0.0f;
 	constexpr float kChangePosY = 1.0f;
 }
 
 Item::Item(VECTOR pos) : 
-	m_Pos(pos),
-
-	m_size(kMinSize),
-	m_vecY(0.0f)
-
-	m_Exist(true)
-
+m_Pos(pos),
+m_size(kMinSize),
+m_vecY(0.0f),
+m_Exist(true)
 {
 	m_modelHandle = MV1LoadModel(kItemName);
 	MV1SetScale(m_modelHandle, VGet(m_size, m_size, m_size));
@@ -40,8 +37,8 @@ Item::~Item()
 
 void Item::Update()
 {
-	static float ChangeSizeSpeed = kChangeSizeSpeed;//ƒ‚ƒfƒ‹‚ÌƒTƒCƒY‚ð•ÏX‚³‚¹‚é‚½‚ß‚Ì•Ï”
-	static float ChangePosSpeed = kChangePosY;//ƒ‚ƒfƒ‹‚ÌÀ•W‚ð•ÏX‚³‚¹‚é‚½‚ß‚Ì•Ï”
+	static float ChangeSizeSpeed = kChangeSizeSpeed;// 一回だけサイズの変動スピードを代入
+	static float ChangePosSpeed = kChangePosY;// 一回だけ座標の移動スピードを代入
 
 	m_size += ChangeSizeSpeed;
 	m_vecY += ChangePosSpeed;
@@ -62,11 +59,6 @@ void Item::Update()
 
 void Item::Draw()
 {
-	/*DrawSphere3D(m_Pos, kColRadius, 50,
-		0xffff00,
-		0xffff00,
-		true);*/
-
 	MV1DrawModel(m_modelHandle);
 }
 

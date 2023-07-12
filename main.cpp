@@ -1,5 +1,7 @@
 #include "DxLib.h"
 
+#include "EffekseerForDXLib.h"
+
 #include "game.h"
 #include "scene/SceneManager.h"
 #include "SaveData.h"
@@ -15,10 +17,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// 画面サイズの設定
 	SetGraphMode(Game::kScreenWidth, Game::kScreenHeight, Game::kColorDepth);
 
+	// DirectX9を使用するようにする。(DirectX11も可)
+	// Effekseerを使用するには必ず設定する。
+	SetUseDirect3DVersion(DX_DIRECT3D_9);
+
 	if (DxLib_Init() == -1)		// ＤＸライブラリ初期化処理
 	{
 		return -1;			// エラーが起きたら直ちに終了
 	}
+
+	// Effekseerを初期化する。
+	// 引数には画面に表示する最大パーティクル数を設定する。
+	if (Effkseer_Init(8000) == -1)
+	{
+		DxLib_End();
+		return -1;
+	}
+
+	// Effekseerに2D描画の設定をする。
+	Effekseer_Set2DSetting(Game::kScreenWidth, Game::kScreenHeight);
+
+	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
+	SetUseZBuffer3D(TRUE);
 
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -56,6 +76,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 
 	scene.end();
+
+	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
+//	DeleteEffekseerEffect(effectResourceHandle);
+
+	// Effekseerを終了する。
+	Effkseer_End();
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 
