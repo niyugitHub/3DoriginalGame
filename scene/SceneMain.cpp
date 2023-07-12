@@ -213,7 +213,7 @@ void SceneMain::draw()
 void SceneMain::IsColl()
 {
 	//デバック用モデルハンドル
-	static int debugHandle = MV1LoadModel(kFileDebug);
+	//static int debugHandle = MV1LoadModel(kFileDebug);
 
 
 	VECTOR PlayerPos = m_Player->GetPos();
@@ -281,7 +281,7 @@ void SceneMain::IsColl()
 				m_Player->SetcolFieldY(false); //縦軸での当たり判定をとる
 				break;
 			}
-			pModel->GetBlock()->SetDebugHandle(debugHandle);
+			//pModel->GetBlock()->SetDebugHandle(debugHandle);
 			m_HitCount++;
 			m_Player->SetcolFieldY(true); //縦軸当たり判定
 			break;

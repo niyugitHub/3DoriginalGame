@@ -66,8 +66,8 @@ SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 	for (auto & effect : m_data)
 	{
 		effect.resourceHandle = LoadEffekseerEffect(kEffectFileName);
-		effect.pos.x = GetRand(Game::kScreenWidth - 200) + 100;
-		effect.pos.y = GetRand(Game::kScreenHeight);
+		effect.pos.x = static_cast<float>(GetRand(Game::kScreenWidth - 200) + 100);
+		effect.pos.y = static_cast<float>(GetRand(Game::kScreenHeight));
 
 		effect.playingEffectHandle = PlayEffekseer2DEffect(effect.resourceHandle);
 		// エフェクトの拡大率を設定する。
@@ -77,8 +77,15 @@ SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<
 
 		int ColorNum = GetRand(2);
 		EffectColor(effect.color, ColorNum);
-		SetColorPlayingEffekseer2DEffect(effect.playingEffectHandle, effect.color.x, effect.color.y, effect.color.z, 255);
+
+		SetColorPlayingEffekseer2DEffect(effect.playingEffectHandle,
+			static_cast<int>(effect.color.x),
+			static_cast<int>(effect.color.y),
+			static_cast<int>(effect.color.z), 1000);
 	}
+
+	//フェードインはしないからシーンの始まりに0を代入
+	setFadeBright(0);
 }
 
 SceneGameClear::~SceneGameClear()
@@ -96,6 +103,8 @@ SceneBase* SceneGameClear::update()
 	m_pPlayer->ClearUpdate();
 	m_pCamera->ClearUpdate(m_pPlayer, frameCount > 150);
 
+	updateFade();
+
 	if (frameCount > 150)
 	{
 		scroll = max(static_cast<int>(scroll - (scroll * 0.05f)), 0);
@@ -110,7 +119,7 @@ SceneBase* SceneGameClear::update()
 		if (effect.pos.y < 0)
 		{
 			effect.pos.y = Game::kScreenHeight;
-			effect.pos.x = GetRand(Game::kScreenWidth - 200) + 100;
+			effect.pos.x = static_cast<float>(GetRand(Game::kScreenWidth - 200) + 100);
 
 			effect.playingEffectHandle = PlayEffekseer2DEffect(effect.resourceHandle);
 			// エフェクトの拡大率を設定する。
@@ -120,28 +129,53 @@ SceneBase* SceneGameClear::update()
 
 			int ColorNum = GetRand(2);
 			EffectColor(effect.color, ColorNum);
-			SetColorPlayingEffekseer2DEffect(effect.playingEffectHandle, effect.color.x, effect.color.y, effect.color.z, 1000);
+
+			SetColorPlayingEffekseer2DEffect(effect.playingEffectHandle,
+				static_cast<int>(effect.color.x),
+				static_cast<int>(effect.color.y),
+				static_cast<int>(effect.color.z), 1000);
 		}
 	}
+
+	if (getFadeBright() >= 255)
+	{
+		if (m_selectNum == kStageSelect && getFadeBright() == 255)
+		{
+			SoundManager::GetInstance().StopBGMAndSE();
+			SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
+			return new SceneStageSelect;
+		}
+		if (m_selectNum == kRestart && getFadeBright() == 255)
+		{
+			m_pField->ResetTime();
+			m_pField->GetItem()->SetExist(true);
+			SoundManager::GetInstance().StopBGMAndSE();
+			//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
+			return new SceneMain(m_pField);
+		}
+	}
+
+	if (isFading()) return this;
 
 	// m_selectNumの数値を変化させるための関数
 	DecisionNum(m_selectNum);
 
 	//PAD1を押した、m_selectNumが各値のとき(今流れてるBGMを止めて、新しいBGMを再生)
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kStageSelect && scroll < kStopScroll)
+	if (Pad::isTrigger(PAD_INPUT_1) && scroll < kStopScroll)
 	{
-		SoundManager::GetInstance().StopBGMAndSE();
+		startFadeOut();
+		/*SoundManager::GetInstance().StopBGMAndSE();
 		SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
-		return new SceneStageSelect;
+		return new SceneStageSelect;*/
 	}
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kRestart && scroll < kStopScroll)
-	{
-		m_pField->ResetTime();
-		m_pField->GetItem()->SetExist(true);
-		SoundManager::GetInstance().StopBGMAndSE();
-		//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
-		return new SceneMain(m_pField);
-	}
+	//if (Pad::isTrigger(PAD_INPUT_1) && scroll < kStopScroll)
+	//{
+	//	m_pField->ResetTime();
+	//	m_pField->GetItem()->SetExist(true);
+	//	SoundManager::GetInstance().StopBGMAndSE();
+	//	//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
+	//	return new SceneMain(m_pField);
+	//}
 
 	return this;
 }
@@ -176,6 +210,8 @@ void SceneGameClear::draw()
 	DrawString(0, 100,
 		"Zボタンで戻る", 0xffffff);*/
 	DrawFormatString(300, 0, 0xffffff, "%d", m_selectNum,0);
+	//フェード状態で画面を映す
+	drawFade();
 }
 
 void SceneGameClear::DecisionNum(int& selectNum)
@@ -196,7 +232,7 @@ void SceneGameClear::DecisionNum(int& selectNum)
 
 void SceneGameClear::EffectColor(VECTOR& color, int colorNum)
 {
-	color.x = (colorNum == 0) ? 255 : 50;
-	color.y = (colorNum == 1) ? 255 : 50;
-	color.z = (colorNum == 2) ? 255 : 50;
+	color.x = (colorNum == 0) ? 255.0f : 50.0f;
+	color.y = (colorNum == 1) ? 255.0f : 50.0f;
+	color.z = (colorNum == 2) ? 255.0f : 50.0f;
 }

@@ -4,6 +4,7 @@
 #include"SceneOption.h"
 #include "../util/ImageUI.h"
 #include"../SoundManager.h"
+#include"../game.h"
 
 namespace
 {
@@ -27,6 +28,11 @@ namespace
 	constexpr float kModelMinPosY = -450.0f;
 	constexpr float kModelMaxSpeed = 6.0f;
 	constexpr float kModelAcc = 0.3f;
+
+	//文字の動き
+	constexpr float kJumpPower = -20.0f;
+	constexpr float kGravity = 0.8f;
+	constexpr float kJumpPosY = 600.0f;
 }
 
 
@@ -47,9 +53,11 @@ SceneTitle::SceneTitle() :
 	m_pImageUI = std::make_shared<ImageUI>();
 	int sizeX, sizeY;
 
+	//UI座標設定
 	m_UI[0].pos = { 550,850 };
 	m_UI[1].pos = { 1370,850 };
 
+	//UIの画像ロード、サイズ取得
 	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_UI[i].handle = LoadGraph(kImageName[i]);
@@ -57,6 +65,20 @@ SceneTitle::SceneTitle() :
 		m_UI[i].size = { static_cast<float>(sizeX / 2),static_cast<float>(sizeY / 2) };
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
+
+	//文字画像UIの座標設定、画像ロード、サイズ取得
+	int divHandle[11] = {};
+	LoadDivGraph(kImageName[1], 11,
+		11, 1,
+		100, 100, divHandle);
+
+	for (int i = 0; i < static_cast<int>(m_stringUI.size()); i++)
+	{
+		m_stringUI[i].pos.y = static_cast<float>(300 + (i * 20));
+		m_stringUI[i].pos.x = static_cast<float>(300 + (i * 100));
+		m_stringUI[i].handle = divHandle[i];
+		m_stringUI[i].jumpPower = 0.0f;
+	}	
 
 	//モデルロード
 	for (int i = 0; i < static_cast<int>(m_data.size()); i++)
@@ -82,29 +104,47 @@ void SceneTitle::end()
 
 SceneBase* SceneTitle::update()
 {
+	//フェードアップデート
+	updateFade();
+
+	//UIのアップデート
+	UiUpdate();
+	//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
+	if (Pad::isTrigger(PAD_INPUT_1))
+	{
+		startFadeOut();
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_1))
+	{
+		startFadeOut();
+	}
+
+	if (isFading())
+	{
+		return this;
+	}
+
 	// m_selectNumの数値を変化させるための関数
 	DecisionNum(m_selectNum);
 
-	//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kStart)
+	if (getFadeBright() == 255 && m_selectNum == kStart)
 	{
 		return new SceneSelectScreen;
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kExit)
+	else if (getFadeBright() == 255 && m_selectNum == kExit)
 	{
 		DxLib_End();
 	}
 
-	//UIのアップデート
-	UiUpdate();
 
 	return this;
 }
 
 void SceneTitle::draw()
 {
-	DrawString(300, 300, "SceneTitle"  , 0xffffff);
+	DrawString(300, 300, "SceneTitle", 0xffffff);
 
 	//モデル描画
 	for (int i = 0; i < static_cast<int>(m_data.size()); i++)
@@ -112,7 +152,15 @@ void SceneTitle::draw()
 		MV1DrawModel(m_data[i].handle);
 	}
 
+	for (auto& stringUI : m_stringUI)
+	{
+		DrawGraph(static_cast<int>(stringUI.pos.x), static_cast<int>(stringUI.pos.y),
+			stringUI.handle, true);
+	}
+
 	m_pImageUI->Draw(m_selectNum, 0);
+	//フェード状態で画面を映す
+	drawFade();
 }
 
 void SceneTitle::UiUpdate()
@@ -143,6 +191,17 @@ void SceneTitle::UiUpdate()
 		m_data[i].pos.y += m_data[i].speed;
 
 		MV1SetPosition(m_data[i].handle, m_data[i].pos);
+	}
+
+	for (int i = 0; i < static_cast<int>(m_stringUI.size()); i++)
+	{
+		m_stringUI[i].pos.y += m_stringUI[i].jumpPower;
+		m_stringUI[i].jumpPower += kGravity;
+		
+		if (m_stringUI[i].pos.y > kJumpPosY)
+		{
+			m_stringUI[i].jumpPower = kJumpPower;
+		}
 	}
 }
 

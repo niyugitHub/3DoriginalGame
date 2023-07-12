@@ -24,9 +24,16 @@ private:
 	struct Data
 	{
 		int handle = -1;
-		VECTOR pos;
-		float speed;
-		bool isModelUp;//モデルの移動が上昇中かどうか
+		VECTOR pos = {0.0f,0.0f};
+		float speed = 0.0f;
+		bool isModelUp = false;//モデルの移動が上昇中かどうか
+	};
+
+	struct stringData
+	{
+		int handle = -1;
+		Vec2 pos = {0,0};
+		float jumpPower = 0.0f;
 	};
 
 	enum
@@ -40,6 +47,9 @@ private:
 
 	//画像UIの配列
 	std::array<UI, 2> m_UI;
+
+	//文字画像UIの配列
+	std::array<stringData, 11> m_stringUI;
 
 	//選んだ番号
 	int m_selectNum;
