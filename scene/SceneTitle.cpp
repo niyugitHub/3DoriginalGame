@@ -16,6 +16,12 @@ namespace
 		"data/fieldGreen.mv1"
 	};
 
+	const char* const kImageName[2] =
+	{
+		"data/image/Title_GameStart.png",
+		"data/image/Title_Exit.png"
+	};
+
 	//モデルの移動
 	constexpr float kModelMaxPosY = 150.0f;
 	constexpr float kModelMinPosY = -450.0f;
@@ -24,7 +30,8 @@ namespace
 }
 
 
-SceneTitle::SceneTitle()
+SceneTitle::SceneTitle() : 
+	m_selectNum(kStart)
 {
 	// カメラの設定
 	// どこまで表示するか
@@ -36,6 +43,20 @@ SceneTitle::SceneTitle()
 
 	//サウンドを流す
 	SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
+
+	m_pImageUI = std::make_shared<ImageUI>();
+	int sizeX, sizeY;
+
+	m_UI[0].pos = { 550,850 };
+	m_UI[1].pos = { 1370,850 };
+
+	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
+	{
+		m_UI[i].handle = LoadGraph(kImageName[i]);
+		GetGraphSize(m_UI[i].handle, &sizeX, &sizeY);
+		m_UI[i].size = { static_cast<float>(sizeX / 2),static_cast<float>(sizeY / 2) };
+		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
+	}
 
 	//モデルロード
 	for (int i = 0; i < static_cast<int>(m_data.size()); i++)
@@ -61,16 +82,18 @@ void SceneTitle::end()
 
 SceneBase* SceneTitle::update()
 {
+	// m_selectNumの数値を変化させるための関数
+	DecisionNum(m_selectNum);
+
 	//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
-	if (Pad::isTrigger(PAD_INPUT_1))
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kStart)
 	{
 		return new SceneSelectScreen;
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_8))
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == kExit)
 	{
-		//自身のポインター、ゲーム中のオプション画面かのフラグを引数に持つ
-		return new SceneOption(this,false);
+		DxLib_End();
 	}
 
 	//UIのアップデート
@@ -88,6 +111,8 @@ void SceneTitle::draw()
 	{
 		MV1DrawModel(m_data[i].handle);
 	}
+
+	m_pImageUI->Draw(m_selectNum, 0);
 }
 
 void SceneTitle::UiUpdate()
@@ -118,5 +143,21 @@ void SceneTitle::UiUpdate()
 		m_data[i].pos.y += m_data[i].speed;
 
 		MV1SetPosition(m_data[i].handle, m_data[i].pos);
+	}
+}
+
+void SceneTitle::DecisionNum(int& selectNum)
+{
+	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
+	{
+		if (selectNum == kStart)
+		{
+			selectNum = kExit;
+		}
+
+		else if (selectNum == kExit)
+		{
+			selectNum = kStart;
+		}
 	}
 }

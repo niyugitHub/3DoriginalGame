@@ -18,6 +18,9 @@ public:
 private:
 	//UIのアップデート
 	void UiUpdate();
+
+	void DecisionNum(int& selectNum);	//決定表
+
 	struct Data
 	{
 		int handle = -1;
@@ -25,7 +28,20 @@ private:
 		float speed;
 		bool isModelUp;//モデルの移動が上昇中かどうか
 	};
+
+	enum
+	{
+		kStart = 0,
+		kExit = 1
+	};
+
 	//ブロックモデルのハンドル
 	std::array<Data, 4>m_data;
+
+	//画像UIの配列
+	std::array<UI, 2> m_UI;
+
+	//選んだ番号
+	int m_selectNum;
 };
 
