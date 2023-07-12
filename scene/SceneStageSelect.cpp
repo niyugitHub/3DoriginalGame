@@ -104,6 +104,9 @@ SceneStageSelect::SceneStageSelect() :
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
 	}
+
+	//フェードインはしないからシーンの始まりに0を代入
+	setFadeBright(0);
 }
 
 SceneStageSelect::~SceneStageSelect()
@@ -123,6 +126,15 @@ void SceneStageSelect::end()
 
 SceneBase* SceneStageSelect::update()
 {
+	if (getFadeBright() == 255)
+	{
+		return m_nextScene;
+	}
+
+	updateFade();
+
+	if (isFading()) return this;
+
 	(this->*m_updateFunc)();
 
 	if (m_pImageUI->GetFadeout())
@@ -151,6 +163,9 @@ void SceneStageSelect::draw()
 			}
 		}
 	}
+
+	//フェード状態で画面を映す
+	drawFade();
 }
 
 void SceneStageSelect::SelectStage(int stageNum)
@@ -196,22 +211,17 @@ void SceneStageSelect::normalUpdate()
 
 	SelectSE();
 
-	m_nextScene = nullptr;
-
 	if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum != 10)
 	{
 		SoundManager::GetInstance().StopBGMAndSE();
 		SelectStage(m_stageNum);
 		m_Field->Init();
+		startFadeOut();
 		m_nextScene = new SceneMain(m_Field);
 	}
 	else if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum == 10)
 	{
 		m_nextScene = new SceneSelectScreen;
-	}
-
-	if (m_nextScene != nullptr)
-	{
 		m_updateFunc = &SceneBase::fadeoutUpdate;
 	}
 }

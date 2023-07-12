@@ -32,6 +32,7 @@ public:
 	/// </summary>
 	/// <returns>0(フェードしていない)～255(真っ黒)</returns>
 	int getFadeBright() const { return m_fadeBright; }
+	void setFadeBright(int fadeBright) { m_fadeBright = fadeBright; }
 
 	virtual void fadeinUpdate();
 	virtual void normalUpdate() {}

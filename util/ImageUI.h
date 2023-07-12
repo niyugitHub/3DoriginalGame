@@ -69,8 +69,6 @@ private:
 	Vec2 m_size;//画像サイズ
 	int m_handle;// 画像ハンドル
 
-	VECTOR m_modelPos;//モデルの座標
-
 	int m_fadeScroll;//フェードするさいのスクロール値
 
 	bool m_fadeIn = false;

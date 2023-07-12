@@ -24,19 +24,19 @@ namespace
 		constexpr float kMoveJumpSpeed = 1.2f;//ジャンプ中
 	
 #else
-		//// 最大移動速度
-		//constexpr float kMaxMoveSpeed = 7.5f;
-
-		//// 一フレームごとの移動速度上昇
-		//constexpr float kMoveSpeed = 1.0f; //地面にいるとき
-		//constexpr float kMoveJumpSpeed = 0.4f;//ジャンプ中
-
 		// 最大移動速度
-		constexpr float kMaxMoveSpeed = 21.0f;
+		constexpr float kMaxMoveSpeed = 7.5f;
 
 		// 一フレームごとの移動速度上昇
-		constexpr float kMoveSpeed = 3.0f; //地面にいるとき
-		constexpr float kMoveJumpSpeed = 1.2f;//ジャンプ中
+		constexpr float kMoveSpeed = 1.0f; //地面にいるとき
+		constexpr float kMoveJumpSpeed = 0.4f;//ジャンプ中
+
+		//// 最大移動速度
+		//constexpr float kMaxMoveSpeed = 21.0f;
+
+		//// 一フレームごとの移動速度上昇
+		//constexpr float kMoveSpeed = 3.0f; //地面にいるとき
+		//constexpr float kMoveJumpSpeed = 1.2f;//ジャンプ中
 	
 	
 #endif

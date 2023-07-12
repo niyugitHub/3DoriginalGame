@@ -36,7 +36,7 @@ private:
 		int resourceHandle = -1;
 		int playingEffectHandle = -1;
 		Vec2 pos = { 0,0 };
-		VECTOR color;
+		VECTOR color = {VGet(0.0f,0.0f,0.0f)};
 	};
 
 	void DecisionNum(int& selectNum);	//Œˆ’è•\
