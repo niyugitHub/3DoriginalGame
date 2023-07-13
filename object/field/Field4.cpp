@@ -23,8 +23,8 @@ Field4::Field4()
 {
 	m_stageNum = 4;
 	m_data.fileName = kFileStage;
-	m_lookBlock = kRed;
-	m_blockKinds = kBlue;
+	m_lookBlock = Red;
+	m_blockKinds = Blue;
 	m_data.blockNumX = kBlockNumX;
 	m_data.blockNumZ = kBlockNumZ;
 }

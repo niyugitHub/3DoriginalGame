@@ -14,6 +14,9 @@ public:
 	VECTOR GetPos() { return m_Pos; }
 
 	bool GetExist() { return m_Exist; }
+	void Spawn() { m_Exist = true; }
+	void Get() { m_Exist = false; }
+
 	void SetExist(bool exist) { m_Exist = exist; }
 
 private:

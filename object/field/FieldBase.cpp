@@ -5,6 +5,7 @@
 #include"../Switch.h"
 #include"../Goal.h"
 #include"../Item.h"
+#include"../HalfwayPoint.h"
 #include"../../SaveData.h"
 #include<cassert>
 #include <iostream>
@@ -36,8 +37,8 @@ namespace
 }
 
 FieldBase::FieldBase() : 
-	m_lookBlock(kRed),
-	m_blockKinds(kBlue),
+	m_lookBlock(Red),
+	m_blockKinds(Blue),
 	m_playerPos(VGet(0,0,0)),
 	m_stageNum(0),
 	m_gameFrameCount(0),
@@ -88,7 +89,7 @@ void FieldBase::Init()
 
 //	m_blockNum.push_back(8); //とりあえずスイッチ用意(8がスイッチ)
 
-	//最初にロードしたモデルと合わせてモデルを100個生成
+	// 後でMV1DuplicateModelを使うために先にモデルロード
 	int orgModel1 = MV1LoadModel(kFileName1);
 	int orgModel2 = MV1LoadModel(kFileName2);
 	int orgModel3 = MV1LoadModel(kFileName3);;
@@ -101,6 +102,12 @@ void FieldBase::Init()
 
 	//モデルロード
 	ModelLoad(orgModel1, orgModel2, orgModel3, orgModel4);
+}
+
+void FieldBase::Reset()
+{
+	//m_pItem->Spawn();
+	m_pItem->SetExist(m_halfwayPointItem);
 }
 
 void FieldBase::Update()
@@ -139,6 +146,8 @@ void FieldBase::Draw()
 	{
 		m_pItem->Draw();
 	}
+
+	m_pHalfwayPoint->Draw();
 
 	printfDx("%d\n", m_gameFrameCount);
 }
@@ -263,17 +272,17 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		int z = 200 * (m_data.blockNumZ - (i / m_data.blockNumX)) - m_data.blockNumX / 2;
 		float posX = static_cast<float>(x);
 		float posZ = static_cast<float>(z);
-		if (m_blockNum[i] == 10)
+		if (m_blockNum[i] == GoalObj)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_pGoal = std::make_shared<Goal>(VGet(posX, 100, posZ));
 			continue;
 		}
 
-		if (m_blockNum[i] == 8)
+		if (m_blockNum[i] == SwitchObj)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_pSwitch.push_back(std::make_shared<Switch>(VGet(posX, 100, posZ)));
 			continue;
@@ -281,46 +290,53 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 
 		if (m_blockNum[i] == Block::kField)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
 		if (m_blockNum[i] == Block::kRed)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kRed),Model2));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Red),Model2));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
 		if (m_blockNum[i] == Block::kBlue)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kBlue),Model3));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Blue),Model3));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
 		if (m_blockNum[i] == Block::kGreen)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kGreen),Model4));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Green),Model4));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			continue;
 		}
 
-		if (m_blockNum[i] == 5)
+		if (m_blockNum[i] == PlayerPos)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_playerPos = VGet(posX, 0, posZ);
 			continue;
 		}
 
-		if (m_blockNum[i] == 6)
+		if (m_blockNum[i] == ItemObj)
 		{
-			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(kField),Model1));
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
 			m_pItem = std::make_shared<Item>(VGet(posX, 100, posZ));
 			continue;
+		}
+
+		if (m_blockNum[i] == HalfwayPointObj)
+		{
+			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field), Model1));
+			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
+			m_pHalfwayPoint = std::make_shared<HalfwayPoint>(VGet(posX, kBlockSideLength / 2.0f, posZ));
 		}
 	}
 }
@@ -330,7 +346,7 @@ void FieldBase::ChangeBlock()
 	m_lookBlock++;
 	if (m_lookBlock > m_blockKinds)
 	{
-		m_lookBlock = kRed;
+		m_lookBlock = Red;
 	}
 }
 
@@ -354,4 +370,9 @@ void FieldBase::StageClear()
 
 	//セーブデータのアップデート(配列が0からなのでm_stageNumに-1をする)
 	SaveData::Update(m_stageNum - 1, m_getStar);
+}
+
+void FieldBase::OnSetPlayerRespawn()
+{
+	m_playerPos = m_pHalfwayPoint->GetPos();
 }

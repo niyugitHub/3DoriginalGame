@@ -23,6 +23,10 @@ namespace
 		"data/image/Title_Exit.png"
 	};
 
+	const char* const kStringName = "data/image/Title_String.png";
+
+	const char* const kUnderbarName = "data/image/Title_Underbar.png";
+
 	//モデルの移動
 	constexpr float kModelMaxPosY = 150.0f;
 	constexpr float kModelMinPosY = -450.0f;
@@ -30,9 +34,12 @@ namespace
 	constexpr float kModelAcc = 0.3f;
 
 	//文字の動き
-	constexpr float kJumpPower = -20.0f;
-	constexpr float kGravity = 0.8f;
-	constexpr float kJumpPosY = 600.0f;
+	constexpr float kJumpPower = -18.0f;
+	constexpr float kGravity = 0.6f;
+
+	//アンダーバーの座標
+	constexpr int kPosX = 0;
+	constexpr int kPosY = 300;
 }
 
 
@@ -67,15 +74,25 @@ SceneTitle::SceneTitle() :
 	}
 
 	//文字画像UIの座標設定、画像ロード、サイズ取得
-	int divHandle[11] = {};
-	LoadDivGraph(kImageName[1], 11,
-		11, 1,
-		100, 100, divHandle);
+	int divHandle[12] = {};
+	LoadDivGraph(kStringName, 12,
+		12, 1,
+		160, 220, divHandle);
+
+	m_underbar.handle = LoadGraph(kUnderbarName);
+	m_underbar.pos = { kPosX, kPosY };
+
+	//文字のスペース
+	int spaceNum = 0;
 
 	for (int i = 0; i < static_cast<int>(m_stringUI.size()); i++)
 	{
-		m_stringUI[i].pos.y = static_cast<float>(300 + (i * 20));
-		m_stringUI[i].pos.x = static_cast<float>(300 + (i * 100));
+		if (i >= 5)
+		{
+			spaceNum = 120;
+		}
+		m_stringUI[i].pos.y = static_cast<float>(300 - (i * 15));
+		m_stringUI[i].pos.x = static_cast<float>(150 + (i * 120)) + spaceNum;
 		m_stringUI[i].handle = divHandle[i];
 		m_stringUI[i].jumpPower = 0.0f;
 	}	
@@ -152,6 +169,11 @@ void SceneTitle::draw()
 		MV1DrawModel(m_data[i].handle);
 	}
 
+	//アンダーバーの描画
+	DrawGraph(static_cast<int>(m_underbar.pos.x) + 50, static_cast<int>(m_underbar.pos.y) + 100,
+		m_underbar.handle, true);
+
+	//文字の描画
 	for (auto& stringUI : m_stringUI)
 	{
 		DrawGraph(static_cast<int>(stringUI.pos.x), static_cast<int>(stringUI.pos.y),
@@ -193,12 +215,13 @@ void SceneTitle::UiUpdate()
 		MV1SetPosition(m_data[i].handle, m_data[i].pos);
 	}
 
+	//文字の位置アップデート
 	for (int i = 0; i < static_cast<int>(m_stringUI.size()); i++)
 	{
 		m_stringUI[i].pos.y += m_stringUI[i].jumpPower;
 		m_stringUI[i].jumpPower += kGravity;
 		
-		if (m_stringUI[i].pos.y > kJumpPosY)
+		if (m_stringUI[i].pos.y > m_underbar.pos.y)
 		{
 			m_stringUI[i].jumpPower = kJumpPower;
 		}

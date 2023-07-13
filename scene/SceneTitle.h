@@ -36,7 +36,7 @@ private:
 		float jumpPower = 0.0f;
 	};
 
-	enum
+	enum //TitleAction
 	{
 		kStart = 0,
 		kExit = 1
@@ -49,7 +49,9 @@ private:
 	std::array<UI, 2> m_UI;
 
 	//•¶š‰æ‘œUI‚Ì”z—ñ
-	std::array<stringData, 11> m_stringUI;
+	std::array<stringData, 12> m_stringUI;
+
+	UI m_underbar;
 
 	//‘I‚ñ‚¾”Ô†
 	int m_selectNum;

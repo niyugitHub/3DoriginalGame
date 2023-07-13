@@ -147,8 +147,8 @@ SceneBase* SceneGameClear::update()
 		}
 		if (m_selectNum == kRestart && getFadeBright() == 255)
 		{
+			m_pField->GetItem()->Spawn();
 			m_pField->ResetTime();
-			m_pField->GetItem()->SetExist(true);
 			SoundManager::GetInstance().StopBGMAndSE();
 			//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
 			return new SceneMain(m_pField);

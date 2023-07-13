@@ -23,8 +23,8 @@ Field7::Field7()
 {
 	m_stageNum = 7;
 	m_data.fileName = kFileStage;
-	m_lookBlock = kRed;
-	m_blockKinds = kGreen;
+	m_lookBlock = Red;
+	m_blockKinds = Green;
 	m_data.blockNumX = kBlockNumX;
 	m_data.blockNumZ = kBlockNumZ;
 }

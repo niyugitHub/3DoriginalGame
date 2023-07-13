@@ -16,6 +16,7 @@
 #include"../SoundManager.h"
 #include "../util/Pad.h"
 #include"../object/Block.h"
+#include"../object/HalfwayPoint.h"
 
 #include <cassert>
 
@@ -150,8 +151,8 @@ SceneBase* SceneMain::update()
 
 	if (gameOverCount > 100)
 	{
-		m_Field->GetItem()->SetExist(false);
-		m_Field->ResetTime();
+		//フィールド情報リセット
+		m_Field->Reset();
 		return new SceneMain(m_Field);
 	}
 
@@ -226,7 +227,7 @@ void SceneMain::IsColl()
 
 		if (dist < (m_Player->GetRadius() + m_Field->GetItem()->GetRadius()))
 		{
-			m_Field->GetItem()->SetExist(false);
+			m_Field->GetItem()->Get();
 		}
 	}
 
@@ -261,6 +262,20 @@ void SceneMain::IsColl()
 	else
 	{
 		m_SwitchColled = false;
+	}
+
+	//中間ポイントに当たったかどうか
+	if (!m_Field->GetHalfwayPoint()->IsCollision())
+	{
+		VECTOR HalfwayPointToPlayer = VSub(PlayerPos, m_Field->GetHalfwayPoint()->GetPos());
+		float dist = VSize(HalfwayPointToPlayer);
+
+		if (dist < (m_Player->GetRadius() + m_Field->GetHalfwayPoint()->GetRadius()))
+		{
+			m_Field->GetHalfwayPoint()->OnCollision();
+			m_Field->OnSetPlayerRespawn();
+			m_Field->SetmHalfwayPointItem(m_Field->GetItem()->GetExist());
+		}
 	}
 
 	if (!m_Player->GetJumpFall()) return;

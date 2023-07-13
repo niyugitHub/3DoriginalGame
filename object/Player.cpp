@@ -60,6 +60,9 @@ namespace
 	//ショットスピード
 	constexpr float kShotSpeed = 20.0f;
 
+	//空中の滞在時間(5f以上でジャンプ禁止)
+	constexpr int kAirFrame = 5;
+
 	//// カメラの位置
 	//constexpr float kCameraPosY = 1500.0f;
 	//constexpr float kCameraPosZ = -800.0f;
@@ -72,7 +75,8 @@ Player::Player(VECTOR pos) :
 	m_angle(DX_PI_F),
 	m_cameraAngle(0.0f),
 	m_colFieldY(false),
-	m_colFieldXZ(false)
+	m_colFieldXZ(false),
+	m_airFrame(0)
 {
 	m_Pos = pos;
 	m_NextPos = m_Pos;
@@ -104,6 +108,7 @@ void Player::Update()
 	//Y軸から見てフィールドと当たってない場合、もしくはジャンプで上昇中の場合
 	if (!m_colFieldY || !GetJumpFall())
 	{
+		m_airFrame++;
 		m_Pos.y = m_NextPos.y;
 		//ジャンプ中じゃないとき
 		if (m_updateFunc != &Player::updateJump) 
@@ -116,6 +121,7 @@ void Player::Update()
 	else if(m_updateFunc != &Player::updateJump)
 	{
 		m_Vec.y = 0.0f;
+		m_airFrame = 0;
 	}
 
 	m_NextPos = m_Pos;
@@ -187,7 +193,7 @@ void Player::updateIdle()
 	}
 
 	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているときupdateJumpに遷移
-	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY) 
+	if (Pad::isTrigger(PAD_INPUT_1) && m_airFrame <= kAirFrame)
 	{
 		m_Vec.y = kJumpPower;
 		SoundManager::GetInstance().Play("jump");
@@ -225,7 +231,7 @@ void Player::updateMove()
 	IsAngle(PressLeft, PressUp, PressRight, PressBottom);
 
 	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているときupdateJumpに遷移
-	if (Pad::isTrigger(PAD_INPUT_1) && m_colFieldY)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_airFrame <= kAirFrame)
 	{
 		m_Vec.y = kJumpPower;
 		SoundManager::GetInstance().Play("jump");
@@ -234,6 +240,7 @@ void Player::updateMove()
 		return;
 	}
 
+	//ボタンが押されるかつ、Y軸から見てフィールドと当たっているときupdatePunchに遷移
 	if (Pad::isTrigger(PAD_INPUT_3) && m_colFieldY)
 	{
 		//ベクトルを0に
@@ -246,6 +253,7 @@ void Player::updateMove()
 		return;
 	}
 
+	//移動量が5よりも大きい場合正規化する
 	if (fabs(m_Vec.x) >= 5.0f && fabs(m_Vec.z) >= 5.0f)
 	{
 		Vec2 vec = { m_Vec.x,m_Vec.z };
@@ -266,6 +274,7 @@ void Player::updateMove()
 	}
 }
 
+//プレイヤーのジャンプ処理
 void Player::updateJump()
 {
 	bool PressLeft = Pad::isPress(PAD_INPUT_LEFT);
@@ -287,6 +296,7 @@ void Player::updateJump()
 	}
 }
 
+//プレイヤーのパンチ処理
 void Player::updatePunch()
 {
 	if (m_pModel->isAnimEnd())
@@ -305,6 +315,7 @@ void Player::SetAttackPos()
 	m_attackPos = VTransform(m_Pos, cameraRotMtx);*/
 }
 
+//プレイヤーの移動処理
 void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed)
 {
 	if (Up)
@@ -378,6 +389,7 @@ void Player::IsMove(bool Left, bool Up, bool Right, bool Bottom, float MoveSpeed
 
 }
 
+//プレイヤーのアングル処理
 void Player::IsAngle(bool Left, bool Up, bool Right, bool Bottom)
 {
 	//m_angleがDX_PI_F * 2より大きいとき

@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="object\HalfwayPoint.cpp" />
     <ClCompile Include="object\Block.cpp" />
     <ClCompile Include="object\Camera.cpp" />
     <ClCompile Include="object\Item.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="object\HalfwayPoint.h" />
     <ClInclude Include="object\Block.h" />
     <ClInclude Include="object\Camera.h" />
     <ClInclude Include="object\Item.h" />

@@ -21,11 +21,13 @@ SceneSelectScreen::SceneSelectScreen() :
 	m_selectScreen(kStageSelect),
 	m_nextScene(nullptr)
 {
+	//画像のサイズ
 	int sizeX,sizeY;
 	m_UI[0].pos = { 450.0f,540.0f };
 	m_UI[1].pos = { 1350,340 };
 	m_UI[2].pos = { 1350.0f,760.0f };
 
+	//UI情報を入れる
 	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_UI[i].handle = LoadGraph(kEnemyModelFileName[i]);
@@ -35,6 +37,7 @@ SceneSelectScreen::SceneSelectScreen() :
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
+	//UI情報をm_pImageUIクラスに入れる
 	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
 	{
 		m_pImageUI->AddUI(m_UI[i].pos, m_UI[i].size, m_UI[i].handle);
@@ -47,6 +50,7 @@ SceneSelectScreen::~SceneSelectScreen()
 
 void SceneSelectScreen::init()
 {
+	//フェードインから始まる
 	m_updateFunc = &SceneBase::fadeinUpdate;
 	m_pImageUI->Init();
 	m_pImageUI->SetResetCount();

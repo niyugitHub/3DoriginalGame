@@ -87,5 +87,8 @@ private:
 
 	//UŒ‚’†‚©‚Ç‚¤‚©
 	bool m_isAttackFlag = false;
+
+	//‹ó’†‚É‚¢‚éŠÔ
+	int m_airFrame;
 };
 

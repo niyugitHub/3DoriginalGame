@@ -7,6 +7,7 @@ class Block;
 class Switch;
 class Goal;
 class Item;
+class HalfwayPoint;
 
 class FieldBase
 {
@@ -23,6 +24,9 @@ public:
 	virtual ~FieldBase();
 
 	void Init();
+
+	//プレイヤー死亡時にリセット
+	void Reset();
 	void Update();
 	void Draw();
 	
@@ -41,12 +45,17 @@ public:
 
 	void StageClear();
 
-	enum
+	enum BlockKind
 	{
-		kField = 1,
-		kRed = 2,
-		kBlue = 3,
-		kGreen = 4,
+		Field = 1,
+		Red = 2,
+		Blue = 3,
+		Green = 4,
+		PlayerPos = 5,
+		ItemObj = 6,
+		HalfwayPointObj = 7,
+		SwitchObj = 8,
+		GoalObj = 10,
 	};
 
 	/*int GetBlockNumX() { return m_blockNum.x; }
@@ -60,11 +69,18 @@ public:
 
 	std::shared_ptr<Item> GetItem() { return m_pItem; }
 
+	std::shared_ptr<HalfwayPoint> GetHalfwayPoint() { return m_pHalfwayPoint; }
+
 	int GetLookBlock() { return m_lookBlock; }
 
 	bool GetStar(int i) { return m_getStar[i]; }
 
 	void ResetTime() { m_gameFrameCount = 0; }
+
+	//プレイヤーのリスポーン位置変更
+	void OnSetPlayerRespawn();
+
+	void SetmHalfwayPointItem(bool getItem) { m_halfwayPointItem = getItem; }
 
 protected:
 	int m_lookBlock;//今見えるブロックの番号
@@ -81,6 +97,9 @@ protected:
 
 	//アイテムを取得したかどうか
 	bool m_getItem;
+
+	//中間ポイントの前にアイテムを取得していたかどうか
+	bool m_halfwayPointItem;
 
 	//スターをもらうための制限時間
 	int m_limitFrame;
@@ -101,6 +120,9 @@ protected:
 
 	//アイテムのポインター
 	std::shared_ptr<Item> m_pItem;
+
+	//中間ポイントのポインター
+	std::shared_ptr<HalfwayPoint> m_pHalfwayPoint;
 
 	////ブロックの番号(番号によってブロックの色が変わる)
 	std::vector<int> m_blockNum; 
