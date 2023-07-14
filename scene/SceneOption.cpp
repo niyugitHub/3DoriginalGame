@@ -124,12 +124,12 @@ void SceneOption::normalUpdate()
 
 	m_nextScene = nullptr;
 
-	if (m_selectOption == kBgm)
+	if (m_selectOption == Bgm)
 	{
 		AccelerateChangeBGMVoluem();
 	}
 
-	if (m_selectOption == kSe)
+	if (m_selectOption == Se)
 	{
 		AccelerateChangeSEVoluem();
 	}
@@ -140,13 +140,13 @@ void SceneOption::normalUpdate()
 		m_nextScene = m_pScene;
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectOption == kBack)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectOption == Back)
 	{
 		SoundManager::GetInstance().SaveSoundConfig();
 		m_nextScene = m_pScene;
 	}
 
-	if (Pad::isTrigger(PAD_INPUT_1) && m_isSceneMain && m_selectOption == kStageSelect)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_isSceneMain && m_selectOption == StageSelect)
 	{
 		SoundManager::GetInstance().SaveSoundConfig();
 		SoundManager::GetInstance().StopBGMAndSE();
@@ -167,7 +167,7 @@ void SceneOption::SelectUpdate()
 	if (Pad::isTrigger(PAD_INPUT_DOWN))
 	{
 		m_selectOption++;
-		if (m_selectOption == kStageSelect && !m_isSceneMain)
+		if (m_selectOption == StageSelect && !m_isSceneMain)
 		{
 			m_selectOption++;
 		}
@@ -176,20 +176,20 @@ void SceneOption::SelectUpdate()
 	if (Pad::isTrigger(PAD_INPUT_UP))
 	{
 		m_selectOption--;
-		if (m_selectOption == kStageSelect && !m_isSceneMain)
+		if (m_selectOption == StageSelect && !m_isSceneMain)
 		{
 			m_selectOption--;
 		}
 	}
 
-	if (m_selectOption > kBack)
+	if (m_selectOption > Back)
 	{
-		m_selectOption = kBgm;
+		m_selectOption = Bgm;
 	}
 
-	if (m_selectOption < kBgm)
+	if (m_selectOption < Bgm)
 	{
-		m_selectOption = kBack;
+		m_selectOption = Back;
 	}
 }
 

@@ -360,7 +360,7 @@ float FieldBase::GetFieldSizeZ()
 	return kFieldSideLengthZ;
 }
 
-void FieldBase::StageClear()
+void FieldBase::OnStageClear()
 {
 	m_getStar[0] = true;
 

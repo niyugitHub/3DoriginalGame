@@ -2,7 +2,7 @@
 #include "../util/Pad.h"
 #include"SceneMain.h"
 #include"SceneOption.h"
-#include"SceneSelectScreen.h"
+#include"SceneMainMenu.h"
 #include <DxLib.h>
 #include "../object/field/Field1.h"
 #include "../object/field/Field2.h"
@@ -221,7 +221,7 @@ void SceneStageSelect::normalUpdate()
 	}
 	else if (Pad::isTrigger(PAD_INPUT_1) && m_stageNum == 10)
 	{
-		m_nextScene = new SceneSelectScreen;
+		m_nextScene = new SceneMainMenu;
 		m_updateFunc = &SceneBase::fadeoutUpdate;
 	}
 }

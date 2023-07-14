@@ -24,10 +24,10 @@ public:
 private:
 	//コインのハンドル
 	int m_coinHandle;
-	enum
+	enum SelectAction
 	{
-		kRestart = 1,		//もう一度同じステージを遊ぶ
-		kStageSelect = 2,	//ステージセレクト
+		Restart = 1,		//もう一度同じステージを遊ぶ
+		StageSelect = 2,	//ステージセレクト
 	};
 
 	//エフェクトデータ
@@ -44,7 +44,7 @@ private:
 	//エフェクトの色アップデート(rbg)
 	void EffectColor(VECTOR& color,int colorNum);
 
-	int m_selectNum  = kRestart; //選んだ番号
+	int m_selectNum  = Restart; //選んだ番号
 	std::shared_ptr<Player> m_pPlayer;
 	std::shared_ptr<FieldBase> m_pField;
 	std::shared_ptr<Camera> m_pCamera;

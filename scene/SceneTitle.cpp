@@ -1,6 +1,6 @@
 #include "SceneTitle.h"
 #include "../util/Pad.h"
-#include"SceneSelectScreen.h"
+#include"SceneMainMenu.h"
 #include"SceneOption.h"
 #include "../util/ImageUI.h"
 #include"../SoundManager.h"
@@ -147,7 +147,7 @@ SceneBase* SceneTitle::update()
 
 	if (getFadeBright() == 255 && m_selectNum == kStart)
 	{
-		return new SceneSelectScreen;
+		return new SceneMainMenu;
 	}
 
 	else if (getFadeBright() == 255 && m_selectNum == kExit)

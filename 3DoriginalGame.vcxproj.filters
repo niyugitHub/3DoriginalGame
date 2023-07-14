@@ -108,7 +108,7 @@
     <ClCompile Include="object\field\Field5.cpp">
       <Filter>ソース ファイル\object\field</Filter>
     </ClCompile>
-    <ClCompile Include="scene\SceneSelectScreen.cpp">
+    <ClCompile Include="scene\SceneMainMenu.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
     <ClCompile Include="object\field\Field6.cpp">
@@ -200,7 +200,7 @@
     <ClInclude Include="scene\SceneOption.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="scene\SceneSelectScreen.h">
+    <ClInclude Include="scene\SceneMainMenu.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="object\field\Field2.h">
