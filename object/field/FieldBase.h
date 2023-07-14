@@ -27,6 +27,7 @@ public:
 
 	//プレイヤー死亡時にリセット
 	void Reset();
+
 	void Update();
 	void Draw();
 	
@@ -43,7 +44,7 @@ public:
 
 	VECTOR GetPlayerPos() { return m_playerPos; }
 
-	void StageClear();
+	void OnStageClear();
 
 	enum BlockKind
 	{

@@ -25,12 +25,12 @@ private:
 	void AccelerateChangeBGMVoluem(); //BGMボリューム設定
 	void AccelerateChangeSEVoluem(); //SEボリューム設定
 
-	enum
+	enum SelectAction
 	{
-		kBgm,//BGM
-		kSe,//SE
-		kStageSelect, //ステージセレクトに戻る
-		kBack//戻る
+		Bgm,//BGM
+		Se,//SE
+		StageSelect, //ステージセレクトに戻る
+		Back//戻る
 	};
 
 	SceneBase* m_pScene;

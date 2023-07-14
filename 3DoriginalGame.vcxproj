@@ -172,7 +172,7 @@
     <ClCompile Include="SaveData.cpp" />
     <ClCompile Include="scene\SceneGameClear.cpp" />
     <ClCompile Include="scene\SceneOption.cpp" />
-    <ClCompile Include="scene\SceneSelectScreen.cpp" />
+    <ClCompile Include="scene\SceneMainMenu.cpp" />
     <ClCompile Include="scene\SceneStageSelect.cpp" />
     <ClCompile Include="scene\SceneTitle.cpp" />
     <ClCompile Include="scene\SceneBase.cpp" />
@@ -209,7 +209,7 @@
     <ClInclude Include="SaveData.h" />
     <ClInclude Include="scene\SceneGameClear.h" />
     <ClInclude Include="scene\SceneOption.h" />
-    <ClInclude Include="scene\SceneSelectScreen.h" />
+    <ClInclude Include="scene\SceneMainMenu.h" />
     <ClInclude Include="scene\SceneStageSelect.h" />
     <ClInclude Include="scene\SceneTitle.h" />
     <ClInclude Include="scene\SceneBase.h" />

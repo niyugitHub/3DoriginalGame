@@ -19,9 +19,9 @@ public:
 	virtual SceneBase* update() override;
 	virtual void draw() override;
 
-	void IsColl();
+	void IsCollision();
 
-	bool StageClear();
+	bool IsClearStage();
 private:
 	std::shared_ptr<Player> m_Player;
 	std::shared_ptr<Camera> m_Camera;

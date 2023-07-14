@@ -115,7 +115,7 @@ void SceneMain::end()
 
 SceneBase* SceneMain::update()
 {
-	if (StageClear())
+	if (IsClearStage())
 	{
 		m_GameClear = true;
 	}
@@ -133,12 +133,12 @@ SceneBase* SceneMain::update()
 	}
 	m_Field->Update();
 	
-	IsColl();
+	IsCollision();
 
 	if (m_GameClear)
 	{
 		m_Player->ClearCharaMotion();
-		m_Field->StageClear();
+		m_Field->OnStageClear();
 		return new SceneGameClear(m_Player, m_Field,m_Camera);
 	}
 
@@ -211,7 +211,7 @@ void SceneMain::draw()
 	SceneBase::drawFade();
 }
 
-void SceneMain::IsColl()
+void SceneMain::IsCollision()
 {
 	//デバック用モデルハンドル
 	//static int debugHandle = MV1LoadModel(kFileDebug);
@@ -451,7 +451,7 @@ void SceneMain::IsColl()
 	//}
 }
 
-bool SceneMain::StageClear()
+bool SceneMain::IsClearStage()
 {
 	VECTOR GoalPos = m_Field->GetGoal()->GetPos();
 	VECTOR PlayerPos = m_Player->GetPos();

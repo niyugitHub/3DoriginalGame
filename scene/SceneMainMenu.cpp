@@ -1,4 +1,4 @@
-#include "SceneSelectScreen.h"
+#include "SceneMainMenu.h"
 #include "SceneStageSelect.h"
 #include "SceneTitle.h"
 #include "SceneOption.h"
@@ -17,8 +17,8 @@ namespace
 	};
 }
 
-SceneSelectScreen::SceneSelectScreen() : 
-	m_selectScreen(kStageSelect),
+SceneMainMenu::SceneMainMenu() :
+	m_selectScreen(StageSelect),
 	m_nextScene(nullptr)
 {
 	//画像のサイズ
@@ -44,11 +44,11 @@ SceneSelectScreen::SceneSelectScreen() :
 	}
 }
 
-SceneSelectScreen::~SceneSelectScreen()
+SceneMainMenu::~SceneMainMenu()
 {
 }
 
-void SceneSelectScreen::init()
+void SceneMainMenu::init()
 {
 	//フェードインから始まる
 	m_updateFunc = &SceneBase::fadeinUpdate;
@@ -56,11 +56,11 @@ void SceneSelectScreen::init()
 	m_pImageUI->SetResetCount();
 }
 
-void SceneSelectScreen::end()
+void SceneMainMenu::end()
 {
 }
 
-SceneBase* SceneSelectScreen::update()
+SceneBase* SceneMainMenu::update()
 {
 	(this->*m_updateFunc)();
 
@@ -72,7 +72,7 @@ SceneBase* SceneSelectScreen::update()
 	return this;
 }
 
-void SceneSelectScreen::draw()
+void SceneMainMenu::draw()
 {
 	DrawFormatString(300, 0, 0xffffff, "%d", m_selectScreen);
 
@@ -93,36 +93,36 @@ void SceneSelectScreen::draw()
 	}*/
 }
 
-void SceneSelectScreen::DecisionNum(int& selectNum)
+void SceneMainMenu::DecisionNum(int& selectNum)
 {
 	switch (selectNum)
 	{
-	case kStageSelect:
+	case StageSelect:
 		if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 		{
-			selectNum = kOption;
+			selectNum = Option;
 		}
 		break;
 
-	case kOption:
+	case Option:
 		if (Pad::isTrigger(PAD_INPUT_DOWN) || Pad::isTrigger(PAD_INPUT_UP))
 		{
-			selectNum = kTitle;
+			selectNum = Title;
 		}
 		if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 		{
-			selectNum = kStageSelect;
+			selectNum = StageSelect;
 		}
 		break;
 
-	case kTitle:
+	case Title:
 		if (Pad::isTrigger(PAD_INPUT_DOWN) || Pad::isTrigger(PAD_INPUT_UP))
 		{
-			selectNum = kOption;
+			selectNum = Option;
 		}
 		if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 		{
-			selectNum = kStageSelect;
+			selectNum = StageSelect;
 		}
 		break;
 	default:
@@ -130,7 +130,7 @@ void SceneSelectScreen::DecisionNum(int& selectNum)
 	}
 }
 
-void SceneSelectScreen::normalUpdate()
+void SceneMainMenu::normalUpdate()
 {
 	DecisionNum(m_selectScreen);
 
@@ -138,16 +138,16 @@ void SceneSelectScreen::normalUpdate()
 
 	m_nextScene = nullptr;
 
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kStageSelect)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == StageSelect)
 	{
 		m_nextScene =  new SceneStageSelect;
 	}
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kOption)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == Option)
 	{
 		//自身のポインター、ゲーム中のオプション画面かのフラグを引数に持つ
 		m_nextScene = new SceneOption(this, false);
 	}
-	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == kTitle)
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectScreen == Title)
 	{
 		m_nextScene = new SceneTitle;
 	}

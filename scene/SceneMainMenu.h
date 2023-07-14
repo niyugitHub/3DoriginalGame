@@ -3,11 +3,11 @@
 #include <array>
 #include "../util/Vec2.h"
 
-class SceneSelectScreen : public SceneBase
+class SceneMainMenu : public SceneBase
 {
 public:
-	SceneSelectScreen();
-	virtual ~SceneSelectScreen();
+	SceneMainMenu();
+	virtual ~SceneMainMenu();
 
 	virtual void init();
 	virtual void end();
@@ -19,11 +19,11 @@ public:
 
 private:
 
-	enum
+	enum SelectAction
 	{
-		kStageSelect,	//ステージセレクト
-		kOption,		//オプション
-		kTitle			//タイトル
+		StageSelect,	//ステージセレクト
+		Option,		//オプション
+		Title			//タイトル
 	};
 
 	void DecisionNum(int& selectNum);	//決定表

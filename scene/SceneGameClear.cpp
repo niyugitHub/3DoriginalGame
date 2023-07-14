@@ -36,7 +36,7 @@ static int scroll = 1100;
 
 SceneGameClear::SceneGameClear(std::shared_ptr<Player> pPlayer, std::shared_ptr<FieldBase> pField,
 	std::shared_ptr<Camera>pCamera) :
-	m_selectNum(kStageSelect)
+	m_selectNum(StageSelect)
 {
 	m_coinHandle = LoadGraph(kCoinFileName);
 	int sizeX, sizeY;
@@ -139,13 +139,13 @@ SceneBase* SceneGameClear::update()
 
 	if (getFadeBright() >= 255)
 	{
-		if (m_selectNum == kStageSelect && getFadeBright() == 255)
+		if (m_selectNum == StageSelect && getFadeBright() == 255)
 		{
 			SoundManager::GetInstance().StopBGMAndSE();
 			SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
 			return new SceneStageSelect;
 		}
-		if (m_selectNum == kRestart && getFadeBright() == 255)
+		if (m_selectNum == Restart && getFadeBright() == 255)
 		{
 			m_pField->GetItem()->Spawn();
 			m_pField->ResetTime();
@@ -218,14 +218,14 @@ void SceneGameClear::DecisionNum(int& selectNum)
 {
 	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 	{
-		if (selectNum == kStageSelect)
+		if (selectNum == StageSelect)
 		{
-			selectNum = kRestart;
+			selectNum = Restart;
 		}
 
-		else if (selectNum == kRestart)
+		else if (selectNum == Restart)
 		{
-			selectNum = kStageSelect;
+			selectNum = StageSelect;
 		}
 	}
 }
