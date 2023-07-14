@@ -158,7 +158,7 @@ SceneBase* SceneGameClear::update()
 	if (isFading()) return this;
 
 	// m_selectNumの数値を変化させるための関数
-	DecisionNum(m_selectNum);
+	SelectAction();
 
 	//PAD1を押した、m_selectNumが各値のとき(今流れてるBGMを止めて、新しいBGMを再生)
 	if (Pad::isTrigger(PAD_INPUT_1) && scroll < kStopScroll)
@@ -214,18 +214,18 @@ void SceneGameClear::draw()
 	drawFade();
 }
 
-void SceneGameClear::DecisionNum(int& selectNum)
+void SceneGameClear::SelectAction()
 {
 	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
 	{
-		if (selectNum == StageSelect)
+		if (m_selectNum == StageSelect)
 		{
-			selectNum = Restart;
+			m_selectNum = Restart;
 		}
 
-		else if (selectNum == Restart)
+		else if (m_selectNum == Restart)
 		{
-			selectNum = StageSelect;
+			m_selectNum = StageSelect;
 		}
 	}
 }

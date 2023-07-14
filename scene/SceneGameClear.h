@@ -39,7 +39,7 @@ private:
 		VECTOR color = {VGet(0.0f,0.0f,0.0f)};
 	};
 
-	void DecisionNum(int& selectNum);	//決定表
+	void SelectAction();	//次のシーンを決定するための関数
 
 	//エフェクトの色アップデート(rbg)
 	void EffectColor(VECTOR& color,int colorNum);

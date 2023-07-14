@@ -1,6 +1,7 @@
 #include "SceneTitle.h"
 #include "../util/Pad.h"
 #include"SceneMainMenu.h"
+#include"SceneExplanation.h"
 #include"SceneOption.h"
 #include "../util/ImageUI.h"
 #include"../SoundManager.h"
@@ -17,8 +18,9 @@ namespace
 		"data/fieldGreen.mv1"
 	};
 
-	const char* const kImageName[2] =
+	const char* const kImageName[3] =
 	{
+		"data/image/Title_Instructions.png",
 		"data/image/Title_GameStart.png",
 		"data/image/Title_Exit.png"
 	};
@@ -44,7 +46,7 @@ namespace
 
 
 SceneTitle::SceneTitle() : 
-	m_selectNum(kStart)
+	m_selectNum(Start)
 {
 	// カメラの設定
 	// どこまで表示するか
@@ -61,8 +63,9 @@ SceneTitle::SceneTitle() :
 	int sizeX, sizeY;
 
 	//UI座標設定
-	m_UI[0].pos = { 550,850 };
-	m_UI[1].pos = { 1370,850 };
+	m_UI[0].pos = { 420,850 };
+	m_UI[1].pos = { 960,850 };
+	m_UI[2].pos = { 1500,850 };
 
 	//UIの画像ロード、サイズ取得
 	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
@@ -126,6 +129,11 @@ SceneBase* SceneTitle::update()
 
 	//UIのアップデート
 	UiUpdate();
+
+	if (Pad::isTrigger(PAD_INPUT_1) && m_selectNum == Instructions)
+	{
+		return new SceneExplanation(this);
+	}
 	//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
 	if (Pad::isTrigger(PAD_INPUT_1))
 	{
@@ -143,14 +151,14 @@ SceneBase* SceneTitle::update()
 	}
 
 	// m_selectNumの数値を変化させるための関数
-	DecisionNum(m_selectNum);
+	SelectAction();
 
-	if (getFadeBright() == 255 && m_selectNum == kStart)
+	if (getFadeBright() == 255 && m_selectNum == Start)
 	{
 		return new SceneMainMenu;
 	}
 
-	else if (getFadeBright() == 255 && m_selectNum == kExit)
+	else if (getFadeBright() == 255 && m_selectNum == Exit)
 	{
 		DxLib_End();
 	}
@@ -228,18 +236,27 @@ void SceneTitle::UiUpdate()
 	}
 }
 
-void SceneTitle::DecisionNum(int& selectNum)
+void SceneTitle::SelectAction()
 {
-	if (Pad::isTrigger(PAD_INPUT_LEFT) || Pad::isTrigger(PAD_INPUT_RIGHT))
+	if (Pad::isTrigger(PAD_INPUT_LEFT))
 	{
-		if (selectNum == kStart)
-		{
-			selectNum = kExit;
-		}
+		m_selectNum--;
 
-		else if (selectNum == kExit)
+		if (m_selectNum < Instructions)
 		{
-			selectNum = kStart;
+			m_selectNum = Exit;
+			return;
+		}
+	}
+
+	if (Pad::isTrigger(PAD_INPUT_RIGHT))
+	{
+		m_selectNum++;
+
+		if (m_selectNum > Exit)
+		{
+			m_selectNum = Instructions;
+			return;
 		}
 	}
 }

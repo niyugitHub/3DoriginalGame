@@ -39,14 +39,18 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 		m_UI[1].pos = { 960.0f,500.0f };
 		m_UI[2].pos = { 960.0f,800.0f };
 		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
+		m_corsorPosY[0] = 355;
+		m_corsorPosY[1] = 700;
 	}
 
 	else
 	{
 		m_UI[0].pos = { 960.0f,350.0f };
 		m_UI[1].pos = { 960.0f,700.0f };
-		m_UI[2].pos = { 960.0f,10000.0f };
+		m_UI[2].pos = { 960.0f,10000.0f };//‰æ–ÊŠO•\Ž¦
 		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
+		m_corsorPosY[0] = 255;
+		m_corsorPosY[1] = 500;
 	}
 
 	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
@@ -111,9 +115,9 @@ void SceneOption::draw()
 
 	m_pImageUI->Draw(m_selectOption,0);
 
-	DrawGraph(505 + m_volumeBGM * 202 + m_pImageUI->GetScrollSize(0), 355, m_corsorHandle, true);
+	DrawGraph(505 + m_volumeBGM * 202 + m_pImageUI->GetScrollSize(0), m_corsorPosY[0], m_corsorHandle, true);
 
-	DrawGraph(505 + m_volumeSE * 202 + m_pImageUI->GetScrollSize(1), 700, m_corsorHandle, true);
+	DrawGraph(505 + m_volumeSE * 202 + m_pImageUI->GetScrollSize(1), m_corsorPosY[1], m_corsorHandle, true);
 }
 
 void SceneOption::normalUpdate()

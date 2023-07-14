@@ -45,6 +45,7 @@ private:
 	int m_volumeSE;//SEボリューム(5段階)
 
 	int m_corsorHandle;//カーソルハンドル
+	std::array<int,2> m_corsorPosY;//カーソルY座標
 
 	SceneBase* m_nextScene;
 };
