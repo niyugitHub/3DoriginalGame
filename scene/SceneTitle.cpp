@@ -177,9 +177,9 @@ void SceneTitle::draw()
 		MV1DrawModel(m_data[i].handle);
 	}
 
-	//アンダーバーの描画
-	DrawGraph(static_cast<int>(m_underbar.pos.x) + 50, static_cast<int>(m_underbar.pos.y) + 100,
-		m_underbar.handle, true);
+	////アンダーバーの描画
+	//DrawGraph(static_cast<int>(m_underbar.pos.x) + 50, static_cast<int>(m_underbar.pos.y) + 100,
+	//	m_underbar.handle, true);
 
 	//文字の描画
 	for (auto& stringUI : m_stringUI)
