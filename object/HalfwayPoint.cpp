@@ -6,13 +6,15 @@ namespace
 	constexpr float kColRadius = 100.0f;
 
 	// 中間ポイントファイル名
-	const char* const kGoalName = "data/goal.mv1";
+	const char* const kHalfwayPointName = "data/goal.mv1";
+	// 中間ポイント取得時のファイル名
+	const char* const kGetHalfwayPointName = "data/";
 }
 
 HalfwayPoint::HalfwayPoint(VECTOR pos) :
 	m_Pos(pos)
 {
-	m_modelHandle = MV1LoadModel(kGoalName);
+	m_modelHandle = MV1LoadModel(kHalfwayPointName);
 
 	MV1SetRotationXYZ(m_modelHandle, VGet(0, 80, 0));
 	MV1SetPosition(m_modelHandle, VGet(m_Pos.x, m_Pos.y - 80, m_Pos.z));

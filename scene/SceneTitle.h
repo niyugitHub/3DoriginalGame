@@ -19,7 +19,7 @@ private:
 	//UIのアップデート
 	void UiUpdate();
 
-	void DecisionNum(int& selectNum);	//決定表
+	void SelectAction();	//決定表
 
 	struct Data
 	{
@@ -38,15 +38,16 @@ private:
 
 	enum //TitleAction
 	{
-		kStart = 0,
-		kExit = 1
+		Instructions = 0,
+		Start = 1,
+		Exit = 2
 	};
 
 	//ブロックモデルのハンドル
 	std::array<Data, 4>m_data;
 
 	//画像UIの配列
-	std::array<UI, 2> m_UI;
+	std::array<UI, 3> m_UI;
 
 	//文字画像UIの配列
 	std::array<stringData, 12> m_stringUI;
