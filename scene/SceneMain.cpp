@@ -170,8 +170,6 @@ SceneBase* SceneMain::update()
 
 void SceneMain::draw()
 {
-	DrawString(64, 64,"上入力でクリア",0xffffff);
-
 	// シャドウマップへの書き込み
 	ShadowMap_DrawSetup(m_shadowMap);
 
@@ -273,6 +271,7 @@ void SceneMain::IsCollision()
 		if (dist < (m_Player->GetRadius() + m_Field->GetHalfwayPoint()->GetRadius()))
 		{
 			m_Field->GetHalfwayPoint()->OnCollision();
+			m_Field->GetHalfwayPoint()->ChangeModel();
 			m_Field->OnSetPlayerRespawn();
 			m_Field->SetmHalfwayPointItem(m_Field->GetItem()->GetExist());
 		}

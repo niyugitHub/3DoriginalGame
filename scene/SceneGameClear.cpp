@@ -9,6 +9,7 @@
 #include"../SoundManager.h"
 #include "../util/ImageUI.h"
 #include"../object/Item.h"
+#include"../object/HalfwayPoint.h"
 #include"../game.h"
 
 namespace
@@ -149,6 +150,8 @@ SceneBase* SceneGameClear::update()
 		{
 			m_pField->GetItem()->Spawn();
 			m_pField->ResetTime();
+			m_pField->ResetPlayerPos();
+			m_pField->GetHalfwayPoint()->Reset();
 			SoundManager::GetInstance().StopBGMAndSE();
 			//SoundManager::GetInstance().PlayMusic("sound/titleScene.mp3");
 			return new SceneMain(m_pField);

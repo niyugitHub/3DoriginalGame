@@ -40,6 +40,7 @@ FieldBase::FieldBase() :
 	m_lookBlock(Red),
 	m_blockKinds(Blue),
 	m_playerPos(VGet(0,0,0)),
+	m_firstPlayerPos(VGet(0, 0, 0)),
 	m_stageNum(0),
 	m_gameFrameCount(0),
 	m_getItem(false),
@@ -106,7 +107,6 @@ void FieldBase::Init()
 
 void FieldBase::Reset()
 {
-	//m_pItem->Spawn();
 	m_pItem->SetExist(m_halfwayPointItem);
 }
 
@@ -124,6 +124,8 @@ void FieldBase::Update()
 	}
 
 	m_pItem->Update();
+
+	m_pHalfwayPoint->Update();
 
 	m_gameFrameCount++;
 }
@@ -149,7 +151,7 @@ void FieldBase::Draw()
 
 	m_pHalfwayPoint->Draw();
 
-	printfDx("%d\n", m_gameFrameCount);
+	//printfDx("%d\n", m_gameFrameCount);
 }
 
 //void FieldBase::FirstModelLoad()
@@ -321,6 +323,7 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//ã–Ê‚ªy=0.0f‚É‚È‚é‚æ‚¤‚É”z’u
 			m_playerPos = VGet(posX, 0, posZ);
+			m_firstPlayerPos = VGet(posX, 0, posZ);
 			continue;
 		}
 
@@ -375,4 +378,9 @@ void FieldBase::OnStageClear()
 void FieldBase::OnSetPlayerRespawn()
 {
 	m_playerPos = m_pHalfwayPoint->GetPos();
+}
+
+void FieldBase::ResetPlayerPos()
+{
+	m_playerPos = m_firstPlayerPos;
 }

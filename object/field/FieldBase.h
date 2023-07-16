@@ -81,14 +81,18 @@ public:
 	//プレイヤーのリスポーン位置変更
 	void OnSetPlayerRespawn();
 
+	void ResetPlayerPos();
+
 	void SetmHalfwayPointItem(bool getItem) { m_halfwayPointItem = getItem; }
 
 protected:
 	int m_lookBlock;//今見えるブロックの番号
 	int m_blockKinds;//ステージで使われるブロックの種類
 	
-	//プレイヤー初期位置
+	//プレイヤーリスポーン位置
 	VECTOR m_playerPos;
+	//プレイヤー初期位置
+	VECTOR m_firstPlayerPos;
 	
 	//ステージ番号
 	int m_stageNum;
