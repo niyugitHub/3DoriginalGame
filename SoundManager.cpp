@@ -30,6 +30,9 @@ SoundManager::SoundManager()
 	LoadSoundFile("cancel");
 	LoadSoundFile("playScene");
 	LoadSoundFile("titleScene");
+	LoadSoundFile("checkPoint");
+	LoadSoundFile("stageClear");
+	LoadSoundFile("fall");
 	SetSEVolume(volumeSE_);
 	SetBGMVolume(volumeBGM_);
 }

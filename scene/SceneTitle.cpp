@@ -124,6 +124,9 @@ void SceneTitle::end()
 
 SceneBase* SceneTitle::update()
 {
+	//SEの音
+	SelectSE();
+
 	//フェードアップデート
 	updateFade();
 

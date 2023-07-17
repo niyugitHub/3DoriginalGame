@@ -111,6 +111,12 @@ SceneBase* SceneGameClear::update()
 		scroll = max(static_cast<int>(scroll - (scroll * 0.05f)), 0);
 	}
 
+	if (frameCount == 150)
+	{
+		//サウンドを流す
+		SoundManager::GetInstance().Play("stageClear");
+	}
+
 	for (auto& effect : m_data)
 	{
 		// 再生中のエフェクトを移動する。

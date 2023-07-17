@@ -144,6 +144,12 @@ SceneBase* SceneMain::update()
 
 	updateFade();
 
+	if (gameOverCount == 30)
+	{
+		//サウンドを流す
+		SoundManager::GetInstance().Play("fall");
+	}
+
 	if (gameOverCount > 60)
 	{
 		startFadeOut();
@@ -223,8 +229,11 @@ void SceneMain::IsCollision()
 		VECTOR ItemToPlayer = VSub(PlayerPos,m_Field->GetItem()->GetPos());
 		float dist = VSize(ItemToPlayer);
 
+		//アイテム取得時
 		if (dist < (m_Player->GetRadius() + m_Field->GetItem()->GetRadius()))
 		{
+			//サウンドを流す
+			SoundManager::GetInstance().Play("checkPoint");
 			m_Field->GetItem()->Get();
 		}
 	}
@@ -270,6 +279,8 @@ void SceneMain::IsCollision()
 
 		if (dist < (m_Player->GetRadius() + m_Field->GetHalfwayPoint()->GetRadius()))
 		{
+			//サウンドを流す
+			SoundManager::GetInstance().Play("checkPoint");
 			m_Field->GetHalfwayPoint()->OnCollision();
 			m_Field->GetHalfwayPoint()->ChangeModel();
 			m_Field->OnSetPlayerRespawn();

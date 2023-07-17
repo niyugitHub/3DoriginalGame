@@ -21,6 +21,9 @@ namespace
 		"data/image/ExplanationBack.png"
 	};
 
+	//動画ファイル名
+	const char* const kMovieFile = "data/movie/movie1.mp4";
+
 	//ページ数最大
 	constexpr int kPageMax = 4;
 }
@@ -35,6 +38,8 @@ SceneExplanation::SceneExplanation(SceneBase* scene) :
 	int pageNum = m_pageHandle.size();
 
 	int sizeX, sizeY;
+
+	//m_movieHandle[0] = 
 
 	m_pImageUI = std::make_shared<ImageUI>();
 
@@ -74,6 +79,7 @@ SceneBase* SceneExplanation::update()
 
 void SceneExplanation::draw()
 {
+	//PlayMovie(kMovieFile, 1, DX_MOVIEPLAYTYPE_NORMAL);
 	m_nextScene->draw();
 
 	int pageNum = m_pageHandle.size();
@@ -85,6 +91,7 @@ void SceneExplanation::draw()
 			DrawGraph(0,0,m_pageHandle[i],true);
 		}
 	}
+
 
 	m_pImageUI->Draw(m_actionNum, 0);
 }
