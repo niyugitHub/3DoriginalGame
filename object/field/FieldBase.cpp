@@ -44,6 +44,7 @@ FieldBase::FieldBase() :
 	m_stageNum(0),
 	m_gameFrameCount(0),
 	m_getItem(false),
+	m_halfwayPointItem(true),
 	m_limitFrame(3600)
 {
 	for (int i = 0; i < 3; i++)

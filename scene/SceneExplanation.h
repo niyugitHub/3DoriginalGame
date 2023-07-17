@@ -34,6 +34,9 @@ private:
 	//ページごとのハンドル
 	std::array<int, 4> m_pageHandle;
 
+	//ページごとの動画ハンドル
+	std::array<int, 4> m_movieHandle;
+
 	//次のシーン
 	SceneBase* m_nextScene = nullptr;
 };
