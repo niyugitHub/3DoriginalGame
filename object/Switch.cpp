@@ -1,4 +1,6 @@
 #include "Switch.h"
+#include<cassert>
+#include<DxLib.h>
 
 namespace
 {
@@ -9,16 +11,25 @@ namespace
 	constexpr int kRedNumber = 2;
 	constexpr int kBlueNumber = 3;
 	constexpr int kGreenNumber = 4;
-
-	//色変更速度
-//	constexpr int kColorChangeSpeed = 5;
 }
 
-Switch::Switch(VECTOR pos) : 
-	m_Color(VGet(0,0,0)),
+Switch::Switch(VECTOR pos, std::array<int, 3> modelHandle) :
 	m_Pos(pos),
 	m_colorNum(2) // 赤の数値が2のため初期化で2を入れる
 {
+	for (int i= 0; i < m_modelHandle.size(); i++)
+	{
+		m_modelHandle[i] = MV1DuplicateModel(modelHandle[i]);;
+	}
+
+	for (auto& model : m_modelHandle)
+	{
+		MV1SetPosition(model, VGet(m_Pos.x, m_Pos.y - 80, m_Pos.z));
+		MV1SetScale(model, VGet(8, 8, 8));
+		assert(model != -1);
+	}
+
+	
 }
 
 Switch::~Switch()
@@ -27,37 +38,26 @@ Switch::~Switch()
 
 void Switch::Update()
 {
-	if (m_colorNum == kRedNumber)
-	{
-		m_Color.x = 255;
-		m_Color.y = 0;
-		m_Color.z = 0;
-	}
-
-	if (m_colorNum == kBlueNumber)
-	{
-		m_Color.x = 0;
-		m_Color.y = 0;
-		m_Color.z = 255;
-	}
-
-	if (m_colorNum == kGreenNumber)
-	{
-		m_Color.x = 0;
-		m_Color.y = 255;
-		m_Color.z = 0;
-	}
+	
 }
 
 void Switch::Draw()
 {
-	DrawSphere3D(m_Pos, kColRadius,50,
-		GetColor(static_cast<int>(m_Color.x), static_cast<int>(m_Color.y), static_cast<int>(m_Color.z)),
-		GetColor(static_cast<int>(m_Color.x), static_cast<int>(m_Color.y), static_cast<int>(m_Color.z)),
-		true);
+	if (m_colorNum == kRedNumber)
+	{
+		MV1DrawModel(m_modelHandle[0]);
+	}
+	if (m_colorNum == kBlueNumber)
+	{
+		MV1DrawModel(m_modelHandle[1]);
+	}
+	if (m_colorNum == kGreenNumber)
+	{
+		MV1DrawModel(m_modelHandle[2]);
+	}
 }
 
 float Switch::GetRadius()
 {
-	return kColRadius * 1.5f; //ショットを当てやすくするため
+	return kColRadius * 1.5f;
 }
