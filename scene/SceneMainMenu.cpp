@@ -74,23 +74,7 @@ SceneBase* SceneMainMenu::update()
 
 void SceneMainMenu::draw()
 {
-	DrawFormatString(300, 0, 0xffffff, "%d", m_selectScreen);
-
 	m_pImageUI->Draw(m_selectScreen,0);
-	/*for (int i = 0; i < m_UI.size(); i++)
-	{
-		if (m_selectScreen == i)
-		{
-			DrawBox(static_cast<int>(m_UI[i].pos.x - 20), 
-				static_cast<int>(m_UI[i].pos.y - 20),
-				static_cast<int>(m_UI[i].size.x + 20), 
-				static_cast<int>(m_UI[i].size.y + 20),
-				0xffffff, true);
-		}
-		DrawBox(static_cast<int>(m_UI[i].pos.x), static_cast<int>(m_UI[i].pos.y),
-			static_cast<int>(m_UI[i].size.x), static_cast<int>(m_UI[i].size.y),
-			0x0000ff,true);
-	}*/
 }
 
 void SceneMainMenu::DecisionNum(int& selectNum)

@@ -45,14 +45,33 @@ void ImageUI::FadeoutUpdate()
 
 void ImageUI::Draw(int selectNum, int scroll)
 {
+	//‘I‘ð‚³‚ê‚½UI‚ð‚í‚©‚è‚â‚·‚­‚·‚é‚½‚ß‚Ì•Ï”(DrawBox‚ÅŽü‚è‚ðˆÍ‚Þ)
+	static int blueColor = 0;
+	static int changeSpeed = 2;
+
+	blueColor += changeSpeed;
+	
+
+	if (blueColor > 230)
+	{
+		blueColor = 230;
+		changeSpeed = -2;
+	}
+
+	if (blueColor < 20)
+	{
+		blueColor = 20;
+		changeSpeed = 2;
+	}
+
 	for (int i = 0; i < static_cast<int>(m_pImage.size()); i++)
 	{
 		if (i == selectNum)
 		{
-			m_pImage[i]->Draw(true, scroll);
+			m_pImage[i]->Draw(true, scroll, blueColor);
 			continue;
 		}
-		m_pImage[i]->Draw(false, scroll);
+		m_pImage[i]->Draw(false, scroll, blueColor);
 	}
 }
 
@@ -120,18 +139,22 @@ void Image::FadeoutUpdate(int count)
 	}
 }
 	
-
-void Image::Draw(bool select,int scroll)
+void Image::Draw(bool select,int scroll, int blue)
 {
 	int posX = static_cast<int>(m_pos.x) + scroll + m_fadeScroll;
 	int posY = static_cast<int>(m_pos.y);
 	int sizeX = static_cast<int>(m_size.x);
 	int sizeY = static_cast<int>(m_size.y);
+
 	if (select)
 	{
-		DrawExtendGraph(posX - sizeX - 20, posY- sizeY - 20,
+		DrawBox(posX - sizeX - 40, posY - sizeY - 40,
+			posX + sizeX + 40, posY + sizeY + 40,
+			GetColor(255,255, blue), true);
+		DrawExtendGraph(posX - sizeX - 20, posY - sizeY - 20,
 			posX + sizeX + 20, posY + sizeY + 20,
 			m_handle, true);
+
 		return;
 	}
 

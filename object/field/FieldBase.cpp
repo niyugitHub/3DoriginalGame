@@ -114,7 +114,7 @@ void FieldBase::Init()
 
 void FieldBase::Reset()
 {
-	m_pItem->SetExist(m_halfwayPointItem);
+	m_pItem->Reset(m_halfwayPointItem);
 }
 
 void FieldBase::Update()
@@ -151,10 +151,7 @@ void FieldBase::Draw()
 
 	m_pGoal->Draw();
 
-	if (m_pItem->GetExist())
-	{
-		m_pItem->Draw();
-	}
+	m_pItem->Draw();
 
 	m_pHalfwayPoint->Draw();
 

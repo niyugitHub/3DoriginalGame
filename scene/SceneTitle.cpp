@@ -36,7 +36,7 @@ namespace
 	constexpr float kModelAcc = 0.3f;
 
 	//文字の動き
-	constexpr float kJumpPower = -18.0f;
+	constexpr float kJumpPower = -25.0f;
 	constexpr float kGravity = 0.6f;
 
 	//アンダーバーの座標
@@ -98,7 +98,13 @@ SceneTitle::SceneTitle() :
 		m_stringUI[i].pos.x = static_cast<float>(150 + (i * 120)) + spaceNum;
 		m_stringUI[i].handle = divHandle[i];
 		m_stringUI[i].jumpPower = 0.0f;
+		m_stringUI[i].maxJumpPower = kJumpPower;
 	}	
+
+	//位置調整
+	m_stringUI[6].pos.x -= 15;
+	m_stringUI[8].pos.x += 15;
+	m_stringUI[9].pos.x += 15;
 
 	//モデルロード
 	for (int i = 0; i < static_cast<int>(m_data.size()); i++)
@@ -234,7 +240,8 @@ void SceneTitle::UiUpdate()
 		
 		if (m_stringUI[i].pos.y > m_underbar.pos.y)
 		{
-			m_stringUI[i].jumpPower = kJumpPower;
+			m_stringUI[i].maxJumpPower /= 1.3f;
+			m_stringUI[i].jumpPower = m_stringUI[i].maxJumpPower;
 		}
 	}
 }
