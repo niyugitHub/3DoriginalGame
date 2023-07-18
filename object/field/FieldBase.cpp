@@ -9,6 +9,7 @@
 #include"../../SaveData.h"
 #include<cassert>
 #include <iostream>
+#include<array>
 
 
 namespace
@@ -18,6 +19,13 @@ namespace
 	const char* const kFileName2 = "data/fieldRed.mv1";
 	const char* const kFileName3 = "data/fieldBlue.mv1";
 	const char* const kFileName4 = "data/fieldGreen.mv1";
+
+	const char* const kSwitchFileName[3] =
+	{
+		"data/redSwitch.mv1",
+		"data/blueSwitch.mv1",
+		"data/greenSwitch.mv1",
+	};
 
 	//地面に敷き詰めるブロックの数
 	constexpr int kBlockNumX = 15;
@@ -84,8 +92,6 @@ FieldBase::~FieldBase()
 
 void FieldBase::Init()
 {
-//	FirstModelLoad(); // 最初に複製するためにモデルを用意する
-
 	//ファイルのロード
 	LoadFile(m_data.fileName);
 
@@ -268,6 +274,12 @@ void FieldBase::LoadFile(const char* fileName)
 
 void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 {
+	std::array<int,3> switchModelHandle{};
+
+	for (int i = 0; i < switchModelHandle.size(); i++)
+	{
+		switchModelHandle[i] = MV1LoadModel(kSwitchFileName[i]);
+	}
 	//地面に並べる
 	for (int i = 0; i < static_cast<int>(m_blockNum.size()); i++)
 	{
@@ -287,7 +299,8 @@ void FieldBase::ModelLoad(int Model1, int Model2, int Model3, int Model4)
 		{
 			m_pBlock.push_back(std::make_shared<Block>(static_cast<int>(Field),Model1));
 			m_pBlock.back()->SetPos(VGet(posX, -kBlockSideLength / 2.0f, posZ));//上面がy=0.0fになるように配置
-			m_pSwitch.push_back(std::make_shared<Switch>(VGet(posX, 100, posZ)));
+			m_pSwitch.push_back(std::make_shared<Switch> (VGet(posX, 100, posZ), switchModelHandle));
+			assert(switchModelHandle[1] != -1);
 			continue;
 		}
 
