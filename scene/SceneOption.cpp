@@ -39,8 +39,8 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 		m_UI[1].pos = { 960.0f,500.0f };
 		m_UI[2].pos = { 960.0f,800.0f };
 		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
-		m_corsorPosY[0] = 355;
-		m_corsorPosY[1] = 700;
+		m_corsorPosY[0] = 255;
+		m_corsorPosY[1] = 500;
 	}
 
 	else
@@ -49,8 +49,8 @@ SceneOption::SceneOption(SceneBase* pScene, bool isSceneMain) :
 		m_UI[1].pos = { 960.0f,700.0f };
 		m_UI[2].pos = { 960.0f,10000.0f };//画面外表示
 		m_UI[3].pos = { 150,Game::kScreenHeight - 100 };
-		m_corsorPosY[0] = 255;
-		m_corsorPosY[1] = 500;
+		m_corsorPosY[0] = 345;
+		m_corsorPosY[1] = 690;
 	}
 
 	for (int i = 0; i < static_cast<int>(m_UI.size()); i++)
@@ -108,10 +108,6 @@ void SceneOption::draw()
 	{
 		m_pScene->draw();
 	}
-
-	DrawBox(0, 0, 100, 100, 0xffffff, true);
-
-	DrawString(0, 400, "オプション画面", 0xffffff);
 
 	m_pImageUI->Draw(m_selectOption,0);
 

@@ -62,7 +62,7 @@ public:
 	/// 画像表示
 	/// </summary>
 	/// <param name="select">画像が選ばれてるかどうか</param>
-	void Draw(bool select,int scroll);
+	void Draw(bool select,int scroll, int blue);
 
 private:
 	Vec2 m_pos;//画像位置(真ん中)

@@ -17,7 +17,7 @@ public:
 	void Spawn() { m_Exist = true; }
 	void Get() { m_Exist = false; }
 
-	void SetExist(bool exist) { m_Exist = exist; }
+	void Reset(bool exist);
 
 private:
 	VECTOR m_Pos; //アイテム座標
@@ -25,6 +25,8 @@ private:
 	int m_modelHandle = -1;
 	float m_vecY;
 	float m_size;
+
+	float m_changeSizeSpeed; //モデルサイズの変更スピード
 
 	bool m_Exist; //存在するか
 };

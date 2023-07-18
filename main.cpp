@@ -43,6 +43,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	// マウスの表示を消す
+	SetMouseDispFlag(false);
+
 	auto& soundManager = SoundManager::GetInstance();
 
 	SceneManager scene;

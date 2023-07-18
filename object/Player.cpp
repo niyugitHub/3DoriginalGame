@@ -25,7 +25,7 @@ namespace
 	
 #else
 		// 最大移動速度
-		constexpr float kMaxMoveSpeed = 7.5f;
+		constexpr float kMaxMoveSpeed = 10.0f;
 
 		// 一フレームごとの移動速度上昇
 		constexpr float kMoveSpeed = 1.0f; //地面にいるとき
@@ -55,7 +55,7 @@ namespace
 	constexpr float kGravity = 0.5f;
 
 	// ジャンプ力
-	constexpr float kJumpPower = 20.0f;
+	constexpr float kJumpPower = 16.0f;
 
 	//ショットスピード
 	constexpr float kShotSpeed = 20.0f;

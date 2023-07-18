@@ -15,7 +15,7 @@ namespace
 	};
 
 	//ƒtƒ@ƒCƒ‹–¼
-	const char* const kUIFileName[2] =
+	const char* const kUIFileName[2] = 
 	{
 		"data/image/ExplanationNext.png",
 		"data/image/ExplanationBack.png"

@@ -26,10 +26,15 @@ Model::Model(const char* fileName) :
 }
 
 Model::Model(int orgModel) :
+	m_isUseCollision(false),
+	m_isUpdateCollision(false),
 	m_animChangeFrame(0),
 	m_modelHandle(-1),
-	m_animChangeFrameTotal(0)
+	m_animChangeFrameTotal(0),
+	m_animSpeed(0),
+	m_colFrameIndex(-1)
 {
+	m_Pos = { 0,0,0 };
 	m_modelHandle = MV1DuplicateModel(orgModel);
 	//ロードに失敗したモデルがコピー元として指定されている
 	assert(m_modelHandle != -1);

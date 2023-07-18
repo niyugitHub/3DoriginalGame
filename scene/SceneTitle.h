@@ -34,6 +34,7 @@ private:
 		int handle = -1;
 		Vec2 pos = {0,0};
 		float jumpPower = 0.0f;
+		float maxJumpPower = 0.0f;
 	};
 
 	enum //TitleAction
