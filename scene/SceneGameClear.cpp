@@ -109,12 +109,17 @@ SceneBase* SceneGameClear::update()
 	if (frameCount > 150)
 	{
 		scroll = max(static_cast<int>(scroll - (scroll * 0.05f)), 0);
+
+		SelectSE();
+
+		// m_selectNumの数値を変化させるための関数
+		SelectAction();
 	}
 
-	if (frameCount == 150)
+	if (frameCount == 50)
 	{
 		//サウンドを流す
-		SoundManager::GetInstance().Play("stageClear");
+		SoundManager::GetInstance().PlayMusic("sound/stageClear.mp3");
 	}
 
 	for (auto& effect : m_data)
@@ -165,9 +170,6 @@ SceneBase* SceneGameClear::update()
 	}
 
 	if (isFading()) return this;
-
-	// m_selectNumの数値を変化させるための関数
-	SelectAction();
 
 	//PAD1を押した、m_selectNumが各値のとき(今流れてるBGMを止めて、新しいBGMを再生)
 	if (Pad::isTrigger(PAD_INPUT_1) && scroll < kStopScroll)

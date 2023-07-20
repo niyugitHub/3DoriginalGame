@@ -178,8 +178,6 @@ SceneBase* SceneTitle::update()
 
 void SceneTitle::draw()
 {
-	DrawString(300, 300, "SceneTitle", 0xffffff);
-
 	//ƒ‚ƒfƒ‹•`‰æ
 	for (int i = 0; i < static_cast<int>(m_data.size()); i++)
 	{
