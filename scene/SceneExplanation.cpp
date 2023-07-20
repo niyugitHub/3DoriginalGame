@@ -67,6 +67,8 @@ void SceneExplanation::init()
 
 SceneBase* SceneExplanation::update()
 {
+	SelectSE();
+
 	SelectAction();
 
 	if (SelectPage())

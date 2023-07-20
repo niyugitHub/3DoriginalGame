@@ -55,13 +55,13 @@ namespace
 	constexpr float kGravity = 0.5f;
 
 	// ジャンプ力
-	constexpr float kJumpPower = 16.0f;
+	constexpr float kJumpPower = 14.0f;
 
 	//ショットスピード
 	constexpr float kShotSpeed = 20.0f;
 
 	//空中の滞在時間(5f以上でジャンプ禁止)
-	constexpr int kAirFrame = 5;
+	constexpr int kAirFrame = 7;
 
 	//// カメラの位置
 	//constexpr float kCameraPosY = 1500.0f;

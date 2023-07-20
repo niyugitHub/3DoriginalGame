@@ -137,6 +137,7 @@ SceneBase* SceneMain::update()
 
 	if (m_GameClear)
 	{
+		SoundManager::GetInstance().StopBGMAndSE();
 		m_Player->ClearCharaMotion();
 		m_Field->OnStageClear();
 		return new SceneGameClear(m_Player, m_Field,m_Camera);
@@ -144,7 +145,7 @@ SceneBase* SceneMain::update()
 
 	updateFade();
 
-	if (gameOverCount == 30)
+	if (gameOverCount == 1)
 	{
 		//ƒTƒEƒ“ƒh‚ð—¬‚·
 		SoundManager::GetInstance().Play("fall");
